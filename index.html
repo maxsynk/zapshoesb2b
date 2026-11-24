@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAP SHOES - Painel do Vendedor</title>
+    <title>ZAP SHOES - Portal do Vendedor</title>
     <style>
         body {
             background-color: #000000;
@@ -50,15 +50,37 @@
 <body>
     <div class="login-box">
         <h1>ZAP SHOES</h1>
-        <p>Painel do Vendedor</p>
+        <p>Portal do Vendedor B2B</p>
         <input type="email" id="email" placeholder="E-mail" />
         <input type="password" id="password" placeholder="Senha" />
         <button onclick="login()">Entrar</button>
     </div>
     <script>
-        function login() {
-            // Por enquanto, apenas um alerta. Depois conectaremos ao Worker.
-            alert('Login será implementado em breve!');
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // ATENÇÃO: Substitua a URL abaixo pela URL do Worker do Vendedor!
+            const workerUrl = 'https://zapshoesb2b.maxcalcadosmax.workers.dev/login';
+
+            try {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Bem-vindo, ' + data.user.name + '!');
+                    // Futuramente, redirecionaremos para o Dashboard do Vendedor
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Erro ao conectar com o servidor.');
+            }
         }
     </script>
 </body>
