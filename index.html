@@ -47,7 +47,7 @@
         .card .value { font-size: 32px; font-weight: 700; color: #fff; }
         .card .icon-bg { position: absolute; right: 20px; top: 20px; font-size: 40px; color: rgba(138,43,226,0.1); }
 
-        /* FORMULÁRIO DE CLIENTE (EM GRADE) */
+        /* FORMULÁRIO DE CLIENTE */
         .form-container { background: #151515; border: 1px solid #333; border-radius: 15px; padding: 30px; margin-bottom: 30px; }
         .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .form-header h2 { font-size: 16px; color: #8A2BE2; font-weight: 700; display: flex; align-items: center; gap: 10px; }
@@ -125,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- FORMULÁRIO DE CADASTRO (ABA CLIENTES COMPLETA) -->
+            <!-- FORMULÁRIO DE CADASTRO (COMPLETO) -->
             <div class="form-container">
                 <div class="form-header">
                     <h2><i class="fa-solid fa-plus"></i> CADASTRAR CLIENTE</h2>
@@ -279,10 +279,11 @@
                     document.getElementById('form-cliente').reset(); 
                     carregarClientes(); 
                 } else {
-                    alert("Erro ao salvar cliente.");
+                    const erroData = await response.json();
+                    alert("Erro real: " + (erroData.message || "Desconhecido"));
                 }
             } catch (error) {
-                alert("Erro de conexão.");
+                alert("Erro de conexão: " + error.message);
             }
         }
 
