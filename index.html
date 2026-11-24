@@ -11,18 +11,58 @@
         body { background: #0a0a0a; color: #fff; height: 100vh; overflow: hidden; display: flex; }
         
         /* TELA DE LOGIN */
-        #login-screen {
-            position: fixed; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%); z-index: 10;
+        #login-screen { position: fixed; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%); z-index: 10; }
+        
+        /* AQUI ESTÁ O QUADRO MAIOR */
+        .login-container { 
+            background: rgba(20,20,20,0.8); 
+            padding: 50px; 
+            border-radius: 20px; 
+            border: 2px solid #8A2BE2; 
+            box-shadow: 0 0 20px rgba(138,43,226,0.6), 0 0 60px rgba(138,43,226,0.2); 
+            width: 420px; 
+            text-align: center; 
+            backdrop-filter: blur(10px); 
         }
-        .login-container { background: rgba(20,20,20,0.8); padding: 40px; border-radius: 20px; border: 2px solid #8A2BE2; box-shadow: 0 0 20px rgba(138,43,226,0.6); width: 380px; text-align: center; backdrop-filter: blur(10px); }
-        .logo { width: 100px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 0 15px rgba(138,43,226,0.4); }
-        h1 { font-size: 28px; background: linear-gradient(90deg, #8A2BE2, #d580ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #8A2BE2; }
-        input { width: 100%; padding: 15px 15px 15px 45px; background: #0d0d0d; border: 1px solid #333; border-radius: 10px; color: #fff; }
+        
+        .logo { width: 120px; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 0 15px rgba(138,43,226,0.4); }
+        h1 { font-size: 32px; background: linear-gradient(90deg, #8A2BE2, #d580ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; letter-spacing: 2px; }
+        p.subtitle { color: #aaa; font-size: 13px; margin-bottom: 30px; letter-spacing: 3px; }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #8A2BE2; font-size: 18px; }
+        
+        /* CAMPOS MAIORES E SEM OS VALORES PADRÃO */
+        input { 
+            width: 100%; 
+            padding: 18px 18px 18px 50px; 
+            background: #0d0d0d; 
+            border: 1px solid #333; 
+            border-radius: 10px; 
+            color: #fff; 
+            font-size: 16px; 
+            transition: 0.3s;
+        }
         input:focus { outline: none; border-color: #8A2BE2; box-shadow: 0 0 10px rgba(138,43,226,0.3); }
-        button.btn-entrar { width: 100%; padding: 15px; background: linear-gradient(90deg, #8A2BE2, #a633ff); border: none; border-radius: 10px; color: white; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        
+        button.btn-entrar { 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(90deg, #8A2BE2, #a633ff); 
+            border: none; 
+            border-radius: 10px; 
+            color: white; 
+            font-size: 18px;
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        button.btn-entrar:hover { background: linear-gradient(90deg, #a633ff, #8A2BE2); box-shadow: 0 0 20px rgba(138,43,226,0.6); }
 
         /* DASHBOARD */
         #dashboard-screen { display: none; width: 100%; height: 100%; }
@@ -43,121 +83,138 @@
         .card .icon-bg { position: absolute; right: 20px; top: 20px; font-size: 40px; color: rgba(138,43,226,0.1); }
         
         .action-bar { display: flex; gap: 15px; margin-bottom: 30px; }
-        .btn-primary { background: #8A2BE2; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background: #8A2BE2; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .btn-primary:hover { background: #a633ff; box-shadow: 0 0 15px rgba(138,43,226,0.4); }
 
         .table-container { background: #151515; border-radius: 15px; border: 1px solid #333; padding: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { color: #888; font-size: 13px; padding-bottom: 15px; border-bottom: 1px solid #333; }
         td { padding: 15px 0; border-bottom: 1px solid #222; color: #ddd; }
-        .status { padding: 5px 10px; border-radius: 20px; font-size: 12px; background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+
+        /* MODAL DE CADASTRO */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #8A2BE2; width: 500px; }
+        .modal-content h2 { margin-bottom: 20px; color: #8A2BE2; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #aaa; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #fff; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn-cancel { background: #333; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN (A que já fizemos) -->
+    <!-- TELA DE LOGIN -->
     <div id="login-screen">
         <div class="login-container">
             <img src="logo.png" alt="ZAP SHOES" class="logo">
             <h1>ZAP SHOES</h1>
-            <p style="color:#aaa; font-size:12px; margin-bottom:20px; letter-spacing:2px;">PORTAL DO VENDEDOR</p>
+            <p class="subtitle">PORTAL DO VENDEDOR</p>
+            
+            <!-- CAMPOS LIMPOS (sem o value) e com o gatilho do ENTER -->
             <div class="input-group">
                 <i class="fa-solid fa-user"></i>
-                <input type="email" id="email" placeholder="E-mail" value="vendedor@teste.com">
+                <input type="email" id="email" placeholder="E-mail" required onkeydown="if(event.key === 'Enter') login()">
             </div>
             <div class="input-group">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" id="password" placeholder="Senha" value="senha123">
+                <input type="password" id="password" placeholder="Senha" required onkeydown="if(event.key === 'Enter') login()">
             </div>
+            
             <button class="btn-entrar" onclick="login()"><i class="fa-solid fa-arrow-right-to-bracket"></i> ENTRAR</button>
         </div>
     </div>
 
-    <!-- TELA DA DASHBOARD (Escondida inicialmente) -->
+    <!-- DASHBOARD -->
     <div id="dashboard-screen">
         <div class="sidebar">
             <img src="logo.png" alt="ZAP" class="logo-small">
             <a class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a>
             <a class="menu-item"><i class="fa-solid fa-users"></i> Meus Clientes</a>
             <a class="menu-item"><i class="fa-solid fa-box-open"></i> Pedidos</a>
-            <a class="menu-item"><i class="fa-solid fa-gear"></i> Configurações</a>
         </div>
         
         <div class="main-content">
             <div class="header-top">
                 <h2>Olá, <span id="user-name-display">Vendedor</span>! 👋</h2>
-                <div class="user-info">
-                    <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i> Sair</button>
-                </div>
+                <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i> Sair</button>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
                     <h3>Total de Clientes</h3>
-                    <div class="value">0</div>
+                    <div class="value" id="total-clientes">0</div>
                     <i class="fa-solid fa-users icon-bg"></i>
                 </div>
-                <div class="card">
-                    <h3>Pedidos no Mês</h3>
-                    <div class="value">0</div>
-                    <i class="fa-solid fa-shopping-cart icon-bg"></i>
-                </div>
-                <div class="card">
-                    <h3>Faturamento</h3>
-                    <div class="value">R$ 0,00</div>
-                    <i class="fa-solid fa-dollar-sign icon-bg"></i>
-                </div>
+                <div class="card"><h3>Pedidos no Mês</h3><div class="value">0</div><i class="fa-solid fa-shopping-cart icon-bg"></i></div>
+                <div class="card"><h3>Faturamento</h3><div class="value">R$ 0,00</div><i class="fa-solid fa-dollar-sign icon-bg"></i></div>
             </div>
 
             <div class="action-bar">
-                <button class="btn-primary"><i class="fa-solid fa-plus"></i> Novo Cliente</button>
-                <button class="btn-primary" style="background:#333;"><i class="fa-solid fa-file-invoice"></i> Novo Pedido</button>
+                <button class="btn-primary" onclick="abrirModal()"><i class="fa-solid fa-plus"></i> Novo Cliente</button>
             </div>
 
             <div class="table-container">
-                <h3 style="margin-bottom:15px;">Últimos Pedidos</h3>
+                <h3 style="margin-bottom:15px;">Meus Clientes</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>Cliente</th>
-                            <th>Data</th>
-                            <th>Valor</th>
-                            <th>Status</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>CPF</th>
+                            <th>Cidade/Bairro</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Nenhum pedido recente</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><span class="status">Aguardando</span></td>
-                        </tr>
+                    <tbody id="lista-clientes">
+                        <tr><td colspan="4" style="text-align:center; color:#888;">Nenhum cliente cadastrado ainda.</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- MODAL DE CADASTRO DE CLIENTE -->
+    <div class="modal" id="modal-cliente">
+        <div class="modal-content">
+            <h2>Cadastrar Novo Cliente</h2>
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="cli-nome" required></div>
+            <div class="form-group"><label>Telefone</label><input type="text" id="cli-telefone" required></div>
+            <div class="form-group"><label>CPF</label><input type="text" id="cli-cpf"></div>
+            <div class="form-group"><label>Endereço (Cidade/Bairro)</label><input type="text" id="cli-endereco"></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-primary" onclick="salvarCliente()">Salvar Cliente</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let currentUserId = "";
+        const workerBaseUrl = 'https://zapshoesb2b.maxcalcadosmax.workers.dev'; 
+
         async function login() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const workerUrl = 'https://zapshoesb2b.maxcalcadosmax.workers.dev/login';
 
             try {
-                const response = await fetch(workerUrl, {
+                const response = await fetch(`${workerBaseUrl}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-
                 const data = await response.json();
 
                 if (response.ok) {
-                    // A MÁGICA ACONTECE AQUI: Esconde o login e mostra a Dashboard
+                    currentUserId = data.user.id; 
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('dashboard-screen').style.display = 'flex';
                     document.getElementById('user-name-display').innerText = data.user.name;
+                    
+                    // Limpa os campos de login após entrar
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    
+                    carregarClientes(); 
                 } else {
                     alert(data.message);
                 }
@@ -169,6 +226,80 @@
         function logout() {
             document.getElementById('dashboard-screen').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
+            currentUserId = "";
+            document.getElementById('lista-clientes').innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888;">Nenhum cliente cadastrado ainda.</td></tr>';
+            document.getElementById('total-clientes').innerText = "0";
+        }
+
+        function abrirModal() { document.getElementById('modal-cliente').style.display = 'flex'; }
+        function fecharModal() { 
+            document.getElementById('modal-cliente').style.display = 'none'; 
+            document.getElementById('cli-nome').value = '';
+            document.getElementById('cli-telefone').value = '';
+            document.getElementById('cli-cpf').value = '';
+            document.getElementById('cli-endereco').value = '';
+        }
+
+        async function salvarCliente() {
+            const name = document.getElementById('cli-nome').value;
+            const phone = document.getElementById('cli-telefone').value;
+            const cpf = document.getElementById('cli-cpf').value;
+            const address = document.getElementById('cli-endereco').value;
+
+            if (!name || !phone) {
+                alert("Nome e Telefone são obrigatórios!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${workerBaseUrl}/clients`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seller_id: currentUserId, name, phone, cpf, address })
+                });
+
+                if (response.ok) {
+                    alert("Cliente salvo com sucesso!");
+                    fecharModal();
+                    carregarClientes(); 
+                } else {
+                    alert("Erro ao salvar cliente.");
+                }
+            } catch (error) {
+                alert("Erro de conexão.");
+            }
+        }
+
+        async function carregarClientes() {
+            try {
+                const response = await fetch(`${workerBaseUrl}/clients?seller_id=${currentUserId}`);
+                const clientes = await response.json();
+
+                const tbody = document.getElementById('lista-clientes');
+                tbody.innerHTML = ''; 
+
+                if (clientes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888;">Nenhum cliente cadastrado ainda.</td></tr>';
+                    document.getElementById('total-clientes').innerText = "0";
+                    return;
+                }
+
+                document.getElementById('total-clientes').innerText = clientes.length;
+
+                clientes.forEach(cliente => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${cliente.name}</strong></td>
+                        <td>${cliente.phone || '-'}</td>
+                        <td>${cliente.cpf || '-'}</td>
+                        <td>${cliente.address || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error("Erro ao carregar clientes:", error);
+            }
         }
     </script>
 </body>
