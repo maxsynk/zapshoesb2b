@@ -4,63 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAP SHOES - Portal do Vendedor</title>
+    <!-- Ícones e Fonte -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
-        .login-box {
-            background-color: #1a1a1a;
+        .login-container {
+            background-color: rgba(20, 20, 20, 0.8);
             padding: 40px;
-            border-radius: 10px;
+            border-radius: 20px;
             border: 2px solid #8A2BE2;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6), 0 0 50px rgba(138, 43, 226, 0.2);
             text-align: center;
-            width: 300px;
+            width: 380px;
+            backdrop-filter: blur(10px);
         }
-        h1 { color: #8A2BE2; }
+        .logo { width: 130px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 0 15px rgba(138, 43, 226, 0.4); }
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #8A2BE2, #d580ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+        h2 {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 5px;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8A2BE2;
+            font-size: 18px;
+        }
         input {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #8A2BE2;
-            background-color: #000;
+            padding: 15px 15px 15px 45px;
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 10px;
             color: #fff;
-            border-radius: 5px;
-            box-sizing: border-box;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #8A2BE2;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
         }
         button {
-            background-color: #8A2BE2;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
             width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #8A2BE2, #a633ff);
+            border: none;
+            border-radius: 10px;
+            color: white;
             font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
-        button:hover { background-color: #6a1b9a; }
+        button:hover {
+            background: linear-gradient(90deg, #a633ff, #8A2BE2);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+        }
+        .footer-text { margin-top: 25px; font-size: 12px; color: #888; line-height: 1.5; }
     </style>
 </head>
 <body>
-    <div class="login-box">
+    <div class="login-container">
+        <img src="logo.png" alt="ZAP SHOES" class="logo">
         <h1>ZAP SHOES</h1>
-        <p>Portal do Vendedor B2B</p>
-        <input type="email" id="email" placeholder="E-mail" />
-        <input type="password" id="password" placeholder="Senha" />
-        <button onclick="login()">Entrar</button>
+        <h2>PORTAL DO VENDEDOR</h2>
+
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="email" id="email" placeholder="E-mail" required>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" placeholder="Senha" required>
+        </div>
+        
+        <button onclick="login()">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTRAR
+        </button>
+
+        <div class="footer-text">
+            Primeiro acesso?<br>
+            Use <strong>vendedor@teste.com</strong> / <strong>senha123</strong>
+        </div>
     </div>
+
     <script>
         async function login() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            // ATENÇÃO: Substitua a URL abaixo pela URL do Worker do Vendedor!
+            // URL do Worker do Vendedor
             const workerUrl = 'https://zapshoesb2b.maxcalcadosmax.workers.dev/login';
 
             try {
@@ -74,7 +136,6 @@
 
                 if (response.ok) {
                     alert('Bem-vindo, ' + data.user.name + '!');
-                    // Futuramente, redirecionaremos para o Dashboard do Vendedor
                 } else {
                     alert(data.message);
                 }
