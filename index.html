@@ -1,67 +1,876 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZAP SHOES - Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAP SHOES — CRM</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23a855f7'/><text x='50' y='68' font-size='60' font-weight='900' text-anchor='middle' fill='white' font-family='Arial'>Z</text></svg>">
+<meta name="theme-color" content="#a855f7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- ======================= INÍCIO: BLOCO CSS (padrão visual MAX) ======================= -->
 <style>
-:root{--bg:#09040e;--card:#110917;--border:#2a163a;--purple:#8A2BE2;--hover:#b026ff;--muted:#999;--green:#25D366;--red:#ff4545}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Montserrat,sans-serif}body{background:var(--bg);color:#fff;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
-#login-screen{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,#1a0b2e,#000)}.login-box{width:min(420px,calc(100% - 32px));padding:38px 22px;border:2px solid var(--purple);border-radius:20px;background:#141018;box-shadow:0 0 25px #8a2be277;text-align:center}.login-box img{width:92px;object-fit:contain;filter:drop-shadow(0 0 10px #8a2be2);margin-bottom:12px}.login-box h1{font-size:28px;font-weight:900;letter-spacing:2px;text-shadow:0 0 12px #8a2be2}.login-box h1 span,.brand span{color:var(--purple)}.login-box .sub{font-size:11px;letter-spacing:3px;color:var(--muted);margin:8px 0 28px}.field-login{position:relative;margin:14px 0}.field-login i{position:absolute;left:16px;top:17px;color:var(--purple)}.field-login input{width:100%;padding:15px 15px 15px 45px;background:#09060d;border:1px solid var(--border);border-radius:9px;color:#fff;font-size:15px}.btn-primary{border:0;border-radius:8px;background:linear-gradient(90deg,var(--purple),#a633ff);color:white;font-weight:800;padding:14px 20px}.login-box .btn-primary{width:100%;margin-top:10px;font-size:16px}.btn-primary:disabled{opacity:.6;cursor:wait}
-#dashboard-screen{display:none;min-height:100vh}.sidebar{width:260px;position:fixed;inset:0 auto 0 0;background:var(--card);border-right:1px solid var(--border);padding:22px 18px;display:flex;flex-direction:column;z-index:1000}.logo-box{display:flex;align-items:center;gap:12px;padding-bottom:22px;margin-bottom:20px;border-bottom:1px solid var(--border)}.logo-box img{width:48px}.brand{font-size:18px;font-weight:900;letter-spacing:1px}.menu-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:700;text-decoration:none;margin:3px 0;cursor:pointer}.menu-item:hover,.menu-item.active{background:#8a2be21c;color:var(--purple)}.sidebar-footer{margin-top:auto}.logout{width:100%;padding:12px;border:1px solid var(--red);border-radius:8px;background:none;color:var(--red);font-weight:700}.main{margin-left:260px;padding:28px;width:calc(100% - 260px)}.mobile-header{display:none}.header-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:24px}.header-top h2{font-size:21px}.muted{color:var(--muted)}.view{display:none}.view.active{display:block}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:24px}.card,.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}.card{position:relative}.card h3{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}.card .value{font-size:29px;font-weight:800}.card .icon{position:absolute;right:18px;top:18px;color:#8a2be233;font-size:34px}.panel{margin-bottom:22px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.panel-head h3{color:var(--purple);font-size:15px}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.form-group{display:flex;flex-direction:column;min-width:0}.form-group.full{grid-column:1/-1}.form-group label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px}.form-group input,.form-group select,.form-group textarea,.search-input{width:100%;background:#0a0510;border:1px solid var(--border);border-radius:8px;padding:12px;color:#fff;outline:none;font-size:13px}.form-group input:focus,.form-group select:focus,.form-group textarea:focus,.search-input:focus{border-color:var(--purple);box-shadow:0 0 8px #8a2be244}.form-group select option{background:#130b1a}.form-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.btn-secondary,.btn-danger,.btn-green{border:1px solid var(--border);background:transparent;color:#ddd;border-radius:8px;padding:11px 15px;font-weight:700;font-size:12px}.btn-danger{border-color:var(--red);color:var(--red)}.btn-green{border-color:var(--green);color:var(--green)}.search-row{display:flex;gap:10px;margin-bottom:15px}.search-row .search-input{max-width:380px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;padding:12px 8px;border-bottom:1px solid var(--border)}td{padding:13px 8px;border-bottom:1px solid #21112d;font-size:12px;color:#ddd}tbody tr:hover{background:#8a2be20d}.actions{display:flex;gap:6px}.icon-btn{background:#21112d;border:1px solid var(--border);border-radius:6px;color:#ddd;padding:7px 9px}.icon-btn.edit{color:#c99aff}.icon-btn.delete{color:var(--red)}.empty{text-align:center!important;color:var(--muted)!important;padding:25px!important}.status{display:inline-block;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:700;background:#8a2be222;color:#c99aff}.status.done{background:#25d36620;color:#25D366}.status.cancelled{background:#ff454520;color:#ff7777}.mobile-list{display:none}.client-card,.order-card{background:#150d1e;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}.client-card h4,.order-card h4{font-size:14px;margin-bottom:8px}.client-card p,.order-card p{font-size:11px;color:var(--muted);margin:5px 0}.client-card .actions,.order-card .actions{margin-top:12px}.notice{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6}.modal{display:none;position:fixed;inset:0;background:#000d;z-index:2500;align-items:center;justify-content:center;padding:16px}.modal-box{width:min(720px,100%);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--purple);border-radius:14px;padding:22px;box-shadow:0 0 25px #8a2be255}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{color:var(--purple);font-size:17px}.close{background:none;border:0;color:white;font-size:23px}.toast{position:fixed;right:20px;bottom:20px;z-index:4000;max-width:min(420px,calc(100% - 40px));background:#21112d;border:1px solid var(--purple);padding:14px 18px;border-radius:9px;font-size:12px;display:none;box-shadow:0 5px 25px #0008}.toast.error{border-color:var(--red)}
-@media(max-width:768px){.sidebar{left:-100%;width:82%;max-width:300px;transition:.25s}.sidebar.open{left:0}.main{margin:0;width:100%;padding:14px}.mobile-header{display:flex;align-items:center;justify-content:space-between;position:relative;min-height:88px;margin-bottom:20px}.mobile-header img{width:78px;height:78px;object-fit:contain;filter:drop-shadow(0 0 8px #8a2be2)}.mobile-brand{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap}.mobile-brand h1{font-size:20px;font-weight:900;text-shadow:0 0 10px #8a2be2}.mobile-brand p{font-size:8px;letter-spacing:2px;color:var(--muted);margin-top:4px}.menu-toggle{width:45px;height:45px;border:0;background:none;color:var(--purple);font-size:26px}.header-top{border:0;margin-bottom:18px;padding:0}.header-top h2{font-size:17px}.cards{grid-template-columns:1fr;gap:10px}.card{padding:17px}.card .value{font-size:25px}.form-grid{grid-template-columns:1fr}.panel{padding:14px}.table-wrap{display:none}.mobile-list{display:block}.search-row .search-input{max-width:none}.search-row{flex-direction:column}.panel-head{align-items:flex-start}.form-actions>*{flex:1}.sidebar-overlay{display:none;position:fixed;inset:0;background:#000b;z-index:900}.sidebar-overlay.show{display:block}}
-@media(min-width:769px){.sidebar-overlay{display:none!important}}
+  :root {
+    --bg-main: #0a0612; --bg-deep: #1a0a2e; --bg-sidebar: #13101e;
+    --bg-card: #1a1726; --border: #2a2438;
+    --text-primary: #f0f0f5; --text-secondary: #9a94a8; --text-dim: #6a6480;
+    --neon: #a855f7; --neon-alt: #d946ef; --neon-cyan: #38bdf8;
+    --neon-glow: rgba(168, 85, 247, 0.6); --neon-glow-strong: rgba(168, 85, 247, 0.9);
+    --success: #22c55e; --warning: #f59e0b; --error: #ef4444; --info: #38bdf8;
+    --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: var(--font-body);
+    background: radial-gradient(circle at 50% -20%, var(--bg-deep) 0%, var(--bg-main) 60%, #000 100%);
+    color: var(--text-primary); min-height: 100vh; overflow-x: hidden;
+  }
+  button, input, select, textarea { font-family: var(--font-body); }
+
+  /* LOGIN */
+  .login-screen {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    z-index: 9999; padding: 20px;
+    background: radial-gradient(circle at 50% 40%, rgba(168,85,247,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(217,70,239,0.08) 0%, transparent 60%), var(--bg-main);
+  }
+  .login-screen.hidden { display: none; }
+  .login-box {
+    width: 100%; max-width: 420px; background: rgba(0,0,0,0.4);
+    border: 2px solid var(--neon); border-radius: 20px; padding: 40px 32px;
+    box-shadow: 0 0 60px var(--neon-glow), 0 0 100px rgba(168,85,247,0.3);
+    backdrop-filter: blur(20px);
+  }
+  .login-logo {
+    font-size: clamp(22px, 5vw, 30px); font-weight: 900; letter-spacing: 3px; color: var(--neon);
+    text-align: center; text-transform: uppercase; margin-bottom: 6px;
+    text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow);
+  }
+  .login-logo span { color: var(--text-primary); text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+  .login-sub { font-size: 11px; font-weight: 600; letter-spacing: 6px; color: var(--text-secondary); text-align: center; text-transform: uppercase; margin-bottom: 32px; }
+  .login-input-wrap { position: relative; margin-bottom: 16px; }
+  .login-input-wrap i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 16px; pointer-events: none; }
+  .login-input {
+    width: 100%; padding: 14px 16px 14px 46px; background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border); border-radius: 12px; color: var(--text-primary);
+    font-size: 15px; outline: none; transition: all 0.15s;
+  }
+  .login-input:focus { border-color: var(--neon); box-shadow: 0 0 16px var(--neon-glow); background: rgba(168,85,247,0.05); }
+  .login-input::placeholder { color: var(--text-dim); }
+  .login-btn {
+    width: 100%; padding: 15px; background: linear-gradient(135deg, var(--neon), var(--neon-alt));
+    color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; margin-top: 8px;
+    transition: all 0.15s; box-shadow: 0 0 20px var(--neon-glow);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .login-btn:hover:not(:disabled) { box-shadow: 0 0 32px var(--neon-glow-strong); transform: translateY(-2px); }
+  .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .login-erro {
+    color: var(--error); font-size: 13px; text-align: center; padding: 10px;
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px;
+    margin-top: 14px; display: none;
+  }
+  .login-erro.show { display: block; animation: fadeIn 0.3s ease-out; }
+  .login-info { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 20px; line-height: 1.6; }
+
+  /* APP */
+  .app { display: none; }
+  .app.visible { display: block; }
+  .topbar {
+    padding: 14px 24px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 6, 18, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(168,85,247,0.1);
+  }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border); border-radius: 24px; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .status-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
+  .status-pill.online .dot { background: var(--success); box-shadow: 0 0 12px var(--success); animation: pulseOnline 1.5s infinite; }
+  .status-pill.online .label { color: var(--success); }
+  .status-pill .label { color: var(--error); }
+  @keyframes pulseOnline { 0%,100% { box-shadow: 0 0 12px var(--success); } 50% { box-shadow: 0 0 20px var(--success); } }
+  .user-pill {
+    display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.3); border-radius: 24px; font-size: 12px; font-weight: 600; color: var(--neon);
+  }
+  .user-pill .perfil-badge { background: var(--neon); color: #fff; padding: 1px 8px; border-radius: 10px; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .topbar .spacer { flex: 1; }
+  .btn-text {
+    padding: 10px 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px;
+    color: var(--text-primary); cursor: pointer; font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s;
+  }
+  .btn-text:hover { border-color: var(--neon); color: var(--neon); box-shadow: 0 0 16px var(--neon-glow); }
+  .btn-text.danger:hover { border-color: var(--error); color: var(--error); box-shadow: 0 0 16px rgba(239,68,68,0.6); }
+  .hamburger {
+    width: 42px; height: 42px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 0; transition: all 0.2s;
+  }
+  .hamburger:hover { border-color: var(--neon); }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--neon); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--neon); }
+
+  .hero { text-align: center; padding: 24px 20px 18px; }
+  .hero-logo { font-size: clamp(28px, 5vw, 44px); font-weight: 900; letter-spacing: 6px; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); margin-bottom: 8px; }
+  .hero-logo span { color: var(--text-primary); }
+  .hero-sub { font-size: 11px; letter-spacing: 8px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; }
+
+  .tabs { display: flex; gap: 4px; padding: 0 24px; max-width: 1600px; margin: 0 auto 20px; border-bottom: 1px solid var(--border); overflow-x: auto; position: relative; z-index: 10; }
+  .tabs::-webkit-scrollbar { height: 0; }
+  .tab {
+    padding: 14px 22px; background: transparent; border: none; color: var(--text-secondary); cursor: pointer;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 8px; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap;
+  }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--neon); border-bottom-color: var(--neon); text-shadow: 0 0 12px var(--neon-glow); }
+
+  .content { padding: 0 24px 80px; max-width: 1600px; margin: 0 auto; }
+  .aba { display: none; }
+  .aba.active { display: block; animation: fadeIn 0.25s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .empty { text-align: center; padding: 50px 20px; color: var(--text-dim); }
+  .empty h2 { margin-bottom: 10px; color: var(--text-secondary); font-size: 15px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+  .loader { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--neon); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 50px auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .versao-canto { position: fixed; bottom: 14px; right: 18px; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--text-dim); opacity: 0.5; z-index: 50; pointer-events: none; text-transform: uppercase; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--success), #16a34a); color: #fff;
+    padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 13px; opacity: 0; transform: translateY(30px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 4500; max-width: 400px; box-shadow: 0 0 32px rgba(34,197,94,0.6);
+  }
+  .toast.show { opacity: 1; transform: translateY(0) scale(1); }
+  .toast.error { background: linear-gradient(135deg, var(--error), #dc2626); box-shadow: 0 0 32px rgba(239,68,68,0.6); }
+  .toast.info { background: linear-gradient(135deg, var(--info), #0284c7); box-shadow: 0 0 32px rgba(56,189,248,0.6); }
+
+  /* CARDS */
+  .card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; border-left: 4px solid var(--neon); }
+  .card h3 { font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--neon); text-shadow: 0 0 12px var(--neon-glow); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .card-collapsible { padding: 0; overflow: hidden; }
+  .card-collapsible .card-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; cursor: pointer; user-select: none; transition: background 0.15s; gap: 12px; }
+  .card-collapsible .card-header:hover { background: rgba(168,85,247,0.05); }
+  .card-collapsible .card-header h3 { margin-bottom: 0; flex: 1; }
+  .card-collapsible .toggle-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); display: flex; align-items: center; justify-content: center; color: var(--neon); font-size: 14px; transition: all 0.3s; flex-shrink: 0; }
+  .card-collapsible.open .toggle-icon { transform: rotate(180deg); background: var(--neon); color: #fff; box-shadow: 0 0 16px var(--neon-glow-strong); }
+  .card-collapsible .card-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); padding: 0 24px; }
+  .card-collapsible.open .card-body { max-height: 5000px; padding: 0 24px 24px 24px; }
+
+  /* DASH CARDS */
+  .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .dash-card { padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; border-left: 4px solid var(--neon); }
+  .dash-card.ok { border-left-color: var(--success); }
+  .dash-card.info { border-left-color: var(--info); }
+  .dash-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .dash-card .val { font-size: 26px; font-weight: 800; color: var(--neon); text-shadow: 0 0 12px var(--neon-glow); line-height: 1; }
+  .dash-card.ok .val { color: var(--success); text-shadow: 0 0 12px rgba(34,197,94,0.5); }
+  .dash-card.info .val { color: var(--info); }
+
+  /* FORM */
+  .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .form-row label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
+  .form-row input, .form-row select, .form-row textarea { padding: 12px 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 14px; outline: none; transition: all 0.15s; }
+  .form-row select option { background: var(--bg-card); }
+  .form-row textarea { resize: vertical; min-height: 70px; }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--neon); box-shadow: 0 0 12px var(--neon-glow); }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .form-row.full { grid-column: 1 / -1; }
+
+  .btn { padding: 12px 22px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-primary { background: linear-gradient(135deg, var(--neon), var(--neon-alt)); color: #fff; box-shadow: 0 0 16px var(--neon-glow); }
+  .btn-primary:hover:not(:disabled) { box-shadow: 0 0 28px var(--neon-glow-strong); transform: translateY(-2px); }
+  .btn-primary:disabled { opacity: 0.5; cursor: wait; }
+  .btn-secondary { background: rgba(255,255,255,0.03); color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--neon); }
+  .btn-danger { background: var(--error); color: #fff; }
+  .btn-danger:hover { box-shadow: 0 0 20px rgba(239,68,68,0.6); }
+  .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; box-shadow: 0 0 16px rgba(37,211,102,0.4); }
+  .btn-whatsapp:hover { box-shadow: 0 0 28px rgba(37,211,102,0.7); transform: translateY(-2px); }
+  .btn-sm { padding: 8px 14px; font-size: 11px; }
+  .form-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+
+  .busca-pedidos { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+  .busca-pedidos input { flex: 1; padding: 12px 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 14px; outline: none; transition: all 0.15s; }
+  .busca-pedidos input:focus { border-color: var(--neon); box-shadow: 0 0 12px var(--neon-glow); }
+
+  /* LISTAS */
+  .pedido-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; transition: all 0.15s; }
+  .pedido-item:hover { border-color: var(--neon); }
+  .pedido-item .info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
+  .pedido-item .info .meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .pedido-item .info .meta strong { color: var(--neon); }
+  .pedido-item .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .status-ped { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; display: inline-block; }
+  .status-pending { background: rgba(56,189,248,0.15); color: var(--info); border: 1px solid var(--info); }
+  .status-processing { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid var(--warning); }
+  .status-done { background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid var(--success); }
+  .status-cancelled { background: rgba(239,68,68,0.15); color: var(--error); border: 1px solid var(--error); }
+
+  /* DRAWER */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 500; opacity: 0; visibility: hidden; transition: all 0.3s; }
+  .sidebar-overlay.open { opacity: 1; visibility: visible; }
+  .sidebar-drawer { position: fixed; top: 0; right: -340px; width: 320px; height: 100vh; background: var(--bg-sidebar); border-left: 1px solid rgba(168,85,247,0.2); z-index: 600; padding: 30px 20px; display: flex; flex-direction: column; gap: 6px; transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.5); }
+  .sidebar-drawer.open { right: 0; }
+  .drawer-title { font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--neon); text-transform: uppercase; padding: 0 12px 16px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .drawer-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: transparent; border: 1px solid transparent; border-radius: 12px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; text-align: left; width: 100%; transition: all 0.15s; }
+  .drawer-item:hover { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.2); color: var(--text-primary); }
+  .drawer-item.active { background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(217,70,239,0.1)); border-color: var(--neon); color: var(--neon); }
+  .drawer-item .icon { font-size: 17px; width: 24px; text-align: center; }
+  .drawer-divider { height: 1px; background: var(--border); margin: 10px 12px; }
+
+  /* TEMA */
+  .tema-btn { min-width: 130px; }
+  .tema-btn.ativo { background: linear-gradient(135deg, var(--neon), var(--neon-alt)); color: #fff; border-color: var(--neon); box-shadow: 0 0 16px var(--neon-glow); }
+
+  body.tema-claro, body.tema-auto[data-tema-efetivo="claro"] {
+    --bg-main: #f5f5f7; --bg-deep: #e8e8ec; --bg-sidebar: #ffffff; --bg-card: #ffffff; --border: #d8d8e0;
+    --text-primary: #1a1726; --text-secondary: #5a5568; --text-dim: #8a8598;
+    --neon: #7c3aed; --neon-alt: #c026d3; --neon-glow: rgba(124,58,237,0.25); --neon-glow-strong: rgba(124,58,237,0.5);
+    --success: #16a34a; --warning: #d97706; --error: #dc2626; --info: #0284c7;
+    background: linear-gradient(180deg, #f5f5f7 0%, #e8e8ec 100%); color: var(--text-primary);
+  }
+  body.tema-claro .login-screen, body.tema-auto[data-tema-efetivo="claro"] .login-screen { background: #f5f5f7; }
+  body.tema-claro .login-box, body.tema-auto[data-tema-efetivo="claro"] .login-box { background: rgba(255,255,255,0.95); }
+  body.tema-claro .login-logo span, body.tema-claro .hero-logo span, body.tema-auto[data-tema-efetivo="claro"] .login-logo span, body.tema-auto[data-tema-efetivo="claro"] .hero-logo span { color: var(--text-primary); text-shadow: none; }
+  body.tema-claro .topbar, body.tema-auto[data-tema-efetivo="claro"] .topbar { background: rgba(255,255,255,0.85); }
+  body.tema-claro .card, body.tema-claro .pedido-item, body.tema-claro .dash-card, body.tema-claro .sidebar-drawer,
+  body.tema-auto[data-tema-efetivo="claro"] .card, body.tema-auto[data-tema-efetivo="claro"] .pedido-item, body.tema-auto[data-tema-efetivo="claro"] .dash-card, body.tema-auto[data-tema-efetivo="claro"] .sidebar-drawer { background: #ffffff; }
+  body.tema-claro .form-row input, body.tema-claro .form-row select, body.tema-claro .form-row textarea, body.tema-claro .login-input, body.tema-claro .busca-pedidos input, body.tema-claro .btn-secondary,
+  body.tema-auto[data-tema-efetivo="claro"] .form-row input, body.tema-auto[data-tema-efetivo="claro"] .form-row select, body.tema-auto[data-tema-efetivo="claro"] .form-row textarea, body.tema-auto[data-tema-efetivo="claro"] .login-input, body.tema-auto[data-tema-efetivo="claro"] .busca-pedidos input, body.tema-auto[data-tema-efetivo="claro"] .btn-secondary { background: #ffffff; border-color: #d8d8e0; color: var(--text-primary); }
+
+  /* MOBILE */
+  @media (max-width: 700px) {
+    .topbar { padding: 10px 12px; gap: 6px; }
+    .status-pill { padding: 8px; border-radius: 50%; min-width: 32px; height: 32px; justify-content: center; }
+    .status-pill .label, .user-pill .label-nome { display: none; }
+    .btn-text { padding: 10px; min-width: 40px; justify-content: center; font-size: 0; gap: 0; }
+    .btn-text i { font-size: 15px; }
+    .hamburger { width: 44px; height: 44px; flex-shrink: 0; }
+    .hero { padding: 16px 12px 12px; }
+    .hero-logo { font-size: 24px; letter-spacing: 3px; }
+    .hero-sub { font-size: 9px; letter-spacing: 5px; }
+    .tabs { padding: 0 8px; gap: 2px; }
+    .tab { padding: 12px 14px; font-size: 11px; }
+    .content { padding: 0 12px 60px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-collapsible { padding: 0; }
+    .card-collapsible .card-body { padding: 0 16px; }
+    .card-collapsible.open .card-body { padding: 0 16px 16px; }
+    .form-grid { grid-template-columns: 1fr; gap: 0; }
+    .form-row input, .form-row select, .form-row textarea { padding: 15px 16px; font-size: 16px; border-radius: 12px; }
+    .btn { min-height: 46px; padding: 14px 22px; font-size: 13px; border-radius: 12px; }
+    .btn-sm { min-height: 40px; padding: 10px 16px; }
+    .form-actions .btn { flex: 1; }
+    .pedido-item { grid-template-columns: 1fr; }
+    .pedido-item .acoes .btn { flex: 1; }
+    .busca-pedidos input { font-size: 16px; padding: 14px 16px; }
+    .sidebar-drawer { width: 280px; }
+    .dash-cards { grid-template-columns: 1fr; gap: 10px; }
+  }
 </style>
+<!-- ======================= FIM: BLOCO CSS ======================= -->
 </head>
 <body>
-<div id="login-screen"><div class="login-box"><img src="logo.png" alt="ZAP SHOES"><h1>ZAP<span>SHOES</span></h1><p class="sub">CRM PARA CALÇADOS</p><div class="field-login"><i class="fa-solid fa-user"></i><input type="email" id="email" placeholder="E-mail" autocomplete="username"></div><div class="field-login"><i class="fa-solid fa-lock"></i><input type="password" id="password" placeholder="Senha" autocomplete="current-password"></div><button class="btn-primary" id="login-button" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> ENTRAR</button><p class="notice">Sua sessão permanece ativa por até 24 horas neste dispositivo.</p></div></div>
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-<div id="dashboard-screen">
-<aside class="sidebar" id="sidebar"><div class="logo-box"><img src="logo.png" alt="ZAP"><div class="brand">ZAP<span>SHOES</span></div></div><a class="menu-item active" data-view="overview" onclick="showView('overview',this)"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a><a class="menu-item" data-view="clients" onclick="showView('clients',this)"><i class="fa-solid fa-users"></i> Meus Clientes</a><a class="menu-item" data-view="orders" onclick="showView('orders',this)"><i class="fa-solid fa-box-open"></i> Pedidos</a><div class="sidebar-footer"><button class="logout" onclick="logout()"><i class="fa-solid fa-power-off"></i> Sair</button></div></aside>
-<main class="main"><div class="mobile-header"><img src="logo.png" alt="ZAP SHOES"><div class="mobile-brand"><h1>ZAP<span>SHOES</span></h1><p>CRM PARA CALÇADOS</p></div><button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button></div><div class="header-top"><h2>Olá, <span id="user-name">Vendedor</span>! 👋</h2><span class="muted" id="session-clock"></span></div>
-<section class="view active" id="view-overview"><div class="cards"><div class="card"><h3>Total de Clientes</h3><div class="value" id="stat-clients">0</div><i class="fa-solid fa-users icon"></i></div><div class="card"><h3>Pedidos no Mês</h3><div class="value" id="stat-orders">0</div><i class="fa-solid fa-cart-shopping icon"></i></div><div class="card"><h3>Faturamento no Mês</h3><div class="value" id="stat-revenue">R$ 0,00</div><i class="fa-solid fa-dollar-sign icon"></i></div></div><div class="panel"><div class="panel-head"><h3><i class="fa-solid fa-clock-rotate-left"></i> Pedidos recentes</h3><button class="btn-secondary" onclick="showView('orders')">Ver pedidos</button></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Data</th><th>Total</th><th>Status</th></tr></thead><tbody id="recent-orders-table"><tr><td colspan="5" class="empty">Nenhum pedido registrado.</td></tr></tbody></table></div><div class="mobile-list" id="recent-orders-mobile"></div></div></section>
-<section class="view" id="view-clients"><div class="panel"><div class="panel-head"><h3 id="client-form-title"><i class="fa-solid fa-user-plus"></i> Cadastrar cliente</h3><button class="btn-secondary" onclick="resetClientForm()">Limpar</button></div><form id="client-form" onsubmit="saveClient(event)"><input type="hidden" id="client-id"><div class="form-grid"><div class="form-group"><label>Nome *</label><input id="cli-nome" required maxlength="160" placeholder="Nome do cliente ou loja"></div><div class="form-group"><label>CPF/CNPJ</label><input id="cli-cpf" placeholder="CPF ou CNPJ"></div><div class="form-group"><label>Telefone/WhatsApp</label><input id="cli-telefone" placeholder="(00) 00000-0000"></div><div class="form-group"><label>CEP</label><input id="cli-cep" placeholder="00000-000"></div><div class="form-group"><label>Endereço</label><input id="cli-endereco" placeholder="Rua/Av."></div><div class="form-group"><label>Número</label><input id="cli-numero" placeholder="Nº"></div><div class="form-group"><label>Bairro</label><input id="cli-bairro" placeholder="Bairro"></div><div class="form-group"><label>Cidade</label><input id="cli-cidade" placeholder="Cidade"></div><div class="form-group"><label>UF</label><input id="cli-uf" maxlength="2" placeholder="MG"></div><div class="form-group full"><label>Ponto de referência</label><input id="cli-referencia" placeholder="Ponto de referência"></div><div class="form-group full"><label>Observações</label><textarea id="cli-obs" rows="3" placeholder="Anotações sobre o cliente"></textarea></div></div><div class="form-actions"><button class="btn-primary" type="submit" id="client-submit"><i class="fa-solid fa-floppy-disk"></i> SALVAR CLIENTE</button><button type="button" class="btn-secondary" onclick="resetClientForm()">Cancelar edição</button></div></form></div><div class="panel"><div class="panel-head"><h3><i class="fa-solid fa-address-book"></i> Meus clientes cadastrados</h3><span class="muted" id="client-count">0 clientes</span></div><div class="search-row"><input class="search-input" id="client-search" placeholder="Buscar por nome, telefone ou cidade" oninput="renderClients()"></div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>CPF/CNPJ</th><th>Cidade/Bairro</th><th>Ações</th></tr></thead><tbody id="clients-table"></tbody></table></div><div class="mobile-list" id="clients-mobile"></div></div></section>
-<section class="view" id="view-orders"><div class="panel"><div class="panel-head"><h3 id="order-form-title"><i class="fa-solid fa-cart-plus"></i> Cadastrar pedido</h3><button class="btn-secondary" onclick="resetOrderForm()">Limpar</button></div><form id="order-form" onsubmit="saveOrder(event)"><input type="hidden" id="order-id"><div class="form-grid"><div class="form-group"><label>Cliente *</label><select id="order-client" required><option value="">Selecione o cliente</option></select></div><div class="form-group"><label>Modelo do produto *</label><input id="order-model" required placeholder="Ex.: Tênis casual"></div><div class="form-group"><label>Cor</label><input id="order-color" placeholder="Cor"></div><div class="form-group"><label>Preço unitário (R$)</label><input id="order-price" type="number" min="0" step="0.01" value="0" oninput="calculateOrderTotal()"></div><div class="form-group"><label>Embalagem</label><input id="order-packaging" placeholder="Embalagem"></div><div class="form-group"><label>Grade</label><input id="order-grade" placeholder="Ex.: 34 ao 39"></div><div class="form-group"><label>Pares por grade</label><input id="order-pairs-grade" type="number" min="0" step="1" value="0"></div><div class="form-group"><label>Quantidade de pares *</label><input id="order-quantity" type="number" min="1" step="1" value="1" required oninput="calculateOrderTotal()"></div><div class="form-group"><label>Desconto (R$)</label><input id="order-discount" type="number" min="0" step="0.01" value="0" oninput="calculateOrderTotal()"></div><div class="form-group"><label>Frete (R$)</label><input id="order-freight" type="number" min="0" step="0.01" value="0" oninput="calculateOrderTotal()"></div><div class="form-group"><label>Custo de compra (R$)</label><input id="order-cost" type="number" min="0" step="0.01" value="0"></div><div class="form-group"><label>Status</label><select id="order-status"><option value="pending">Pendente</option><option value="processing">Em andamento</option><option value="done">Concluído</option><option value="cancelled">Cancelado</option></select></div><div class="form-group"><label>Total do pedido (R$)</label><input id="order-total" type="number" min="0" step="0.01" value="0"></div></div><div class="form-actions"><button class="btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> SALVAR PEDIDO</button><button type="button" class="btn-secondary" onclick="resetOrderForm()">Cancelar edição</button></div><p class="notice">O total é calculado automaticamente como preço unitário × quantidade − desconto + frete. Você também pode ajustar o total manualmente.</p></form></div><div class="panel"><div class="panel-head"><h3><i class="fa-solid fa-clipboard-list"></i> Meus pedidos</h3><span class="muted" id="order-count">0 pedidos</span></div><div class="search-row"><input class="search-input" id="order-search" placeholder="Buscar por cliente ou produto" oninput="renderOrders()"></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Quantidade</th><th>Data</th><th>Total</th><th>Status</th><th>Ações</th></tr></thead><tbody id="orders-table"></tbody></table></div><div class="mobile-list" id="orders-mobile"></div></div></section>
-</main></div>
+
+<!-- ======================= INÍCIO: TELA DE LOGIN ======================= -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">ZAP <span>SHOES</span></div>
+    <div class="login-sub">CRM para Calçados</div>
+    <div class="login-input-wrap"><i class="fas fa-user"></i><input type="email" class="login-input" id="loginEmail" placeholder="E-mail" autocomplete="username" autofocus></div>
+    <div class="login-input-wrap"><i class="fas fa-lock"></i><input type="password" class="login-input" id="loginSenha" placeholder="Senha" autocomplete="current-password"></div>
+    <button class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+    <div class="login-erro" id="loginErro"></div>
+    <div class="login-info">Sua sessão permanece ativa por até 24 horas neste dispositivo.</div>
+  </div>
+</div>
+<!-- ======================= FIM: TELA DE LOGIN ======================= -->
+
+<div class="app" id="app">
+
+<!-- ======================= INÍCIO: TOPBAR + HERO + ABAS ======================= -->
+<div class="topbar">
+  <div class="status-pill" id="statusPill"><span class="dot"></span><span class="label" id="statusLabel">Verificando...</span></div>
+  <div class="user-pill"><i class="fas fa-user-circle"></i><span class="label-nome" id="userNome">—</span><span class="perfil-badge">Vendedor</span></div>
+  <div class="spacer"></div>
+  <span class="user-pill" id="sessionClock" style="display:none"></span>
+  <button class="btn-text" id="btnRefresh"><i class="fas fa-sync-alt"></i> <span>Atualizar</span></button>
+  <button class="btn-text danger" id="btnSair"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></button>
+  <button class="hamburger" id="btnMenu" aria-label="Menu"><span></span><span></span><span></span></button>
+</div>
+
+<div class="hero">
+  <div class="hero-logo" id="heroLogo">ZAP <span>SHOES</span></div>
+  <div class="hero-sub" id="heroSub">CRM para Calçados</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-aba="dashboard"><i class="fas fa-chart-line"></i> Visão Geral</button>
+  <button class="tab" data-aba="clientes"><i class="fas fa-users"></i> Clientes</button>
+  <button class="tab" data-aba="pedidos"><i class="fas fa-shopping-cart"></i> Pedidos</button>
+  <button class="tab" data-aba="config"><i class="fas fa-cog"></i> Configurações</button>
+</div>
+<!-- ======================= FIM: TOPBAR + HERO + ABAS ======================= -->
+
+<div class="content">
+
+<!-- ======================= INÍCIO: ABA VISÃO GERAL ======================= -->
+<div class="aba active" id="aba-dashboard">
+  <div class="card">
+    <h3><i class="fas fa-chart-line"></i> Visão Geral</h3>
+    <div class="dash-cards">
+      <div class="dash-card"><div class="lbl"><i class="fas fa-users"></i> Total de Clientes</div><div class="val" id="stat-clients">0</div></div>
+      <div class="dash-card info"><div class="lbl"><i class="fas fa-cart-shopping"></i> Pedidos no Mês</div><div class="val" id="stat-orders">0</div></div>
+      <div class="dash-card ok"><div class="lbl"><i class="fas fa-dollar-sign"></i> Faturamento no Mês</div><div class="val" id="stat-revenue" style="font-size:22px">R$ 0,00</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3><i class="fas fa-clock-rotate-left"></i> Pedidos recentes</h3>
+    <div id="recentOrders"><div class="empty"><h2>Nenhum pedido registrado</h2></div></div>
+  </div>
+</div>
+<!-- ======================= FIM: ABA VISÃO GERAL ======================= -->
+
+<!-- ======================= INÍCIO: ABA CLIENTES ======================= -->
+<div class="aba" id="aba-clientes">
+  <div class="card card-collapsible" data-collapse-id="cadastro_cliente" id="cardCliente">
+    <div class="card-header" onclick="toggleCardCollapsible(this)">
+      <h3 id="clienteFormTitulo"><i class="fas fa-plus"></i> Cadastrar Cliente</h3>
+      <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+    </div>
+    <div class="card-body">
+      <input type="hidden" id="clienteId">
+      <div class="form-grid">
+        <div class="form-row"><label>Nome *</label><input type="text" id="cliNome" maxlength="160" placeholder="Nome do cliente ou loja"></div>
+        <div class="form-row"><label>CPF/CNPJ</label><input type="text" id="cliCpf" placeholder="CPF ou CNPJ"></div>
+        <div class="form-row"><label>Telefone/WhatsApp</label><input type="text" id="cliTelefone" placeholder="(00) 00000-0000"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>CEP</label><input type="text" id="cliCep" placeholder="00000-000"></div>
+        <div class="form-row"><label>Endereço</label><input type="text" id="cliEndereco" placeholder="Rua/Av."></div>
+        <div class="form-row"><label>Número</label><input type="text" id="cliNumero" placeholder="Nº"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>Bairro</label><input type="text" id="cliBairro" placeholder="Bairro"></div>
+        <div class="form-row"><label>Cidade</label><input type="text" id="cliCidade" placeholder="Cidade"></div>
+        <div class="form-row"><label>UF</label><input type="text" id="cliUf" maxlength="2" placeholder="MG"></div>
+      </div>
+      <div class="form-row"><label>⭐ Ponto de Referência</label><input type="text" id="cliReferencia" placeholder="Ponto de referência"></div>
+      <div class="form-row"><label>Observações</label><textarea id="cliObs" placeholder="Anotações sobre o cliente..."></textarea></div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btnSalvarCliente"><i class="fas fa-save"></i> Salvar Cliente</button>
+        <button class="btn btn-secondary" id="btnLimparCliente"><i class="fas fa-eraser"></i> Limpar / Cancelar edição</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3><i class="fas fa-users"></i> Clientes Cadastrados <span id="clientCount" style="margin-left:auto;font-size:11px;color:var(--text-dim)">0 clientes</span></h3>
+    <div class="busca-pedidos"><input type="text" id="buscaClientes" placeholder="Buscar por nome, telefone, cidade..."><button class="btn btn-secondary btn-sm" id="btnLimparBuscaClientes"><i class="fas fa-times"></i></button></div>
+    <div id="listaClientes"><div class="loader"></div></div>
+  </div>
+</div>
+<!-- ======================= FIM: ABA CLIENTES ======================= -->
+
+<!-- ======================= INÍCIO: ABA PEDIDOS ======================= -->
+<div class="aba" id="aba-pedidos">
+  <div class="card card-collapsible" data-collapse-id="cadastro_pedido" id="cardPedido">
+    <div class="card-header" onclick="toggleCardCollapsible(this)">
+      <h3 id="pedidoFormTitulo"><i class="fas fa-plus"></i> Cadastrar Pedido</h3>
+      <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+    </div>
+    <div class="card-body">
+      <input type="hidden" id="pedidoId">
+      <div class="form-grid">
+        <div class="form-row"><label>Cliente *</label><select id="ordCliente"><option value="">Selecione o cliente</option></select></div>
+        <div class="form-row"><label>Modelo do produto *</label><input type="text" id="ordModelo" placeholder="Ex.: Tênis casual"></div>
+        <div class="form-row"><label>Cor</label><input type="text" id="ordCor" placeholder="Cor"></div>
+        <div class="form-row"><label>Preço unitário (R$)</label><input type="number" id="ordPreco" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Embalagem</label><input type="text" id="ordEmbalagem" placeholder="Embalagem"></div>
+        <div class="form-row"><label>Grade</label><input type="text" id="ordGrade" placeholder="Ex.: 34 ao 39"></div>
+        <div class="form-row"><label>Pares por grade</label><input type="number" id="ordParesGrade" min="0" step="1" value="0"></div>
+        <div class="form-row"><label>Quantidade de pares *</label><input type="number" id="ordQtd" min="1" step="1" value="1"></div>
+        <div class="form-row"><label>Desconto (R$)</label><input type="number" id="ordDesconto" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Frete (R$)</label><input type="number" id="ordFrete" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Custo de compra (R$)</label><input type="number" id="ordCusto" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Status</label>
+          <select id="ordStatus"><option value="pending">Pendente</option><option value="processing">Em andamento</option><option value="done">Concluído</option><option value="cancelled">Cancelado</option></select>
+        </div>
+        <div class="form-row"><label>Total do pedido (R$)</label><input type="number" id="ordTotal" min="0" step="0.01" value="0"></div>
+      </div>
+      <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px"><i class="fas fa-info-circle"></i> O total é calculado automaticamente: preço unitário × quantidade − desconto + frete. Você também pode ajustar manualmente.</p>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btnSalvarPedido"><i class="fas fa-save"></i> Salvar Pedido</button>
+        <button class="btn btn-secondary" id="btnLimparPedido"><i class="fas fa-eraser"></i> Limpar / Cancelar edição</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3><i class="fas fa-clipboard-list"></i> Meus Pedidos <span id="orderCount" style="margin-left:auto;font-size:11px;color:var(--text-dim)">0 pedidos</span></h3>
+    <div class="busca-pedidos"><input type="text" id="buscaPedidos" placeholder="Buscar por cliente ou produto..."><button class="btn btn-secondary btn-sm" id="btnLimparBuscaPedidos"><i class="fas fa-times"></i></button></div>
+    <div id="listaPedidos"><div class="loader"></div></div>
+  </div>
+</div>
+<!-- ======================= FIM: ABA PEDIDOS ======================= -->
+
+<!-- ======================= INÍCIO: ABA CONFIGURAÇÕES ======================= -->
+<div class="aba" id="aba-config">
+  <div class="card card-collapsible open" data-collapse-id="identidade">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-cog"></i> Identidade</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <div class="form-row"><label>Nome do Sistema</label><input type="text" id="cfgNomeSistema"></div>
+      <div class="form-row"><label>Subtítulo</label><input type="text" id="cfgSubtitulo"></div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btnSalvarConfig"><i class="fas fa-save"></i> Salvar</button>
+        <button class="btn btn-secondary" id="btnResetConfig"><i class="fas fa-undo"></i> Restaurar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-collapsible" data-collapse-id="senha">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-key"></i> Minha Senha</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-row"><label>Senha Atual</label><input type="password" id="senhaAtual" autocomplete="current-password" placeholder="••••"></div>
+        <div class="form-row"><label>Nova Senha</label><input type="password" id="senhaNova" autocomplete="new-password" placeholder="mínimo 6 caracteres"></div>
+        <div class="form-row"><label>Confirmar Nova</label><input type="password" id="senhaConfirma" autocomplete="new-password" placeholder="repita a nova senha"></div>
+      </div>
+      <button class="btn btn-primary" id="btnAlterarSenha"><i class="fas fa-save"></i> Alterar Senha</button>
+    </div>
+  </div>
+
+  <div class="card card-collapsible" data-collapse-id="whatsapp">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fab fa-whatsapp"></i> WhatsApp</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <div class="form-row"><label>Abrir em</label>
+        <select id="cfgWhatsappApp"><option value="desktop">WhatsApp Desktop (recomendado)</option><option value="web">WhatsApp Web</option></select>
+      </div>
+      <button class="btn btn-primary" id="btnSalvarWhatsapp"><i class="fas fa-save"></i> Salvar</button>
+    </div>
+  </div>
+
+  <div class="card card-collapsible" data-collapse-id="aparencia">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-palette"></i> Aparência</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Escolha como o sistema deve aparecer. Por padrão, ele segue o tema do seu sistema operacional.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-secondary tema-btn" data-tema="auto" type="button"><i class="fas fa-circle-half-stroke"></i> Automático</button>
+        <button class="btn btn-secondary tema-btn" data-tema="claro" type="button"><i class="fas fa-sun"></i> Claro</button>
+        <button class="btn btn-secondary tema-btn" data-tema="escuro" type="button"><i class="fas fa-moon"></i> Escuro</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-collapsible" data-collapse-id="sobre">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-info-circle"></i> Sobre</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8">
+        <strong style="color:var(--text-primary)">ZAP SHOES — CRM</strong><br>
+        Versão: <strong id="sobreVersao"></strong><br>
+        API: <code style="color:var(--neon);font-size:11px" id="sobreApi"></code>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- ======================= FIM: ABA CONFIGURAÇÕES ======================= -->
+
+</div><!-- /.content -->
+
+<!-- ======================= INÍCIO: MENU LATERAL (DRAWER) ======================= -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-drawer" id="sidebarDrawer">
+  <div class="drawer-title">Menu</div>
+  <button class="drawer-item" data-aba="dashboard"><span class="icon"><i class="fas fa-chart-line"></i></span><span>Visão Geral</span></button>
+  <button class="drawer-item" data-aba="clientes"><span class="icon"><i class="fas fa-users"></i></span><span>Clientes</span></button>
+  <button class="drawer-item" data-aba="pedidos"><span class="icon"><i class="fas fa-shopping-cart"></i></span><span>Pedidos</span></button>
+  <div class="drawer-divider"></div>
+  <button class="drawer-item" data-aba="config"><span class="icon"><i class="fas fa-cog"></i></span><span>Configurações</span></button>
+  <div class="drawer-divider"></div>
+  <button class="drawer-item" id="drawerSair"><span class="icon"><i class="fas fa-sign-out-alt"></i></span><span>Sair</span></button>
+</aside>
+<!-- ======================= FIM: MENU LATERAL (DRAWER) ======================= -->
+
+</div><!-- /.app -->
+
+<div class="versao-canto" id="versaoCanto"></div>
 <div class="toast" id="toast"></div>
+
+<!-- ======================= INÍCIO: BLOCO JAVASCRIPT ======================= -->
 <script>
-const API='https://zapshoesb2b.maxcalcadosmax.workers.dev';
-let token='', currentUser=null, clients=[], orders=[], sessionExpiry=0, toastTimer;
-const $=id=>document.getElementById(id);
-const money=value=>Number(value||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-function notify(message,error=false){const el=$('toast');el.textContent=message;el.className='toast'+(error?' error':'');el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',4200)}
-function saveLocalSession(data){token=data.token;currentUser=data.user;sessionExpiry=Number(data.expiresAt)*1000;localStorage.setItem('zapShoesSession',JSON.stringify({token,expiresAt:sessionExpiry,user:currentUser}));}
-function clearLocalSession(){token='';currentUser=null;sessionExpiry=0;localStorage.removeItem('zapShoesSession')}
-async function api(path,options={}){const headers={...(options.headers||{})};if(token)headers.Authorization='Bearer '+token;if(options.body)headers['Content-Type']='application/json';const response=await fetch(API+path,{...options,headers});let data={};try{data=await response.json()}catch{}if(response.status===401){clearLocalSession();showLogin();throw new Error(data.message||'Sua sessão expirou. Entre novamente.')}if(!response.ok)throw new Error(data.message||'Não foi possível concluir a operação.');return data}
-function showLogin(){ $('dashboard-screen').style.display='none';$('login-screen').style.display='flex'; }
-function showDashboard(){ $('login-screen').style.display='none';$('dashboard-screen').style.display='block';$('user-name').textContent=currentUser?.name||'Vendedor'; }
-async function login(){const email=$('email').value.trim(),password=$('password').value;const btn=$('login-button');if(!email||!password){notify('Informe seu e-mail e sua senha.',true);return}btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> ENTRANDO';try{const response=await fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});const data=await response.json();if(!response.ok)throw new Error(data.message||'Falha no login');saveLocalSession(data);$('password').value='';showDashboard();await loadAll();notify('Login realizado com sucesso!')}catch(e){notify(e.message,true)}finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> ENTRAR'}}
-$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('email').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
-async function logout(){try{if(token)await fetch(API+'/logout',{method:'POST',headers:{Authorization:'Bearer '+token}})}catch{}clearLocalSession();clients=[];orders=[];showLogin();notify('Você saiu do sistema.')}
-function toggleSidebar(){const open=$('sidebar').classList.toggle('open');$('sidebar-overlay').classList.toggle('show',open)}
-function showView(name,el){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('.menu-item').forEach(v=>v.classList.toggle('active',v.dataset.view===name));if(name==='orders')populateClientSelect();if($('sidebar').classList.contains('open'))toggleSidebar();}
-async function loadAll(){try{const [c,o,d]=await Promise.all([api('/clients'),api('/orders'),api('/dashboard')]);clients=c;orders=o;renderClients();renderOrders();renderRecentOrders();$('stat-clients').textContent=d.totalClients||0;$('stat-orders').textContent=d.ordersThisMonth||0;$('stat-revenue').textContent=money(d.revenueThisMonth);populateClientSelect();}catch(e){notify(e.message,true)}}
-function clientPayload(){return{name:$('cli-nome').value.trim(),cpf_cnpj:$('cli-cpf').value.trim(),phone:$('cli-telefone').value.trim(),cep:$('cli-cep').value.trim(),address:$('cli-endereco').value.trim(),number:$('cli-numero').value.trim(),neighborhood:$('cli-bairro').value.trim(),city:$('cli-cidade').value.trim(),state:$('cli-uf').value.trim().toUpperCase(),reference_point:$('cli-referencia').value.trim(),notes:$('cli-obs').value.trim()}}
-async function saveClient(event){event.preventDefault();const id=$('client-id').value;try{if(id)await api('/clients/'+encodeURIComponent(id),{method:'PUT',body:JSON.stringify(clientPayload())});else await api('/clients',{method:'POST',body:JSON.stringify(clientPayload())});notify(id?'Cliente atualizado!':'Cliente cadastrado!');resetClientForm();await loadAll()}catch(e){notify(e.message,true)}}
-function resetClientForm(){$('client-form').reset();$('client-id').value='';$('client-form-title').innerHTML='<i class="fa-solid fa-user-plus"></i> Cadastrar cliente';$('client-submit').innerHTML='<i class="fa-solid fa-floppy-disk"></i> SALVAR CLIENTE'}
-function editClient(id){const c=clients.find(x=>x.id===id);if(!c)return;$('client-id').value=c.id;$('cli-nome').value=c.name||'';$('cli-cpf').value=c.cpf_cnpj||'';$('cli-telefone').value=c.phone||'';$('cli-cep').value=c.cep||'';$('cli-endereco').value=c.address||'';$('cli-numero').value=c.number||'';$('cli-bairro').value=c.neighborhood||'';$('cli-cidade').value=c.city||'';$('cli-uf').value=c.state||'';$('cli-referencia').value=c.reference_point||'';$('cli-obs').value=c.notes||'';$('client-form-title').innerHTML='<i class="fa-solid fa-user-pen"></i> Editar cliente';$('client-submit').innerHTML='<i class="fa-solid fa-floppy-disk"></i> ATUALIZAR CLIENTE';showView('clients');window.scrollTo({top:0,behavior:'smooth'})}
-async function deleteClient(id){const c=clients.find(x=>x.id===id);if(!c||!confirm(`Excluir o cliente "${c.name}"? Esta ação não pode ser desfeita.`))return;try{await api('/clients/'+encodeURIComponent(id),{method:'DELETE'});notify('Cliente excluído.');await loadAll()}catch(e){notify(e.message,true)}}
-function whatsapp(phone){const digits=String(phone||'').replace(/\D/g,'');if(!digits){notify('Este cliente não possui telefone cadastrado.',true);return}const full=digits.startsWith('55')?digits:'55'+digits;const web='https://web.whatsapp.com/send?phone='+full;const app='whatsapp://send?phone='+full;if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){location.href='https://wa.me/'+full;return}const useApp=confirm('Deseja tentar abrir o aplicativo WhatsApp instalado?\n\nOK = Aplicativo\nCancelar = WhatsApp Web');if(useApp){const w=window.open(app,'_blank');if(!w)notify('O navegador bloqueou a abertura. Permita pop-ups ou escolha o WhatsApp Web.',true)}else window.open(web,'_blank','noopener')}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderClients(){const term=($('client-search').value||'').toLowerCase();const rows=clients.filter(c=>[c.name,c.phone,c.city,c.neighborhood,c.cpf_cnpj].join(' ').toLowerCase().includes(term));$('client-count').textContent=clients.length+' clientes';const empty='<tr><td colspan="5" class="empty">Nenhum cliente encontrado.</td></tr>';$('clients-table').innerHTML=rows.length?rows.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone||'-')}</td><td>${esc(c.cpf_cnpj||'-')}</td><td>${esc([c.city,c.neighborhood].filter(Boolean).join(' / ')||'-')}</td><td><div class="actions"><button class="icon-btn edit" title="Editar" onclick="editClient('${c.id}')"><i class="fa-solid fa-pen"></i></button><button class="icon-btn" title="WhatsApp" onclick="whatsapp('${esc(c.phone||'')}')"><i class="fa-brands fa-whatsapp"></i></button><button class="icon-btn delete" title="Excluir" onclick="deleteClient('${c.id}')"><i class="fa-solid fa-trash"></i></button></div></td></tr>`).join(''):empty;$('clients-mobile').innerHTML=rows.length?rows.map(c=>`<div class="client-card"><h4>${esc(c.name)}</h4><p><i class="fa-solid fa-phone"></i> ${esc(c.phone||'Não informado')}</p><p><i class="fa-solid fa-location-dot"></i> ${esc([c.city,c.neighborhood].filter(Boolean).join(' / ')||'Endereço não informado')}</p><div class="actions"><button class="btn-green" onclick="whatsapp('${esc(c.phone||'')}')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button><button class="btn-secondary" onclick="editClient('${c.id}')"><i class="fa-solid fa-pen"></i> Editar</button><button class="btn-danger" onclick="deleteClient('${c.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''):'<p class="empty">Nenhum cliente encontrado.</p>'}
-function populateClientSelect(selected=''){const select=$('order-client');if(!select)return;select.innerHTML='<option value="">Selecione o cliente</option>'+clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');if(selected)select.value=selected}
-function calculateOrderTotal(){const p=Number($('order-price').value)||0,q=Number($('order-quantity').value)||0,d=Number($('order-discount').value)||0,f=Number($('order-freight').value)||0;$('order-total').value=Math.max(0,p*q-d+f).toFixed(2)}
-function orderPayload(){return{client_id:$('order-client').value,product_model:$('order-model').value.trim(),color:$('order-color').value.trim(),unit_price:Number($('order-price').value)||0,packaging:$('order-packaging').value.trim(),grade:$('order-grade').value.trim(),pairs_per_grade:Number($('order-pairs-grade').value)||0,quantity:Number($('order-quantity').value)||1,discount:Number($('order-discount').value)||0,freight:Number($('order-freight').value)||0,total:Number($('order-total').value)||0,purchase_price:Number($('order-cost').value)||0,status:$('order-status').value}}
-async function saveOrder(event){event.preventDefault();if(!clients.length){notify('Cadastre um cliente antes de criar um pedido.',true);return}const id=$('order-id').value;try{if(id)await api('/orders/'+encodeURIComponent(id),{method:'PUT',body:JSON.stringify(orderPayload())});else await api('/orders',{method:'POST',body:JSON.stringify(orderPayload())});notify(id?'Pedido atualizado!':'Pedido cadastrado!');resetOrderForm();await loadAll()}catch(e){notify(e.message,true)}}
-function resetOrderForm(){ $('order-form').reset();$('order-id').value='';$('order-quantity').value=1;$('order-price').value=0;$('order-discount').value=0;$('order-freight').value=0;$('order-total').value=0;$('order-cost').value=0;$('order-pairs-grade').value=0;$('order-form-title').innerHTML='<i class="fa-solid fa-cart-plus"></i> Cadastrar pedido';populateClientSelect() }
-function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;$('order-id').value=o.id;populateClientSelect(o.client_id);$('order-model').value=o.product_model||'';$('order-color').value=o.color||'';$('order-price').value=o.unit_price||0;$('order-packaging').value=o.packaging||'';$('order-grade').value=o.grade||'';$('order-pairs-grade').value=o.pairs_per_grade||0;$('order-quantity').value=o.quantity||1;$('order-discount').value=o.discount||0;$('order-freight').value=o.freight||0;$('order-cost').value=o.purchase_price||0;$('order-total').value=o.total||0;$('order-status').value=o.status||'pending';$('order-form-title').innerHTML='<i class="fa-solid fa-pen-to-square"></i> Editar pedido';showView('orders');window.scrollTo({top:0,behavior:'smooth'})}
-async function deleteOrder(id){if(!confirm('Excluir este pedido?'))return;try{await api('/orders/'+encodeURIComponent(id),{method:'DELETE'});notify('Pedido excluído.');await loadAll()}catch(e){notify(e.message,true)}}
-function statusLabel(s){return({pending:'Pendente',processing:'Em andamento',done:'Concluído',cancelled:'Cancelado'})[s]||s||'Pendente'}function statusClass(s){return s==='done'?'done':s==='cancelled'?'cancelled':''}function dateLabel(s){if(!s)return '-';const d=new Date(s.replace(' ','T')+'Z');return isNaN(d)?s:d.toLocaleDateString('pt-BR')}
-function renderOrders(){const term=($('order-search').value||'').toLowerCase();const rows=orders.filter(o=>[o.client_name,o.product_model,o.color].join(' ').toLowerCase().includes(term));$('order-count').textContent=orders.length+' pedidos';$('orders-table').innerHTML=rows.length?rows.map(o=>`<tr><td>${esc(o.client_name||'-')}</td><td>${esc(o.product_model||'-')} ${o.color?'· '+esc(o.color):''}</td><td>${o.quantity||0}</td><td>${esc(dateLabel(o.created_at))}</td><td><b>${money(o.total)}</b></td><td><span class="status ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></td><td><div class="actions"><button class="icon-btn edit" onclick="editOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="icon-btn delete" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum pedido encontrado.</td></tr>';$('orders-mobile').innerHTML=rows.length?rows.map(o=>`<div class="order-card"><h4>${esc(o.client_name||'-')}</h4><p>${esc(o.product_model||'-')} ${o.color?'· '+esc(o.color):''}</p><p>${o.quantity||0} pares · ${esc(dateLabel(o.created_at))}</p><p><b>${money(o.total)}</b> · <span class="status ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></p><div class="actions"><button class="btn-secondary" onclick="editOrder('${o.id}')">Editar</button><button class="btn-danger" onclick="deleteOrder('${o.id}')">Excluir</button></div></div>`).join(''):'<p class="empty">Nenhum pedido encontrado.</p>'}
-function renderRecentOrders(){const rows=orders.slice(0,6);$('recent-orders-table').innerHTML=rows.length?rows.map(o=>`<tr><td>${esc(o.client_name||'-')}</td><td>${esc(o.product_model||'-')}</td><td>${esc(dateLabel(o.created_at))}</td><td>${money(o.total)}</td><td><span class="status ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></td></tr>`).join(''):'<tr><td colspan="5" class="empty">Nenhum pedido registrado.</td></tr>';$('recent-orders-mobile').innerHTML=rows.map(o=>`<div class="order-card"><h4>${esc(o.client_name||'-')}</h4><p>${esc(o.product_model||'-')} · ${esc(dateLabel(o.created_at))}</p><p><b>${money(o.total)}</b> · ${esc(statusLabel(o.status))}</p></div>`).join('')}
-function updateSessionClock(){if(!sessionExpiry)return;const remaining=Math.max(0,sessionExpiry-Date.now());if(!remaining){clearLocalSession();showLogin();notify('Sua sessão de 24 horas expirou. Entre novamente.',true);return}const hours=Math.floor(remaining/3600000),mins=Math.floor((remaining%3600000)/60000);$('session-clock').textContent=`Sessão: ${hours}h ${mins}min`}
-async function restoreSession(){try{const saved=JSON.parse(localStorage.getItem('zapShoesSession')||'null');if(!saved?.token||!saved?.expiresAt||Date.now()>=saved.expiresAt){clearLocalSession();return}token=saved.token;sessionExpiry=saved.expiresAt;const me=await api('/me');currentUser=me.user;showDashboard();await loadAll();updateSessionClock();setInterval(updateSessionClock,30000)}catch{clearLocalSession();showLogin()}}
-restoreSession();
+// ----- INÍCIO: JS 1 — CONSTANTES E ESTADO -----
+const APP_VERSION = "3.0";
+const API = 'https://zapshoesb2b.maxcalcadosmax.workers.dev';
+let token = '', currentUser = null, clients = [], orders = [], sessionExpiry = 0, sessionTimer = null, statusTimer = null;
+const $ = id => document.getElementById(id);
+const money = v => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+$('versaoCanto').textContent = 'v' + APP_VERSION;
+$('sobreVersao').textContent = 'v' + APP_VERSION;
+$('sobreApi').textContent = API;
+// ----- FIM: JS 1 -----
+
+// ----- INÍCIO: JS 2 — TOAST, COLAPSÁVEIS, TEMA, IDENTIDADE -----
+let toastTimer;
+function toast(msg, tipo = 'ok') {
+  const el = $('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (tipo === 'error' ? ' error' : tipo === 'info' ? ' info' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 3800);
+}
+function toggleCardCollapsible(headerEl) {
+  const card = headerEl.closest('.card-collapsible');
+  if (!card) return;
+  card.classList.toggle('open');
+  const id = card.dataset.collapseId;
+  if (id) {
+    const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '[]');
+    const idx = abertos.indexOf(id);
+    if (card.classList.contains('open')) { if (idx === -1) abertos.push(id); }
+    else if (idx !== -1) abertos.splice(idx, 1);
+    localStorage.setItem('zap_abertos', JSON.stringify(abertos));
+  }
+}
+function abrirCard(id) {
+  const card = document.querySelector(`.card-collapsible[data-collapse-id="${id}"]`);
+  if (card) card.classList.add('open');
+  return card;
+}
+function restaurarColapsaveis() {
+  const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '["identidade"]');
+  document.querySelectorAll('.card-collapsible').forEach(c => c.classList.toggle('open', abertos.includes(c.dataset.collapseId)));
+}
+// Tema claro/escuro/automático
+function getTema() { return localStorage.getItem('zap_tema') || 'auto'; }
+function aplicarTema() {
+  const pref = getTema();
+  document.body.classList.remove('tema-auto', 'tema-claro', 'tema-escuro');
+  document.body.classList.add('tema-' + pref);
+  const efetivo = pref === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro') : pref;
+  document.body.dataset.temaEfetivo = efetivo;
+  document.querySelectorAll('.tema-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tema === pref));
+}
+document.querySelectorAll('.tema-btn').forEach(b => b.addEventListener('click', () => {
+  localStorage.setItem('zap_tema', b.dataset.tema);
+  aplicarTema();
+  toast('Tema: ' + ({ auto: 'Automático', claro: 'Claro', escuro: 'Escuro' })[b.dataset.tema]);
+}));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (getTema() === 'auto') aplicarTema(); });
+// Identidade
+function aplicarIdentidade() {
+  const nome = localStorage.getItem('zap_nome_sistema') || 'ZAP SHOES';
+  const sub = localStorage.getItem('zap_subtitulo') || 'CRM para Calçados';
+  const partes = nome.trim().split(' ');
+  $('heroLogo').innerHTML = esc(partes[0] || '') + (partes.slice(1).join(' ') ? ' <span>' + esc(partes.slice(1).join(' ')) + '</span>' : '');
+  $('heroSub').textContent = sub;
+  $('cfgNomeSistema').value = nome;
+  $('cfgSubtitulo').value = sub;
+}
+$('btnSalvarConfig').onclick = () => {
+  const nome = $('cfgNomeSistema').value.trim();
+  if (!nome) return toast('Nome obrigatório', 'error');
+  localStorage.setItem('zap_nome_sistema', nome);
+  localStorage.setItem('zap_subtitulo', $('cfgSubtitulo').value.trim());
+  aplicarIdentidade();
+  toast('Identidade salva');
+};
+$('btnResetConfig').onclick = () => {
+  localStorage.removeItem('zap_nome_sistema'); localStorage.removeItem('zap_subtitulo');
+  aplicarIdentidade(); toast('Restaurado');
+};
+$('btnSalvarWhatsapp').onclick = () => { localStorage.setItem('zap_whatsapp_app', $('cfgWhatsappApp').value); toast('WhatsApp salvo'); };
+$('cfgWhatsappApp').value = localStorage.getItem('zap_whatsapp_app') || 'desktop';
+// ----- FIM: JS 2 -----
+
+// ----- INÍCIO: JS 3 — SESSÃO, API E LOGIN/LOGOUT -----
+function saveLocalSession(data) {
+  token = data.token; currentUser = data.user; sessionExpiry = Number(data.expiresAt) * 1000;
+  localStorage.setItem('zapShoesSession', JSON.stringify({ token, expiresAt: sessionExpiry, user: currentUser }));
+}
+function clearLocalSession() { token = ''; currentUser = null; sessionExpiry = 0; localStorage.removeItem('zapShoesSession'); }
+
+async function api(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  if (token) headers.Authorization = 'Bearer ' + token;
+  if (options.body) headers['Content-Type'] = 'application/json';
+  const response = await fetch(API + path, { ...options, headers });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  if (response.status === 401 && token) { clearLocalSession(); showLogin(); throw new Error(data.message || 'Sua sessão expirou. Entre novamente.'); }
+  if (!response.ok) throw new Error(data.message || 'Não foi possível concluir a operação.');
+  return data;
+}
+function showLogin() {
+  $('app').classList.remove('visible'); $('loginScreen').classList.remove('hidden');
+  clearInterval(sessionTimer); clearInterval(statusTimer);
+}
+function showApp() {
+  $('loginScreen').classList.add('hidden'); $('app').classList.add('visible');
+  $('userNome').textContent = currentUser?.name || 'Vendedor';
+}
+function erroLogin(msg) {
+  const el = $('loginErro'); el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+async function login() {
+  const email = $('loginEmail').value.trim(), password = $('loginSenha').value, btn = $('loginBtn');
+  if (!email || !password) return erroLogin('Informe seu e-mail e sua senha.');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+  try {
+    const response = await fetch(API + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Falha no login');
+    saveLocalSession(data); $('loginSenha').value = '';
+    iniciarApp(); toast('Bem-vindo, ' + (currentUser.name || ''));
+  } catch (e) { erroLogin(e.message); $('loginSenha').value = ''; }
+  finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar'; }
+}
+$('loginBtn').onclick = login;
+$('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('loginSenha').focus(); });
+$('loginSenha').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+async function logout() {
+  if (!confirm('Deseja sair do sistema?')) return;
+  try { if (token) await fetch(API + '/logout', { method: 'POST', headers: { Authorization: 'Bearer ' + token } }); } catch {}
+  clearLocalSession(); clients = []; orders = []; showLogin(); $('loginEmail').focus();
+}
+$('btnSair').onclick = logout;
+$('drawerSair').onclick = () => { fecharSidebar(); logout(); };
+
+async function verificarStatus() {
+  const pill = $('statusPill');
+  try { const r = await fetch(API + '/'); const d = await r.json(); if (d.status === 'online') { pill.classList.add('online'); $('statusLabel').textContent = 'Online'; return; } } catch {}
+  pill.classList.remove('online'); $('statusLabel').textContent = 'Offline';
+}
+function updateSessionClock() {
+  if (!sessionExpiry) return;
+  const remaining = Math.max(0, sessionExpiry - Date.now());
+  if (!remaining) { clearLocalSession(); showLogin(); erroLogin('Sua sessão de 24 horas expirou. Entre novamente.'); return; }
+  const h = Math.floor(remaining / 3600000), m = Math.floor((remaining % 3600000) / 60000);
+  const el = $('sessionClock'); el.style.display = ''; el.textContent = `Sessão: ${h}h ${m}min`;
+}
+function iniciarApp() {
+  showApp(); aplicarTema(); aplicarIdentidade(); restaurarColapsaveis();
+  verificarStatus(); updateSessionClock();
+  clearInterval(sessionTimer); clearInterval(statusTimer);
+  sessionTimer = setInterval(updateSessionClock, 30000);
+  statusTimer = setInterval(verificarStatus, 30000);
+  irParaAba('dashboard'); loadAll();
+}
+async function restoreSession() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('zapShoesSession') || 'null');
+    if (!saved?.token || !saved?.expiresAt || Date.now() >= saved.expiresAt) { clearLocalSession(); return false; }
+    token = saved.token; sessionExpiry = saved.expiresAt;
+    const me = await api('/me'); currentUser = me.user;
+    iniciarApp(); return true;
+  } catch { clearLocalSession(); return false; }
+}
+// ----- FIM: JS 3 -----
+
+// ----- INÍCIO: JS 4 — NAVEGAÇÃO (ABAS E MENU LATERAL) -----
+function irParaAba(nome) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.aba === nome));
+  document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
+  const el = $('aba-' + nome); if (el) el.classList.add('active');
+  document.querySelectorAll('.drawer-item[data-aba]').forEach(b => b.classList.toggle('active', b.dataset.aba === nome));
+  if (nome === 'pedidos') populateClientSelect($('ordCliente').value);
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => irParaAba(b.dataset.aba));
+function abrirSidebar() { $('sidebarDrawer').classList.add('open'); $('sidebarOverlay').classList.add('open'); $('btnMenu').classList.add('open'); }
+function fecharSidebar() { $('sidebarDrawer').classList.remove('open'); $('sidebarOverlay').classList.remove('open'); $('btnMenu').classList.remove('open'); }
+$('btnMenu').onclick = e => { e.stopPropagation(); $('sidebarDrawer').classList.contains('open') ? fecharSidebar() : abrirSidebar(); };
+$('sidebarOverlay').onclick = fecharSidebar;
+document.querySelectorAll('.drawer-item[data-aba]').forEach(b => b.onclick = () => { irParaAba(b.dataset.aba); fecharSidebar(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharSidebar(); });
+$('btnRefresh').onclick = async () => { toast('Atualizando...', 'info'); await verificarStatus(); await loadAll(); toast('Atualizado'); };
+// ----- FIM: JS 4 -----
+
+// ----- INÍCIO: JS 5 — CARREGAR DADOS -----
+async function loadAll() {
+  try {
+    const [c, o, d] = await Promise.all([api('/clients'), api('/orders'), api('/dashboard')]);
+    clients = c; orders = o;
+    $('stat-clients').textContent = d.totalClients || 0;
+    $('stat-orders').textContent = d.ordersThisMonth || 0;
+    $('stat-revenue').textContent = money(d.revenueThisMonth);
+    renderClients(); renderOrders(); renderRecentOrders(); populateClientSelect($('ordCliente').value);
+  } catch (e) { toast(e.message, 'error'); }
+}
+// ----- FIM: JS 5 -----
+
+// ----- INÍCIO: JS 6 — CLIENTES -----
+function clientPayload() {
+  return { name: $('cliNome').value.trim(), cpf_cnpj: $('cliCpf').value.trim(), phone: $('cliTelefone').value.trim(), cep: $('cliCep').value.trim(),
+    address: $('cliEndereco').value.trim(), number: $('cliNumero').value.trim(), neighborhood: $('cliBairro').value.trim(), city: $('cliCidade').value.trim(),
+    state: $('cliUf').value.trim().toUpperCase(), reference_point: $('cliReferencia').value.trim(), notes: $('cliObs').value.trim() };
+}
+$('btnSalvarCliente').onclick = async () => {
+  const id = $('clienteId').value;
+  if (!$('cliNome').value.trim()) return toast('Nome obrigatório', 'error');
+  const btn = $('btnSalvarCliente'); btn.disabled = true;
+  try {
+    if (id) await api('/clients/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify(clientPayload()) });
+    else await api('/clients', { method: 'POST', body: JSON.stringify(clientPayload()) });
+    toast(id ? 'Cliente atualizado!' : 'Cliente cadastrado!'); resetClientForm(); await loadAll();
+  } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
+};
+function resetClientForm() {
+  ['cliNome','cliCpf','cliTelefone','cliCep','cliEndereco','cliNumero','cliBairro','cliCidade','cliUf','cliReferencia','cliObs','clienteId'].forEach(i => $(i).value = '');
+  $('clienteFormTitulo').innerHTML = '<i class="fas fa-plus"></i> Cadastrar Cliente';
+}
+$('btnLimparCliente').onclick = resetClientForm;
+function editClient(id) {
+  const c = clients.find(x => x.id === id); if (!c) return;
+  $('clienteId').value = c.id; $('cliNome').value = c.name || ''; $('cliCpf').value = c.cpf_cnpj || ''; $('cliTelefone').value = c.phone || '';
+  $('cliCep').value = c.cep || ''; $('cliEndereco').value = c.address || ''; $('cliNumero').value = c.number || ''; $('cliBairro').value = c.neighborhood || '';
+  $('cliCidade').value = c.city || ''; $('cliUf').value = c.state || ''; $('cliReferencia').value = c.reference_point || ''; $('cliObs').value = c.notes || '';
+  $('clienteFormTitulo').innerHTML = '<i class="fas fa-user-pen"></i> Editar Cliente';
+  const card = abrirCard('cadastro_cliente');
+  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+}
+async function deleteClient(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c || !confirm(`Excluir o cliente "${c.name}"? Esta ação não pode ser desfeita.`)) return;
+  try { await api('/clients/' + encodeURIComponent(id), { method: 'DELETE' }); toast('Cliente excluído.'); await loadAll(); } catch (e) { toast(e.message, 'error'); }
+}
+function whatsapp(phone) {
+  const digits = String(phone || '').replace(/\D/g, '');
+  if (!digits) return toast('Este cliente não possui telefone cadastrado.', 'error');
+  const full = digits.startsWith('55') ? digits : '55' + digits;
+  const web = 'https://wa.me/' + full;
+  const modo = localStorage.getItem('zap_whatsapp_app') || 'desktop';
+  const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const a = document.createElement('a');
+  a.href = (modo === 'desktop' && !mobile) ? 'whatsapp://send?phone=' + full : web;
+  if (a.href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+  a.style.display = 'none'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 300);
+}
+function renderClients() {
+  const term = ($('buscaClientes').value || '').toLowerCase();
+  const rows = clients.filter(c => [c.name, c.phone, c.city, c.neighborhood, c.cpf_cnpj].join(' ').toLowerCase().includes(term));
+  $('clientCount').textContent = clients.length + (clients.length === 1 ? ' cliente' : ' clientes');
+  $('listaClientes').innerHTML = rows.length ? rows.map(c => `
+    <div class="pedido-item"><div class="info">
+      <h4>${esc(c.name)}</h4>
+      <div class="meta">
+        ${c.cpf_cnpj ? `<span><i class="fas fa-id-card"></i> ${esc(c.cpf_cnpj)}</span>` : ''}
+        ${c.phone ? `<span><i class="fas fa-phone"></i> ${esc(c.phone)}</span>` : ''}
+        ${[c.city, c.neighborhood].filter(Boolean).length ? `<span><i class="fas fa-map-marker-alt"></i> ${esc([c.city, c.neighborhood].filter(Boolean).join(' / '))}</span>` : ''}
+      </div>
+      ${c.reference_point ? `<p style="font-size:12px;color:var(--warning)"><i class="fas fa-star"></i> ${esc(c.reference_point)}</p>` : ''}
+      ${c.notes ? `<p style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.notes)}</p>` : ''}
+    </div>
+    <div class="acoes">
+      ${c.phone ? `<button class="btn btn-whatsapp btn-sm" onclick="whatsapp(this.dataset.p)" data-p="${esc(c.phone)}"><i class="fab fa-whatsapp"></i> WhatsApp</button>` : ''}
+      <button class="btn btn-secondary btn-sm" onclick="editClient('${esc(c.id)}')"><i class="fas fa-edit"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="deleteClient('${esc(c.id)}')"><i class="fas fa-trash"></i></button>
+    </div></div>`).join('') : '<div class="empty"><h2>Nenhum cliente encontrado</h2></div>';
+}
+$('buscaClientes').addEventListener('input', renderClients);
+$('btnLimparBuscaClientes').onclick = () => { $('buscaClientes').value = ''; renderClients(); };
+// ----- FIM: JS 6 -----
+
+// ----- INÍCIO: JS 7 — PEDIDOS -----
+function populateClientSelect(selected = '') {
+  const s = $('ordCliente');
+  s.innerHTML = '<option value="">Selecione o cliente</option>' + clients.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+  if (selected) s.value = selected;
+}
+function calculateOrderTotal() {
+  const p = Number($('ordPreco').value) || 0, q = Number($('ordQtd').value) || 0, d = Number($('ordDesconto').value) || 0, f = Number($('ordFrete').value) || 0;
+  $('ordTotal').value = Math.max(0, p * q - d + f).toFixed(2);
+}
+['ordPreco', 'ordQtd', 'ordDesconto', 'ordFrete'].forEach(i => $(i).addEventListener('input', calculateOrderTotal));
+function orderPayload() {
+  return { client_id: $('ordCliente').value, product_model: $('ordModelo').value.trim(), color: $('ordCor').value.trim(), unit_price: Number($('ordPreco').value) || 0,
+    packaging: $('ordEmbalagem').value.trim(), grade: $('ordGrade').value.trim(), pairs_per_grade: Number($('ordParesGrade').value) || 0, quantity: Number($('ordQtd').value) || 1,
+    discount: Number($('ordDesconto').value) || 0, freight: Number($('ordFrete').value) || 0, total: Number($('ordTotal').value) || 0,
+    purchase_price: Number($('ordCusto').value) || 0, status: $('ordStatus').value };
+}
+$('btnSalvarPedido').onclick = async () => {
+  if (!clients.length) return toast('Cadastre um cliente antes de criar um pedido.', 'error');
+  if (!$('ordCliente').value || !$('ordModelo').value.trim()) return toast('Selecione o cliente e informe o modelo.', 'error');
+  const id = $('pedidoId').value, btn = $('btnSalvarPedido'); btn.disabled = true;
+  try {
+    if (id) await api('/orders/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify(orderPayload()) });
+    else await api('/orders', { method: 'POST', body: JSON.stringify(orderPayload()) });
+    toast(id ? 'Pedido atualizado!' : 'Pedido cadastrado!'); resetOrderForm(); await loadAll();
+  } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
+};
+function resetOrderForm() {
+  ['ordModelo','ordCor','ordEmbalagem','ordGrade','pedidoId'].forEach(i => $(i).value = '');
+  $('ordQtd').value = 1; ['ordPreco','ordDesconto','ordFrete','ordTotal','ordCusto','ordParesGrade'].forEach(i => $(i).value = 0);
+  $('ordStatus').value = 'pending'; populateClientSelect('');
+  $('pedidoFormTitulo').innerHTML = '<i class="fas fa-plus"></i> Cadastrar Pedido';
+}
+$('btnLimparPedido').onclick = resetOrderForm;
+function editOrder(id) {
+  const o = orders.find(x => x.id === id); if (!o) return;
+  $('pedidoId').value = o.id; populateClientSelect(o.client_id);
+  $('ordModelo').value = o.product_model || ''; $('ordCor').value = o.color || ''; $('ordPreco').value = o.unit_price || 0;
+  $('ordEmbalagem').value = o.packaging || ''; $('ordGrade').value = o.grade || ''; $('ordParesGrade').value = o.pairs_per_grade || 0;
+  $('ordQtd').value = o.quantity || 1; $('ordDesconto').value = o.discount || 0; $('ordFrete').value = o.freight || 0;
+  $('ordCusto').value = o.purchase_price || 0; $('ordTotal').value = o.total || 0; $('ordStatus').value = o.status || 'pending';
+  $('pedidoFormTitulo').innerHTML = '<i class="fas fa-pen-to-square"></i> Editar Pedido';
+  const card = abrirCard('cadastro_pedido');
+  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+}
+async function deleteOrder(id) {
+  if (!confirm('Excluir este pedido?')) return;
+  try { await api('/orders/' + encodeURIComponent(id), { method: 'DELETE' }); toast('Pedido excluído.'); await loadAll(); } catch (e) { toast(e.message, 'error'); }
+}
+const statusLabel = s => ({ pending: 'Pendente', processing: 'Em andamento', done: 'Concluído', cancelled: 'Cancelado' })[s] || s || 'Pendente';
+const statusClass = s => 'status-' + (['pending','processing','done','cancelled'].includes(s) ? s : 'pending');
+function dateLabel(s) { if (!s) return '-'; const d = new Date(String(s).replace(' ', 'T') + 'Z'); return isNaN(d) ? s : d.toLocaleDateString('pt-BR'); }
+function orderCard(o, acoes) {
+  return `<div class="pedido-item"><div class="info">
+    <h4>${esc(o.client_name || '-')}</h4>
+    <div class="meta"><span>${esc(o.product_model || '-')}${o.color ? ' · ' + esc(o.color) : ''}</span><span><strong>${o.quantity || 0}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span></div>
+    <span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div>${acoes || ''}</div>`;
+}
+function renderOrders() {
+  const term = ($('buscaPedidos').value || '').toLowerCase();
+  const rows = orders.filter(o => [o.client_name, o.product_model, o.color].join(' ').toLowerCase().includes(term));
+  $('orderCount').textContent = orders.length + (orders.length === 1 ? ' pedido' : ' pedidos');
+  $('listaPedidos').innerHTML = rows.length ? rows.map(o => orderCard(o,
+    `<div class="acoes"><button class="btn btn-secondary btn-sm" onclick="editOrder('${esc(o.id)}')"><i class="fas fa-edit"></i> Editar</button><button class="btn btn-danger btn-sm" onclick="deleteOrder('${esc(o.id)}')"><i class="fas fa-trash"></i></button></div>`
+  )).join('') : '<div class="empty"><h2>Nenhum pedido encontrado</h2></div>';
+}
+function renderRecentOrders() {
+  const rows = orders.slice(0, 6);
+  $('recentOrders').innerHTML = rows.length ? rows.map(o => orderCard(o, '')).join('') : '<div class="empty"><h2>Nenhum pedido registrado</h2></div>';
+}
+$('buscaPedidos').addEventListener('input', renderOrders);
+$('btnLimparBuscaPedidos').onclick = () => { $('buscaPedidos').value = ''; renderOrders(); };
+// ----- FIM: JS 7 -----
+
+// ----- INÍCIO: JS 8 — TROCA DE SENHA -----
+$('btnAlterarSenha').onclick = async () => {
+  const sa = $('senhaAtual').value, sn = $('senhaNova').value, sc = $('senhaConfirma').value;
+  if (!sa || !sn || !sc) return toast('Preencha todos os campos', 'error');
+  if (sn !== sc) return toast('Nova senha e confirmação não batem', 'error');
+  if (sn.length < 6) return toast('Senha mínimo 6 caracteres', 'error');
+  const btn = $('btnAlterarSenha'); btn.disabled = true;
+  try {
+    await api('/me/alterar-senha', { method: 'POST', body: JSON.stringify({ senha_atual: sa, senha_nova: sn }) });
+    toast('Senha alterada com sucesso!');
+    $('senhaAtual').value = ''; $('senhaNova').value = ''; $('senhaConfirma').value = '';
+  } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
+};
+// ----- FIM: JS 8 -----
+
+// ----- INÍCIO: JS 9 — INICIALIZAÇÃO -----
+aplicarTema();
+(async () => { const ok = await restoreSession(); if (!ok) { showLogin(); $('loginEmail').focus(); } })();
+// ----- FIM: JS 9 -----
 </script>
-</body></html>
+<!-- ======================= FIM: BLOCO JAVASCRIPT ======================= -->
+</body>
+</html>
