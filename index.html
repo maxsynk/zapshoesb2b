@@ -119,10 +119,21 @@
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--neon); }
 
-  .hero { text-align: center; padding: 24px 20px 18px; }
-  .hero-logo { font-size: clamp(28px, 5vw, 44px); font-weight: 900; letter-spacing: 6px; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); margin-bottom: 8px; }
+  .hero { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 20px 24px 16px; max-width: 1600px; margin: 0 auto; }
+  .hero-left { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+  .hero-img { height: 56px; width: auto; max-width: 170px; object-fit: contain; }
+  .hero-logo { font-size: clamp(18px, 3vw, 28px); font-weight: 900; letter-spacing: 4px; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); line-height: 1.1; }
   .hero-logo span { color: var(--text-primary); }
-  .hero-sub { font-size: 11px; letter-spacing: 8px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; }
+  .hero-sub { font-size: 10px; letter-spacing: 5px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; }
+  .hero-center { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; min-width: 0; }
+  .brand-logo { max-height: 84px; max-width: 260px; object-fit: contain; }
+  .brand-name { font-size: clamp(16px, 2.6vw, 24px); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-primary); word-break: break-word; }
+  .brand-add { background: transparent; border: 1px dashed var(--border); color: var(--text-dim); padding: 10px 16px; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.15s; }
+  .brand-add:hover { border-color: var(--neon); color: var(--neon); }
+  .login-img { display: block; margin: 0 auto 12px; max-height: 72px; max-width: 180px; object-fit: contain; }
+  .marca-upload { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .marca-preview { width: 150px; height: 96px; border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(128,128,128,0.12); overflow: hidden; font-size: 11px; color: var(--text-dim); }
+  .marca-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
   .tabs { display: flex; gap: 4px; padding: 0 24px; max-width: 1600px; margin: 0 auto 20px; border-bottom: 1px solid var(--border); overflow-x: auto; position: relative; z-index: 10; }
   .tabs::-webkit-scrollbar { height: 0; }
@@ -295,9 +306,12 @@
     .btn-text { padding: 10px; min-width: 40px; justify-content: center; font-size: 0; gap: 0; }
     .btn-text i { font-size: 15px; }
     .hamburger { width: 44px; height: 44px; flex-shrink: 0; }
-    .hero { padding: 16px 12px 12px; }
-    .hero-logo { font-size: 24px; letter-spacing: 3px; }
-    .hero-sub { font-size: 9px; letter-spacing: 5px; }
+    .hero { grid-template-columns: 1fr; padding: 14px 12px 10px; gap: 12px; }
+    .hero-right { display: none; }
+    .hero-img { height: 44px; }
+    .hero-logo { font-size: 20px; letter-spacing: 3px; }
+    .hero-sub { font-size: 9px; letter-spacing: 4px; }
+    .brand-logo { max-height: 64px; max-width: 70vw; }
     .tabs { padding: 0 8px; gap: 2px; }
     .tab { padding: 12px 14px; font-size: 11px; }
     .content { padding: 0 12px 60px; }
@@ -330,6 +344,7 @@
 <!-- ======================= INÍCIO: TELA DE LOGIN ======================= -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
+    <img class="login-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'">
     <div class="login-logo">ZAP <span>SHOES</span></div>
     <div class="login-sub">CRM para Calçados</div>
     <div class="login-input-wrap"><i class="fas fa-user"></i><input type="email" class="login-input" id="loginEmail" placeholder="E-mail" autocomplete="username" autofocus></div>
@@ -355,8 +370,13 @@
 </div>
 
 <div class="hero">
-  <div class="hero-logo">ZAP <span>SHOES</span></div>
-  <div class="hero-sub">CRM para Calçados</div>
+  <div class="hero-left">
+    <img class="hero-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'">
+    <div class="hero-logo">ZAP <span>SHOES</span></div>
+    <div class="hero-sub">CRM para Calçados</div>
+  </div>
+  <div class="hero-center" id="heroBrand"></div>
+  <div class="hero-right"></div>
 </div>
 
 <div class="tabs">
@@ -494,6 +514,26 @@
 
 <!-- ======================= INÍCIO: ABA CONFIGURAÇÕES ======================= -->
 <div class="aba" id="aba-config">
+  <div class="card card-collapsible" data-collapse-id="marca">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-store"></i> Minha Marca</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Sua logo e seu nome de vendas aparecem no centro do topo do sistema e em destaque no cabeçalho do PDF dos pedidos. A marca ZAP SHOES fica no canto.</p>
+      <div class="form-row"><label>Nome de vendas</label><input type="text" id="cfgMarcaNome" maxlength="60" placeholder="Ex.: Maria Calçados"></div>
+      <div class="form-row"><label>Logo (PNG, JPG ou WEBP)</label>
+        <div class="marca-upload">
+          <div class="marca-preview" id="marcaPreview"><span>Sem logo</span></div>
+          <div class="form-actions" style="margin:0">
+            <button class="btn btn-secondary" id="btnMarcaEscolher" type="button"><i class="fas fa-upload"></i> Escolher logo</button>
+            <button class="btn btn-secondary" id="btnMarcaRemover" type="button"><i class="fas fa-trash"></i> Remover</button>
+          </div>
+        </div>
+        <input type="file" id="marcaArquivo" accept="image/png,image/jpeg,image/webp" hidden>
+      </div>
+      <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px"><i class="fas fa-info-circle"></i> Dica: PNG com fundo transparente fica melhor. A imagem é reduzida automaticamente.</p>
+      <button class="btn btn-primary" id="btnMarcaSalvar" type="button"><i class="fas fa-save"></i> Salvar marca</button>
+    </div>
+  </div>
+
   <div class="card card-collapsible" data-collapse-id="senha">
     <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-key"></i> Minha Conta</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
     <div class="card-body">
@@ -594,7 +634,7 @@
 <!-- ======================= INÍCIO: BLOCO JAVASCRIPT ======================= -->
 <script>
 // ----- INÍCIO: JS 1 — CONSTANTES E ESTADO -----
-const APP_VERSION = "4.0";
+const APP_VERSION = "4.1";
 const API = 'https://zapshoesb2b.maxcalcadosmax.workers.dev';
 // Os produtos do pedido (fabricante, transportadora etc.) ficam empacotados em JSON dentro do campo
 // product_model, com este prefixo. Assim o Worker atual continua funcionando sem alterações.
@@ -639,7 +679,7 @@ function abrirCard(id) {
   return card;
 }
 function restaurarColapsaveis() {
-  const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '["senha"]');
+  const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '["marca"]');
   document.querySelectorAll('.card-collapsible').forEach(c => c.classList.toggle('open', abertos.includes(c.dataset.collapseId)));
 }
 // Tema claro/escuro/automático
@@ -662,6 +702,86 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if
 $('btnSalvarWhatsapp').onclick = () => { localStorage.setItem('zap_whatsapp_app', $('cfgWhatsappApp').value); toast('WhatsApp salvo'); };
 $('cfgWhatsappApp').value = localStorage.getItem('zap_whatsapp_app') || 'desktop';
 // ----- FIM: JS 2 -----
+
+// ----- INÍCIO: JS 2B — MARCA PERSONALIZADA (logo + nome de vendas) -----
+let brand = { name: '', logo: '' }, brandDraftLogo = '';
+const brandKey = () => 'zap_brand_' + (currentUser?.id || 'x');
+function renderBrand() {
+  const box = $('heroBrand');
+  if (brand.name || brand.logo) {
+    box.innerHTML = (brand.logo ? `<img class="brand-logo" src="${esc(brand.logo)}" alt="Logo">` : '') + (brand.name ? `<div class="brand-name">${esc(brand.name)}</div>` : '');
+  } else {
+    box.innerHTML = '<button class="brand-add" type="button" onclick="abrirMarca()"><i class="fas fa-plus"></i> Adicionar sua marca</button>';
+  }
+}
+function abrirMarca() {
+  irParaAba('config');
+  const card = abrirCard('marca');
+  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+}
+function setBrandPreview(src) {
+  brandDraftLogo = src || '';
+  $('marcaPreview').innerHTML = src ? `<img src="${esc(src)}" alt="Prévia da logo">` : '<span>Sem logo</span>';
+}
+function fillBrandForm() { $('cfgMarcaNome').value = brand.name; setBrandPreview(brand.logo); }
+async function loadBrand() {
+  let b = null;
+  try { b = JSON.parse(localStorage.getItem(brandKey()) || 'null'); } catch {}
+  brand = { name: b?.name || '', logo: b?.logo || '' };
+  renderBrand(); fillBrandForm();
+  try {
+    const s = await api('/me/brand');
+    if (s && (s.name || s.logo)) {
+      brand = { name: s.name || '', logo: s.logo || '' };
+      try { localStorage.setItem(brandKey(), JSON.stringify(brand)); } catch {}
+      renderBrand(); fillBrandForm();
+    }
+  } catch {}
+}
+function processLogoFile(file) {
+  return new Promise((resolve, reject) => {
+    if (!/^image\/(png|jpe?g|webp)$/.test(file.type)) return reject(new Error('Escolha uma imagem PNG, JPG ou WEBP.'));
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('Não foi possível ler o arquivo.'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Imagem inválida.'));
+      img.onload = () => {
+        let max = 400, out = '';
+        for (let k = 0; k < 3; k++) {
+          const sc = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+          c.width = Math.max(1, Math.round(img.width * sc)); c.height = Math.max(1, Math.round(img.height * sc));
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          out = c.toDataURL('image/png');
+          if (out.length <= 350000) break;
+          max = Math.round(max * 0.6);
+        }
+        if (out.length > 350000) return reject(new Error('Logo muito pesada. Use uma imagem menor.'));
+        resolve(out);
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+$('btnMarcaEscolher').onclick = () => $('marcaArquivo').click();
+$('marcaArquivo').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  try { setBrandPreview(await processLogoFile(f)); toast('Logo carregada. Clique em "Salvar marca".', 'info'); }
+  catch (err) { toast(err.message, 'error'); }
+});
+$('btnMarcaRemover').onclick = () => { setBrandPreview(''); toast('Logo removida. Clique em "Salvar marca".', 'info'); };
+$('btnMarcaSalvar').onclick = async () => {
+  brand = { name: $('cfgMarcaNome').value.trim(), logo: brandDraftLogo };
+  try { localStorage.setItem(brandKey(), JSON.stringify(brand)); } catch {}
+  renderBrand();
+  const btn = $('btnMarcaSalvar'); btn.disabled = true;
+  try { await api('/me/brand', { method: 'PUT', body: JSON.stringify(brand) }); toast('Marca salva!'); }
+  catch (e) { toast('Marca salva neste aparelho. Para sincronizar entre aparelhos, atualize o Worker.', 'info'); }
+  finally { btn.disabled = false; }
+};
+// ----- FIM: JS 2B -----
 
 // ----- INÍCIO: JS 3 — SESSÃO, API E LOGIN/LOGOUT -----
 function saveLocalSession(data) {
@@ -715,7 +835,7 @@ $('loginSenha').addEventListener('keydown', e => { if (e.key === 'Enter') login(
 async function logout() {
   if (!confirm('Deseja sair do sistema?')) return;
   try { if (token) await fetch(API + '/logout', { method: 'POST', headers: { Authorization: 'Bearer ' + token } }); } catch {}
-  clearLocalSession(); clients = []; orders = []; fecharModalPedido(); fecharModalPdf(); showLogin(); $('loginEmail').focus();
+  clearLocalSession(); clients = []; orders = []; brand = { name: '', logo: '' }; renderBrand(); fecharModalPedido(); fecharModalPdf(); showLogin(); $('loginEmail').focus();
 }
 $('btnSair').onclick = logout;
 $('drawerSair').onclick = () => { fecharSidebar(); logout(); };
@@ -738,7 +858,7 @@ function iniciarApp() {
   clearInterval(sessionTimer); clearInterval(statusTimer);
   sessionTimer = setInterval(updateSessionClock, 30000);
   statusTimer = setInterval(verificarStatus, 30000);
-  irParaAba('dashboard'); resetOrderForm(); loadAll();
+  irParaAba('dashboard'); resetOrderForm(); loadBrand(); loadAll();
 }
 async function restoreSession() {
   try {
@@ -1113,23 +1233,57 @@ $('modalPedido').addEventListener('click', e => { if (e.target === $('modalPedid
 const moneyPdf = v => 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const slug = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40) || 'cliente';
 
-function gerarPdf(id) {
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('img')); i.src = src; }); }
+let zapLogoCache;   // undefined = ainda não tentou; null = logo.png indisponível
+async function getZapLogo() {
+  if (zapLogoCache !== undefined) return zapLogoCache;
+  try {
+    const im = await loadImg('logo.png'), k = Math.min(1, 400 / Math.max(im.naturalWidth, im.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    zapLogoCache = { data: c.toDataURL('image/png'), w: c.width, h: c.height };
+  } catch { zapLogoCache = null; }
+  return zapLogoCache;
+}
+async function gerarPdf(id) {
   const o = findOrder(id); if (!o) return;
   if (!window.jspdf || !window.jspdf.jsPDF) return toast('O gerador de PDF não carregou. Verifique sua internet e atualize a página.', 'error');
   fecharModalPedido();
   const { jsPDF } = window.jspdf, doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = doc.internal.pageSize.getWidth(), M = 14, cli = findClient(o.client_id), t = orderTotals(o._items);
 
-  // Cabeçalho
-  doc.setFillColor(124, 58, 237); doc.rect(0, 0, W, 26, 'F');
-  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text('ZAP SHOES', M, 16);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-  doc.text('Resumo do Pedido', W - M, 12, { align: 'right' });
-  doc.text(orderNum(o) + '  |  ' + dateLabel(o.created_at), W - M, 19, { align: 'right' });
+  // Cabeçalho: marca do vendedor em destaque + marca ZAP SHOES no canto
+  const temMarca = !!(brand.name || brand.logo), zap = await getZapLogo();
+  const fit = (iw, ih, maxW, maxH) => { const k = Math.min(maxW / iw, maxH / ih); return { w: iw * k, h: ih * k }; };
+  let hx = M, ny = 16;
+  if (temMarca) {
+    if (brand.logo) {
+      try { const im = await loadImg(brand.logo), d = fit(im.naturalWidth, im.naturalHeight, 48, 22); doc.addImage(brand.logo, 'PNG', M, 6 + (22 - d.h) / 2, d.w, d.h); hx = M + d.w + 5; } catch {}
+    }
+    if (brand.name) {
+      const avail = W - hx - M - 40; let fs = 18, nm = brand.name;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(fs);
+      while (fs > 11 && doc.getTextWidth(nm) > avail) { fs--; doc.setFontSize(fs); }
+      const cheio = nm; while (nm.length > 3 && doc.getTextWidth(nm) > avail) nm = nm.slice(0, -1);
+      if (nm !== cheio) nm = nm.trimEnd() + '...';
+      doc.setTextColor(30, 30, 40); doc.text(nm, hx, 15); ny = 23;
+    }
+  } else if (zap) {
+    const d = fit(zap.w, zap.h, 50, 20); doc.addImage(zap.data, 'PNG', M, 6 + (20 - d.h) / 2, d.w, d.h); hx = M + d.w + 5;
+  } else {
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(124, 58, 237); doc.text('ZAP SHOES', M, 15); ny = 23;
+  }
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(124, 58, 237); doc.text('Resumo do Pedido', hx, ny);
+  doc.setFont('helvetica', 'normal'); doc.setTextColor(110, 110, 120); doc.text(orderNum(o) + '  |  ' + dateLabel(o.created_at), hx, ny + 5.5);
+  if (temMarca) {   // marca ZAP SHOES no canto direito
+    if (zap) { const d = fit(zap.w, zap.h, 30, 10); doc.addImage(zap.data, 'PNG', W - M - d.w, 7, d.w, d.h); }
+    else { doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(124, 58, 237); doc.text('ZAP SHOES', W - M, 12, { align: 'right' }); }
+  }
+  doc.setDrawColor(124, 58, 237); doc.setLineWidth(0.8); doc.line(M, 33, W - M, 33); doc.setLineWidth(0.2);
 
   // Cliente
   doc.setTextColor(30, 30, 40);
-  let y = 36;
+  let y = 41;
   const bloco = (titulo, linhas) => {
     doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(124, 58, 237); doc.text(titulo, M, y); y += 5;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(30, 30, 40);
