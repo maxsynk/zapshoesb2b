@@ -119,18 +119,31 @@
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--neon); }
 
-  .hero { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 20px 24px 16px; max-width: 1600px; margin: 0 auto; }
-  .hero-left { --zap-w: 110px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; width: var(--zap-w); min-width: 0; }
-  .hero-img { width: 100%; height: auto; display: block; object-fit: contain; visibility: hidden; }
-  .hero-img.pronto { visibility: visible; }
-  .hero-logo { font-size: 16px; font-weight: 900; letter-spacing: 2px; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); line-height: 1.1; white-space: nowrap; text-align: justify; text-align-last: justify; }
-  .hero-logo span { color: var(--text-primary); }
-  .hero-sub { font-size: 8px; letter-spacing: 2px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; white-space: nowrap; text-align: justify; text-align-last: justify; }
-  .hero-center { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; min-width: 0; }
-  .brand-logo { max-height: 96px; max-width: 300px; object-fit: contain; }
-  .brand-name { font-size: clamp(16px, 2.6vw, 24px); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; word-break: break-word; }
+  .hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 24px 14px; max-width: 1600px; margin: 0 auto; }
+  .hero-brand { display: flex; align-items: center; gap: 16px; min-width: 0; flex: 1; }
+  .brand-logo { max-width: 110px; max-height: 96px; object-fit: contain; flex-shrink: 0; }
+  .brand-name { font-size: clamp(18px, 3vw, 30px); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; word-break: break-word; line-height: 1.15; min-width: 0; }
   .brand-name .b1 { color: var(--neon); text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); }
   .brand-name .b2 { color: var(--text-primary); }
+  .hero-zap { flex-shrink: 0; width: 84px; }
+  .zap-img { width: 100%; height: auto; display: block; object-fit: contain; visibility: hidden; }
+  .zap-img.pronto { visibility: visible; }
+  /* RODAPÉ */
+  .rodape { max-width: 1600px; margin: 10px auto 0; padding: 22px 24px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .rodape-marca { display: flex; align-items: center; gap: 12px; }
+  .rodape-img { width: auto; height: 40px; }
+  .rodape-titulo { font-size: 15px; font-weight: 900; letter-spacing: 3px; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 14px var(--neon-glow); line-height: 1.1; }
+  .rodape-titulo span { color: var(--text-primary); }
+  .rodape-sub { font-size: 9px; letter-spacing: 3px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+  .rodape-direitos { font-size: 11px; color: var(--text-dim); line-height: 1.6; text-align: right; }
+  .rodape-versao { margin-left: 8px; font-weight: 700; letter-spacing: 1px; opacity: 0.8; }
+  /* RECEBIDO */
+  .rec-check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 14px 6px 10px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-secondary); user-select: none; transition: all 0.15s; margin-top: 8px; }
+  .rec-check input { width: 18px; height: 18px; accent-color: var(--success); cursor: pointer; }
+  .item-box.recebido { border-color: var(--success); background: rgba(34,197,94,0.08); }
+  .item-box.recebido .rec-check { background: rgba(34,197,94,0.18); border-color: var(--success); color: var(--success); }
+  .rec-resumo { color: var(--text-dim); }
+  .rec-resumo.ok { color: var(--success); font-weight: 700; }
   .brand-add { background: transparent; border: 1px dashed var(--border); color: var(--text-dim); padding: 10px 16px; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.15s; }
   .brand-add:hover { border-color: var(--neon); color: var(--neon); }
   .login-img { display: block; margin: 0 auto 12px; max-height: 72px; max-width: 180px; object-fit: contain; }
@@ -148,7 +161,7 @@
   .tab:hover { color: var(--text-primary); }
   .tab.active { color: var(--neon); border-bottom-color: var(--neon); text-shadow: 0 0 12px var(--neon-glow); }
 
-  .content { padding: 0 24px 80px; max-width: 1600px; margin: 0 auto; }
+  .content { padding: 0 24px 24px; max-width: 1600px; margin: 0 auto; }
   .aba { display: none; }
   .aba.active { display: block; animation: fadeIn 0.25s ease-out; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -294,12 +307,39 @@
   }
   body.tema-claro .login-screen, body.tema-auto[data-tema-efetivo="claro"] .login-screen { background: #f5f5f7; }
   body.tema-claro .login-box, body.tema-auto[data-tema-efetivo="claro"] .login-box { background: rgba(255,255,255,0.95); }
-  body.tema-claro .login-logo span, body.tema-claro .hero-logo span, body.tema-auto[data-tema-efetivo="claro"] .login-logo span, body.tema-auto[data-tema-efetivo="claro"] .hero-logo span { color: var(--text-primary); text-shadow: none; }
+  body.tema-claro .login-logo span, body.tema-claro .rodape-titulo span, body.tema-auto[data-tema-efetivo="claro"] .login-logo span, body.tema-auto[data-tema-efetivo="claro"] .rodape-titulo span { color: var(--text-primary); text-shadow: none; }
   body.tema-claro .topbar, body.tema-auto[data-tema-efetivo="claro"] .topbar { background: rgba(255,255,255,0.85); }
   body.tema-claro .card, body.tema-claro .pedido-item, body.tema-claro .dash-card, body.tema-claro .sidebar-drawer, body.tema-claro .item-box, body.tema-claro .totais-box, body.tema-claro .det-grid .d,
   body.tema-auto[data-tema-efetivo="claro"] .card, body.tema-auto[data-tema-efetivo="claro"] .pedido-item, body.tema-auto[data-tema-efetivo="claro"] .dash-card, body.tema-auto[data-tema-efetivo="claro"] .sidebar-drawer, body.tema-auto[data-tema-efetivo="claro"] .item-box, body.tema-auto[data-tema-efetivo="claro"] .totais-box, body.tema-auto[data-tema-efetivo="claro"] .det-grid .d { background: #ffffff; }
   body.tema-claro .form-row input, body.tema-claro .form-row select, body.tema-claro .form-row textarea, body.tema-claro .login-input, body.tema-claro .busca-pedidos input, body.tema-claro .btn-secondary,
   body.tema-auto[data-tema-efetivo="claro"] .form-row input, body.tema-auto[data-tema-efetivo="claro"] .form-row select, body.tema-auto[data-tema-efetivo="claro"] .form-row textarea, body.tema-auto[data-tema-efetivo="claro"] .login-input, body.tema-auto[data-tema-efetivo="claro"] .busca-pedidos input, body.tema-auto[data-tema-efetivo="claro"] .btn-secondary { background: #ffffff; border-color: #d8d8e0; color: var(--text-primary); }
+
+  .amostra { width: 16px; height: 16px; border-radius: 50%; border: 1px solid #888; display: inline-block; flex-shrink: 0; }
+  .tema-btn { min-width: 150px; }
+
+  /* TEMAS EXTRAS: BRANCO COM PRETO / CINZA COM PRETO / PRETO COM BRANCO */
+  body.tema-brancopreto { --bg-main:#ffffff; --bg-deep:#f2f2f2; --bg-sidebar:#ffffff; --bg-card:#ffffff; --bg-input:#f4f4f4; --border:#c8c8c8; --text-primary:#000; --text-secondary:#2a2a2a; --text-dim:#666; --neon:#000; --neon-alt:#333; --on-neon:#fff; --neon-glow:rgba(0,0,0,0.15); --neon-glow-strong:rgba(0,0,0,0.35); --success:#15803d; --warning:#b45309; --error:#b91c1c; --info:#0369a1; background:#ffffff; color:#000; }
+  body.tema-cinzapreto { --bg-main:#cfcfd3; --bg-deep:#bcbcc1; --bg-sidebar:#e2e2e5; --bg-card:#e2e2e5; --bg-input:#f1f1f3; --border:#a3a3a9; --text-primary:#000; --text-secondary:#26262a; --text-dim:#55555b; --neon:#000; --neon-alt:#333; --on-neon:#fff; --neon-glow:rgba(0,0,0,0.15); --neon-glow-strong:rgba(0,0,0,0.35); --success:#15803d; --warning:#b45309; --error:#b91c1c; --info:#0369a1; background:linear-gradient(180deg,#d8d8dc 0%,#bcbcc1 100%); color:#000; }
+  body.tema-pretobranco { --bg-main:#000; --bg-deep:#0b0b0b; --bg-sidebar:#0a0a0a; --bg-card:#0f0f0f; --bg-input:#1a1a1a; --border:#2e2e2e; --text-primary:#fff; --text-secondary:#c4c4c4; --text-dim:#8a8a8a; --neon:#fff; --neon-alt:#d4d4d4; --on-neon:#000; --neon-glow:rgba(255,255,255,0.22); --neon-glow-strong:rgba(255,255,255,0.45); background:#000; color:#fff; }
+  body.tema-mono .login-screen { background: var(--bg-main); }
+  body.tema-mono .login-box { background: var(--bg-card); }
+  body.tema-mono .topbar { background: color-mix(in srgb, var(--bg-sidebar) 88%, transparent); border-bottom-color: var(--border); }
+  body.tema-mono .card, body.tema-mono .sidebar-drawer { background: var(--bg-card); }
+  body.tema-mono .pedido-item, body.tema-mono .dash-card, body.tema-mono .item-box, body.tema-mono .totais-box, body.tema-mono .det-grid .d, body.tema-mono .status-pill, body.tema-mono .item-builder { background: var(--bg-input); }
+  body.tema-mono .item-builder { border-color: var(--neon); }
+  body.tema-mono .item-box.recebido { background: rgba(34,197,94,0.14); }
+  body.tema-mono .form-row input, body.tema-mono .form-row select, body.tema-mono .form-row textarea, body.tema-mono .login-input, body.tema-mono .busca-pedidos input, body.tema-mono .btn-secondary, body.tema-mono .btn-text, body.tema-mono .hamburger { background: var(--bg-input); border-color: var(--border); color: var(--text-primary); }
+  body.tema-mono .login-input:focus { background: var(--bg-input); }
+  body.tema-mono .user-pill { background: var(--bg-input); border-color: var(--border); color: var(--text-primary); }
+  body.tema-mono .btn-primary, body.tema-mono .login-btn, body.tema-mono .tema-btn.ativo, body.tema-mono .user-pill .perfil-badge, body.tema-mono .card-collapsible.open .toggle-icon { color: var(--on-neon); }
+  body.tema-mono .card-collapsible .toggle-icon { background: var(--bg-input); border-color: var(--border); }
+  body.tema-mono .card-collapsible.open .toggle-icon { background: var(--neon); }
+  body.tema-mono .card-collapsible .card-header:hover { background: rgba(128,128,128,0.10); }
+  body.tema-mono .sidebar-drawer { border-left-color: var(--border); }
+  body.tema-mono .drawer-item:hover { background: rgba(128,128,128,0.12); border-color: var(--border); }
+  body.tema-mono .drawer-item.active { background: rgba(128,128,128,0.2); border-color: var(--neon); color: var(--neon); }
+  body.tema-mono .login-logo span, body.tema-mono .rodape-titulo span { text-shadow: none; }
+  body.tema-mono-claro .login-logo, body.tema-mono-claro .rodape-titulo, body.tema-mono-claro .brand-name .b1, body.tema-mono-claro .card h3, body.tema-mono-claro .tab.active { text-shadow: none; }
 
   /* MOBILE */
   @media (max-width: 700px) {
@@ -309,14 +349,16 @@
     .btn-text { padding: 10px; min-width: 40px; justify-content: center; font-size: 0; gap: 0; }
     .btn-text i { font-size: 15px; }
     .hamburger { width: 44px; height: 44px; flex-shrink: 0; }
-    .hero { grid-template-columns: auto 1fr; padding: 10px 12px 8px; gap: 12px; }
-    .hero-right { display: none; }
-    .hero-left { --zap-w: 92px; }
-    .brand-logo { max-height: 72px; max-width: 60vw; }
-    .brand-name { font-size: clamp(15px, 4.6vw, 20px); }
+    .hero { padding: 10px 12px 8px; gap: 10px; }
+    .hero-brand { gap: 10px; }
+    .brand-logo { max-width: 92px; max-height: 80px; }
+    .brand-name { font-size: clamp(15px, 4.6vw, 20px); letter-spacing: 1px; }
+    .hero-zap { width: 58px; }
+    .rodape { flex-direction: column; text-align: center; padding: 18px 12px 24px; }
+    .rodape-direitos { text-align: center; }
     .tabs { padding: 0 8px; gap: 2px; }
     .tab { padding: 12px 14px; font-size: 11px; }
-    .content { padding: 0 12px 60px; }
+    .content { padding: 0 12px 16px; }
     .card { padding: 16px; border-radius: 12px; }
     .card-collapsible { padding: 0; }
     .card-collapsible .card-body { padding: 0 16px; }
@@ -372,13 +414,8 @@
 </div>
 
 <div class="hero">
-  <div class="hero-left">
-    <img class="hero-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'">
-    <div class="hero-logo">ZAP <span>SHOES</span></div>
-    <div class="hero-sub">CRM para Calçados</div>
-  </div>
-  <div class="hero-center" id="heroBrand"></div>
-  <div class="hero-right"></div>
+  <div class="hero-brand" id="heroBrand"></div>
+  <div class="hero-zap"><img class="zap-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'"></div>
 </div>
 
 <div class="tabs">
@@ -568,6 +605,9 @@
         <button class="btn btn-secondary tema-btn" data-tema="auto" type="button"><i class="fas fa-circle-half-stroke"></i> Automático</button>
         <button class="btn btn-secondary tema-btn" data-tema="claro" type="button"><i class="fas fa-sun"></i> Claro</button>
         <button class="btn btn-secondary tema-btn" data-tema="escuro" type="button"><i class="fas fa-moon"></i> Escuro</button>
+        <button class="btn btn-secondary tema-btn" data-tema="brancopreto" type="button"><span class="amostra" style="background:linear-gradient(135deg,#fff 50%,#000 50%)"></span> Branco com Preto</button>
+        <button class="btn btn-secondary tema-btn" data-tema="cinzapreto" type="button"><span class="amostra" style="background:linear-gradient(135deg,#bcbcc1 50%,#000 50%)"></span> Cinza com Preto</button>
+        <button class="btn btn-secondary tema-btn" data-tema="pretobranco" type="button"><span class="amostra" style="background:linear-gradient(135deg,#000 50%,#fff 50%)"></span> Preto com Branco</button>
       </div>
     </div>
   </div>
@@ -586,6 +626,19 @@
 <!-- ======================= FIM: ABA CONFIGURAÇÕES ======================= -->
 
 </div><!-- /.content -->
+
+<!-- ======================= INÍCIO: RODAPÉ ======================= -->
+<footer class="rodape">
+  <div class="rodape-marca">
+    <img class="zap-img rodape-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'">
+    <div>
+      <div class="rodape-titulo">ZAP <span>SHOES</span></div>
+      <div class="rodape-sub">CRM para Calçados</div>
+    </div>
+  </div>
+  <div class="rodape-direitos">&copy; 2026 MaxSync. Todos os direitos reservados.<span class="rodape-versao" id="versaoCanto"></span></div>
+</footer>
+<!-- ======================= FIM: RODAPÉ ======================= -->
 
 <!-- ======================= INÍCIO: MENU LATERAL (DRAWER) ======================= -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -630,13 +683,12 @@
 
 </div><!-- /.app -->
 
-<div class="versao-canto" id="versaoCanto"></div>
 <div class="toast" id="toast"></div>
 
 <!-- ======================= INÍCIO: BLOCO JAVASCRIPT ======================= -->
 <script>
 // ----- INÍCIO: JS 1 — CONSTANTES E ESTADO -----
-const APP_VERSION = "4.4";
+const APP_VERSION = "5.0";
 const API = 'https://zapshoesb2b.maxcalcadosmax.workers.dev';
 // Os produtos do pedido (fabricante, transportadora etc.) ficam empacotados em JSON dentro do campo
 // product_model, com este prefixo. Assim o Worker atual continua funcionando sem alterações.
@@ -688,16 +740,22 @@ function restaurarColapsaveis() {
 function getTema() { return localStorage.getItem('zap_tema') || 'auto'; }
 function aplicarTema() {
   const pref = getTema();
-  document.body.classList.remove('tema-auto', 'tema-claro', 'tema-escuro');
+  document.body.classList.remove('tema-auto', 'tema-claro', 'tema-escuro', 'tema-brancopreto', 'tema-cinzapreto', 'tema-pretobranco', 'tema-mono', 'tema-mono-claro');
   document.body.classList.add('tema-' + pref);
+  if (['brancopreto', 'cinzapreto', 'pretobranco'].includes(pref)) {
+    document.body.classList.add('tema-mono');
+    if (pref !== 'pretobranco') document.body.classList.add('tema-mono-claro');
+  }
   const efetivo = pref === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro') : pref;
   document.body.dataset.temaEfetivo = efetivo;
+  const corBarra = { brancopreto: '#ffffff', cinzapreto: '#cfcfd3', pretobranco: '#000000' }[pref] || '#a855f7';
+  const metaCor = document.querySelector('meta[name="theme-color"]'); if (metaCor) metaCor.setAttribute('content', corBarra);
   document.querySelectorAll('.tema-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tema === pref));
 }
 document.querySelectorAll('.tema-btn').forEach(b => b.addEventListener('click', () => {
   localStorage.setItem('zap_tema', b.dataset.tema);
   aplicarTema();
-  toast('Tema: ' + ({ auto: 'Automático', claro: 'Claro', escuro: 'Escuro' })[b.dataset.tema]);
+  toast('Tema: ' + ({ auto: 'Automático', claro: 'Claro', escuro: 'Escuro', brancopreto: 'Branco com Preto', cinzapreto: 'Cinza com Preto', pretobranco: 'Preto com Branco' })[b.dataset.tema]);
 }));
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (getTema() === 'auto') aplicarTema(); });
 // WhatsApp (preferência de abertura)
@@ -1042,6 +1100,7 @@ function commitItem() {
   if (!it.model) { toast('Informe o modelo do produto.', 'error'); return false; }
   if (it.qty < 1) { toast('Informe a quantidade de pares.', 'error'); return false; }
   const editou = editingItem >= 0;
+  it.received = editou ? !!draftItems[editingItem].received : false;
   if (editou) draftItems[editingItem] = it; else draftItems.push(it);
   clearItemFields(); renderDraftItems(); calculateOrderTotal();
   toast(editou ? 'Produto atualizado no pedido.' : 'Produto adicionado ao pedido.', 'info');
@@ -1060,6 +1119,11 @@ function editDraftItem(i) {
   $('itemBuilderTitulo').innerHTML = '<i class="fas fa-pen"></i> Editando produto ' + (i + 1);
   $('itemBuilder').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
+function setDraftReceived(i, el) {
+  if (!draftItems[i]) return;
+  draftItems[i].received = el.checked;
+  el.closest('.item-box').classList.toggle('recebido', el.checked);
+}
 function removeDraftItem(i) {
   if (!confirm('Remover este produto do pedido?')) return;
   draftItems.splice(i, 1);
@@ -1069,7 +1133,7 @@ function removeDraftItem(i) {
 function renderDraftItems() {
   const box = $('itensLista');
   box.innerHTML = draftItems.length ? draftItems.map((it, i) => `
-    <div class="item-box"><div>
+    <div class="item-box${it.received ? ' recebido' : ''}"><div>
       <h5>${i + 1}. ${esc(it.model)}${it.color ? ' · ' + esc(it.color) : ''}</h5>
       <div class="meta">
         <span><strong>${num(it.qty)}</strong> pares</span>
@@ -1080,6 +1144,7 @@ function renderDraftItems() {
         <span>Fábrica: ${money(it.cost)}</span>
       </div>
       ${it.manufacturer ? `<div style="margin-top:6px"><span class="tag-int"><i class="fas fa-industry"></i> ${esc(it.manufacturer)}</span></div>` : ''}
+      <div><label class="rec-check"><input type="checkbox" ${it.received ? 'checked' : ''} onchange="setDraftReceived(${i}, this)"> Recebido</label></div>
     </div>
     <div class="acoes">
       <button class="btn btn-secondary btn-sm" type="button" onclick="editDraftItem(${i})"><i class="fas fa-edit"></i></button>
@@ -1089,17 +1154,37 @@ function renderDraftItems() {
   $('resumoItens').innerHTML = `<span><strong>${draftItems.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>Subtotal: <strong>${money(t.sub)}</strong></span>`;
 }
 
-function orderPayload() {
-  const t = orderTotals(draftItems), f = draftItems[0] || {};
+function buildOrderPayload(d) {
+  const t = orderTotals(d.items), f = d.items[0] || {};
   return {
-    client_id: $('ordCliente').value,
-    product_model: PACK + JSON.stringify({ v: 2, carrier: $('ordTransportadora').value.trim(), items: draftItems }),
+    client_id: d.client_id,
+    product_model: PACK + JSON.stringify({ v: 2, carrier: d.carrier || '', items: d.items }),
     color: f.color || '', unit_price: t.pairs ? r2(t.sub / t.pairs) : 0,
     packaging: f.packaging || '', grade: f.grade || '',
     pairs_per_grade: t.pairs, quantity: t.pairs,
-    discount: num($('ordDesconto').value), freight: num($('ordFrete').value), total: num($('ordTotal').value),
-    purchase_price: t.pairs ? r2(t.cost / t.pairs) : 0, status: $('ordStatus').value
+    discount: num(d.discount), freight: num(d.freight), total: num(d.total),
+    purchase_price: t.pairs ? r2(t.cost / t.pairs) : 0, status: d.status
   };
+}
+function orderPayload() {
+  return buildOrderPayload({ client_id: $('ordCliente').value, carrier: $('ordTransportadora').value.trim(), items: draftItems,
+    discount: $('ordDesconto').value, freight: $('ordFrete').value, total: $('ordTotal').value, status: $('ordStatus').value });
+}
+// Marcar/desmarcar "Recebido" direto no pedido aberto (salva na hora)
+async function toggleRecebido(orderId, idx, el) {
+  const o = findOrder(orderId); if (!o || !o._items[idx]) return;
+  const marcado = el.checked, items = o._items.map(i => ({ ...i }));
+  items[idx].received = marcado;
+  el.disabled = true;
+  try {
+    await api('/orders/' + encodeURIComponent(o.id), { method: 'PUT', body: JSON.stringify(buildOrderPayload({
+      client_id: o.client_id, carrier: o._carrier, items, discount: o.discount, freight: o.freight, total: o.total, status: o.status })) });
+    o._items = items;
+    el.closest('.item-box').classList.toggle('recebido', marcado);
+    renderOrders(); renderRecentOrders();
+    toast(marcado ? 'Produto marcado como recebido.' : 'Recebimento desmarcado.', 'info');
+  } catch (e) { el.checked = !marcado; toast(e.message, 'error'); }
+  finally { el.disabled = false; }
 }
 $('btnSalvarPedido').onclick = async () => {
   if (!clients.length) return toast('Cadastre um cliente antes de criar um pedido.', 'error');
@@ -1157,13 +1242,17 @@ const statusLabel = s => ({ pending: 'Pendente', processing: 'Em andamento', don
 const statusClass = s => 'status-' + (['pending','processing','done','cancelled'].includes(s) ? s : 'pending');
 function dateLabel(s) { if (!s) return '-'; const d = new Date(String(s).replace(' ', 'T') + 'Z'); return isNaN(d) ? s : d.toLocaleDateString('pt-BR'); }
 
+function recResumo(o) {
+  const tot = o._items.length, rec = o._items.filter(i => i.received).length;
+  return `<span class="rec-resumo${rec === tot && tot ? ' ok' : ''}"><i class="fas fa-box-open"></i> ${rec}/${tot} recebido(s)</span>`;
+}
 function orderCard(o, acoes) {
   const t = orderTotals(o._items);
   const nomes = o._items.map(i => i.model).filter(Boolean);
   const resumo = nomes.slice(0, 3).join(', ') + (nomes.length > 3 ? ` +${nomes.length - 3}` : '');
   return `<div class="pedido-item"><div class="info clicavel" onclick="abrirPedido('${esc(o.id)}')" title="Clique para abrir o pedido">
     <h4>${esc(o.client_name || '-')} <span style="font-size:11px;color:var(--text-dim);font-weight:600">${esc(orderNum(o))}</span></h4>
-    <div class="meta"><span><strong>${o._items.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span></div>
+    <div class="meta"><span><strong>${o._items.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span>${recResumo(o)}</div>
     <div class="resumo-prod">${esc(resumo || '-')}</div>
     <span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div>${acoes || ''}</div>`;
 }
@@ -1202,7 +1291,7 @@ function abrirPedido(id) {
     </div>
     <div class="secao-titulo"><i class="fas fa-boxes-stacked"></i> Produtos (${o._items.length})</div>
     ${o._items.map((it, i) => `
-      <div class="item-box" style="grid-template-columns:1fr"><div>
+      <div class="item-box${it.received ? ' recebido' : ''}" style="grid-template-columns:1fr"><div>
         <h5>${i + 1}. ${esc(it.model)}${it.color ? ' · ' + esc(it.color) : ''}</h5>
         <div class="meta">
           <span><strong>${num(it.qty)}</strong> pares</span>
@@ -1213,6 +1302,7 @@ function abrirPedido(id) {
           <span>Fábrica: ${money(it.cost)}</span>
         </div>
         ${it.manufacturer ? `<div style="margin-top:6px"><span class="tag-int"><i class="fas fa-industry"></i> Fabricante: ${esc(it.manufacturer)}</span></div>` : ''}
+        <div><label class="rec-check"><input type="checkbox" ${it.received ? 'checked' : ''} onchange="toggleRecebido('${esc(o.id)}', ${i}, this)"> Recebido</label></div>
       </div></div>`).join('')}
     <div class="totais-box">
       <div class="lin"><span>Total de pares</span><span>${t.pairs}</span></div>
@@ -1398,33 +1488,12 @@ $('btnAlterarSenha').onclick = async () => {
 };
 // ----- FIM: JS 11 -----
 
-// ----- INÍCIO: JS 11B — AJUSTE DO TEXTO À LARGURA DA LOGO -----
-// Tamanhos MÁXIMOS das letras (px): TITULO e SUBTITULO. Se não couberem na largura da logo, encolhem sozinhos.
-const HERO_FONTE_TITULO = 16, HERO_FONTE_SUB = 8;
-function ajustarTextoHero() {
-  const box = document.querySelector('.hero-left'); if (!box) return;
-  const w = box.clientWidth; if (!w) return;
-  [['.hero-logo', HERO_FONTE_TITULO], ['.hero-sub', HERO_FONTE_SUB]].forEach(([sel, max]) => {
-    const el = box.querySelector(sel); if (!el) return;
-    let fs = max, nat;
-    el.style.letterSpacing = '0px'; el.style.marginRight = '0px';
-    el.style.textAlign = 'left'; el.style.textAlignLast = 'left'; el.style.width = 'max-content';
-    for (;;) {
-      el.style.fontSize = fs + 'px'; nat = el.getBoundingClientRect().width;
-      if (nat <= w || fs <= 5) break;
-      fs -= 0.5;
-    }
-    el.style.width = '';
-    const ls = Math.max(0, (w - nat) / el.textContent.length);
-    el.style.letterSpacing = ls + 'px'; el.style.marginRight = (-ls) + 'px';
-  });
-}
-if (window.ResizeObserver) new ResizeObserver(ajustarTextoHero).observe(document.querySelector('.hero-left'));
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustarTextoHero);
+// ----- INÍCIO: JS 11B — LOGO ZAP SHOES (topo e rodapé) -----
 getZapLogo().then(z => {
-  const img = document.querySelector('.hero-img'); if (!img) return;
-  if (z) img.src = z.data;
-  img.classList.add('pronto'); ajustarTextoHero();
+  document.querySelectorAll('.zap-img').forEach(img => {
+    if (z) img.src = z.data;
+    img.classList.add('pronto');
+  });
 });
 // ----- FIM: JS 11B -----
 
