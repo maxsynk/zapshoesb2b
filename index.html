@@ -10,6 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Geração de PDF (jsPDF + AutoTable) -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <!-- ======================= INÍCIO: BLOCO CSS (padrão visual MAX) ======================= -->
 <style>
@@ -138,6 +141,7 @@
 
   .empty { text-align: center; padding: 50px 20px; color: var(--text-dim); }
   .empty h2 { margin-bottom: 10px; color: var(--text-secondary); font-size: 15px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+  .empty.mini { padding: 20px; font-size: 13px; }
   .loader { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--neon); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 50px auto; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .versao-canto { position: fixed; bottom: 14px; right: 18px; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--text-dim); opacity: 0.5; z-index: 50; pointer-events: none; text-transform: uppercase; }
@@ -146,6 +150,7 @@
     position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--success), #16a34a); color: #fff;
     padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 13px; opacity: 0; transform: translateY(30px) scale(0.9);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 4500; max-width: 400px; box-shadow: 0 0 32px rgba(34,197,94,0.6);
+    pointer-events: none;
   }
   .toast.show { opacity: 1; transform: translateY(0) scale(1); }
   .toast.error { background: linear-gradient(135deg, var(--error), #dc2626); box-shadow: 0 0 32px rgba(239,68,68,0.6); }
@@ -161,7 +166,7 @@
   .card-collapsible .toggle-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); display: flex; align-items: center; justify-content: center; color: var(--neon); font-size: 14px; transition: all 0.3s; flex-shrink: 0; }
   .card-collapsible.open .toggle-icon { transform: rotate(180deg); background: var(--neon); color: #fff; box-shadow: 0 0 16px var(--neon-glow-strong); }
   .card-collapsible .card-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); padding: 0 24px; }
-  .card-collapsible.open .card-body { max-height: 5000px; padding: 0 24px 24px 24px; }
+  .card-collapsible.open .card-body { max-height: 9000px; padding: 0 24px 24px 24px; }
 
   /* DASH CARDS */
   .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
@@ -177,6 +182,7 @@
   .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
   .form-row label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
   .form-row input, .form-row select, .form-row textarea { padding: 12px 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 14px; outline: none; transition: all 0.15s; }
+  .form-row input[readonly] { opacity: 0.7; cursor: not-allowed; }
   .form-row select option { background: var(--bg-card); }
   .form-row textarea { resize: vertical; min-height: 70px; }
   .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--neon); box-shadow: 0 0 12px var(--neon-glow); }
@@ -206,12 +212,48 @@
   .pedido-item .info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
   .pedido-item .info .meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
   .pedido-item .info .meta strong { color: var(--neon); }
+  .pedido-item .info .resumo-prod { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+  .pedido-item .info.clicavel { cursor: pointer; }
   .pedido-item .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
   .status-ped { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; display: inline-block; }
   .status-pending { background: rgba(56,189,248,0.15); color: var(--info); border: 1px solid var(--info); }
   .status-processing { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid var(--warning); }
   .status-done { background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid var(--success); }
   .status-cancelled { background: rgba(239,68,68,0.15); color: var(--error); border: 1px solid var(--error); }
+
+  /* PRODUTOS DO PEDIDO */
+  .secao-titulo { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin: 6px 0 14px; display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .item-box { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+  .item-box h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
+  .item-box .meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; }
+  .item-box .meta strong { color: var(--neon); }
+  .item-box .acoes { display: flex; gap: 6px; }
+  .tag-int { display: inline-flex; align-items: center; gap: 5px; background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid var(--warning); padding: 2px 9px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .item-builder { background: rgba(168,85,247,0.05); border: 1px dashed var(--neon); border-radius: 14px; padding: 16px; margin-bottom: 18px; }
+  .resumo-itens { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); margin: 4px 0 18px; padding: 10px 14px; background: rgba(0,0,0,0.25); border-radius: 10px; }
+  .resumo-itens strong { color: var(--neon); }
+  .totais-box { margin-top: 14px; padding: 14px 16px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 12px; }
+  .totais-box .lin { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--text-secondary); }
+  .totais-box .lin.total { font-size: 17px; font-weight: 800; color: var(--neon); border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; }
+  .totais-box .lin.interno { color: var(--warning); }
+
+  /* MODAIS */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 800; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
+  .modal-box { width: 100%; max-width: 820px; max-height: 92vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--neon); border-radius: 16px; box-shadow: 0 0 40px var(--neon-glow); }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-card); z-index: 2; }
+  .modal-head h3 { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--neon); }
+  .modal-x { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-primary); cursor: pointer; font-size: 15px; }
+  .modal-x:hover { border-color: var(--error); color: var(--error); }
+  .modal-body { padding: 20px 22px; }
+  .modal-foot { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 22px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: var(--bg-card); }
+  .det-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .det-grid .d { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+  .det-grid .d .k { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+  .det-grid .d .v { font-size: 14px; font-weight: 600; color: var(--text-primary); word-break: break-word; }
+  .pdf-frame { width: 100%; height: 62vh; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+  .pdf-aviso { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-top: 10px; }
+  .pdf-aviso a { color: var(--neon); }
 
   /* DRAWER */
   .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 500; opacity: 0; visibility: hidden; transition: all 0.3s; }
@@ -240,8 +282,8 @@
   body.tema-claro .login-box, body.tema-auto[data-tema-efetivo="claro"] .login-box { background: rgba(255,255,255,0.95); }
   body.tema-claro .login-logo span, body.tema-claro .hero-logo span, body.tema-auto[data-tema-efetivo="claro"] .login-logo span, body.tema-auto[data-tema-efetivo="claro"] .hero-logo span { color: var(--text-primary); text-shadow: none; }
   body.tema-claro .topbar, body.tema-auto[data-tema-efetivo="claro"] .topbar { background: rgba(255,255,255,0.85); }
-  body.tema-claro .card, body.tema-claro .pedido-item, body.tema-claro .dash-card, body.tema-claro .sidebar-drawer,
-  body.tema-auto[data-tema-efetivo="claro"] .card, body.tema-auto[data-tema-efetivo="claro"] .pedido-item, body.tema-auto[data-tema-efetivo="claro"] .dash-card, body.tema-auto[data-tema-efetivo="claro"] .sidebar-drawer { background: #ffffff; }
+  body.tema-claro .card, body.tema-claro .pedido-item, body.tema-claro .dash-card, body.tema-claro .sidebar-drawer, body.tema-claro .item-box, body.tema-claro .totais-box, body.tema-claro .det-grid .d,
+  body.tema-auto[data-tema-efetivo="claro"] .card, body.tema-auto[data-tema-efetivo="claro"] .pedido-item, body.tema-auto[data-tema-efetivo="claro"] .dash-card, body.tema-auto[data-tema-efetivo="claro"] .sidebar-drawer, body.tema-auto[data-tema-efetivo="claro"] .item-box, body.tema-auto[data-tema-efetivo="claro"] .totais-box, body.tema-auto[data-tema-efetivo="claro"] .det-grid .d { background: #ffffff; }
   body.tema-claro .form-row input, body.tema-claro .form-row select, body.tema-claro .form-row textarea, body.tema-claro .login-input, body.tema-claro .busca-pedidos input, body.tema-claro .btn-secondary,
   body.tema-auto[data-tema-efetivo="claro"] .form-row input, body.tema-auto[data-tema-efetivo="claro"] .form-row select, body.tema-auto[data-tema-efetivo="claro"] .form-row textarea, body.tema-auto[data-tema-efetivo="claro"] .login-input, body.tema-auto[data-tema-efetivo="claro"] .busca-pedidos input, body.tema-auto[data-tema-efetivo="claro"] .btn-secondary { background: #ffffff; border-color: #d8d8e0; color: var(--text-primary); }
 
@@ -270,9 +312,15 @@
     .form-actions .btn { flex: 1; }
     .pedido-item { grid-template-columns: 1fr; }
     .pedido-item .acoes .btn { flex: 1; }
+    .item-box { grid-template-columns: 1fr; }
+    .item-box .acoes .btn { flex: 1; }
     .busca-pedidos input { font-size: 16px; padding: 14px 16px; }
     .sidebar-drawer { width: 280px; }
     .dash-cards { grid-template-columns: 1fr; gap: 10px; }
+    .modal-overlay { padding: 0; align-items: stretch; }
+    .modal-box { max-height: 100vh; height: 100%; border-radius: 0; }
+    .modal-foot .btn { flex: 1 1 45%; }
+    .pdf-frame { height: 55vh; }
   }
 </style>
 <!-- ======================= FIM: BLOCO CSS ======================= -->
@@ -307,8 +355,8 @@
 </div>
 
 <div class="hero">
-  <div class="hero-logo" id="heroLogo">ZAP <span>SHOES</span></div>
-  <div class="hero-sub" id="heroSub">CRM para Calçados</div>
+  <div class="hero-logo">ZAP <span>SHOES</span></div>
+  <div class="hero-sub">CRM para Calçados</div>
 </div>
 
 <div class="tabs">
@@ -387,24 +435,49 @@
     </div>
     <div class="card-body">
       <input type="hidden" id="pedidoId">
+
+      <!-- Dados gerais do pedido -->
+      <div class="secao-titulo"><i class="fas fa-file-invoice"></i> Dados do pedido</div>
       <div class="form-grid">
         <div class="form-row"><label>Cliente *</label><select id="ordCliente"><option value="">Selecione o cliente</option></select></div>
-        <div class="form-row"><label>Modelo do produto *</label><input type="text" id="ordModelo" placeholder="Ex.: Tênis casual"></div>
-        <div class="form-row"><label>Cor</label><input type="text" id="ordCor" placeholder="Cor"></div>
-        <div class="form-row"><label>Preço unitário (R$)</label><input type="number" id="ordPreco" min="0" step="0.01" value="0"></div>
-        <div class="form-row"><label>Embalagem</label><input type="text" id="ordEmbalagem" placeholder="Embalagem"></div>
-        <div class="form-row"><label>Grade</label><input type="text" id="ordGrade" placeholder="Ex.: 34 ao 39"></div>
-        <div class="form-row"><label>Pares por grade</label><input type="number" id="ordParesGrade" min="0" step="1" value="0"></div>
-        <div class="form-row"><label>Quantidade de pares *</label><input type="number" id="ordQtd" min="1" step="1" value="1"></div>
-        <div class="form-row"><label>Desconto (R$)</label><input type="number" id="ordDesconto" min="0" step="0.01" value="0"></div>
-        <div class="form-row"><label>Frete (R$)</label><input type="number" id="ordFrete" min="0" step="0.01" value="0"></div>
-        <div class="form-row"><label>Custo de compra (R$)</label><input type="number" id="ordCusto" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Transportadora</label><input type="text" id="ordTransportadora" maxlength="120" placeholder="Nome da transportadora"></div>
         <div class="form-row"><label>Status</label>
           <select id="ordStatus"><option value="pending">Pendente</option><option value="processing">Em andamento</option><option value="done">Concluído</option><option value="cancelled">Cancelado</option></select>
         </div>
+      </div>
+
+      <!-- Produtos já adicionados -->
+      <div class="secao-titulo"><i class="fas fa-boxes-stacked"></i> Produtos do pedido</div>
+      <div id="itensLista"></div>
+      <div class="resumo-itens" id="resumoItens"></div>
+
+      <!-- Montador de produto -->
+      <div class="item-builder" id="itemBuilder">
+        <div class="secao-titulo" style="border:none;margin-bottom:10px;padding-bottom:0" id="itemBuilderTitulo"><i class="fas fa-plus-circle"></i> Adicionar produto</div>
+        <div class="form-grid">
+          <div class="form-row"><label>Fabricante (uso interno)</label><input type="text" id="itFabricante" maxlength="120" placeholder="Quem fabrica este produto"></div>
+          <div class="form-row"><label>Modelo do produto *</label><input type="text" id="itModelo" maxlength="160" placeholder="Ex.: Tênis casual"></div>
+          <div class="form-row"><label>Cor</label><input type="text" id="itCor" maxlength="80" placeholder="Cor"></div>
+          <div class="form-row"><label>Grade</label><input type="text" id="itGrade" maxlength="80" placeholder="Ex.: 34 ao 39"></div>
+          <div class="form-row"><label>Embalagem</label><input type="text" id="itEmbalagem" maxlength="80" placeholder="Embalagem"></div>
+          <div class="form-row"><label>Quantidade de pares *</label><input type="number" id="itQtd" min="1" step="1" value="1"></div>
+          <div class="form-row"><label>Preço de venda (R$)</label><input type="number" id="itPreco" min="0" step="0.01" value="0"></div>
+          <div class="form-row"><label>Custo de compra (R$) (Fábrica)</label><input type="number" id="itCusto" min="0" step="0.01" value="0"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnAddItem" type="button"><i class="fas fa-plus"></i> Adicionar produto ao pedido</button>
+          <button class="btn btn-secondary" id="btnCancelItem" type="button" style="display:none"><i class="fas fa-times"></i> Cancelar edição do produto</button>
+        </div>
+      </div>
+
+      <!-- Fechamento -->
+      <div class="secao-titulo"><i class="fas fa-calculator"></i> Fechamento</div>
+      <div class="form-grid">
+        <div class="form-row"><label>Desconto (R$)</label><input type="number" id="ordDesconto" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Frete (R$)</label><input type="number" id="ordFrete" min="0" step="0.01" value="0"></div>
         <div class="form-row"><label>Total do pedido (R$)</label><input type="number" id="ordTotal" min="0" step="0.01" value="0"></div>
       </div>
-      <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px"><i class="fas fa-info-circle"></i> O total é calculado automaticamente: preço unitário × quantidade − desconto + frete. Você também pode ajustar manualmente.</p>
+      <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px"><i class="fas fa-info-circle"></i> O total é calculado automaticamente: soma dos produtos (preço de venda × pares) − desconto + frete. Você também pode ajustar manualmente.</p>
       <div class="form-actions">
         <button class="btn btn-primary" id="btnSalvarPedido"><i class="fas fa-save"></i> Salvar Pedido</button>
         <button class="btn btn-secondary" id="btnLimparPedido"><i class="fas fa-eraser"></i> Limpar / Cancelar edição</button>
@@ -413,7 +486,7 @@
   </div>
   <div class="card">
     <h3><i class="fas fa-clipboard-list"></i> Meus Pedidos <span id="orderCount" style="margin-left:auto;font-size:11px;color:var(--text-dim)">0 pedidos</span></h3>
-    <div class="busca-pedidos"><input type="text" id="buscaPedidos" placeholder="Buscar por cliente ou produto..."><button class="btn btn-secondary btn-sm" id="btnLimparBuscaPedidos"><i class="fas fa-times"></i></button></div>
+    <div class="busca-pedidos"><input type="text" id="buscaPedidos" placeholder="Buscar por cliente, produto, fabricante ou transportadora..."><button class="btn btn-secondary btn-sm" id="btnLimparBuscaPedidos"><i class="fas fa-times"></i></button></div>
     <div id="listaPedidos"><div class="loader"></div></div>
   </div>
 </div>
@@ -421,21 +494,11 @@
 
 <!-- ======================= INÍCIO: ABA CONFIGURAÇÕES ======================= -->
 <div class="aba" id="aba-config">
-  <div class="card card-collapsible open" data-collapse-id="identidade">
-    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-cog"></i> Identidade</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
-    <div class="card-body">
-      <div class="form-row"><label>Nome do Sistema</label><input type="text" id="cfgNomeSistema"></div>
-      <div class="form-row"><label>Subtítulo</label><input type="text" id="cfgSubtitulo"></div>
-      <div class="form-actions">
-        <button class="btn btn-primary" id="btnSalvarConfig"><i class="fas fa-save"></i> Salvar</button>
-        <button class="btn btn-secondary" id="btnResetConfig"><i class="fas fa-undo"></i> Restaurar</button>
-      </div>
-    </div>
-  </div>
-
   <div class="card card-collapsible" data-collapse-id="senha">
-    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-key"></i> Minha Senha</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-key"></i> Minha Conta</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
     <div class="card-body">
+      <div class="form-row"><label>Login (e-mail)</label><input type="text" id="cfgLogin" readonly></div>
+      <p style="font-size:11px;color:var(--text-dim);margin:-8px 0 18px"><i class="fas fa-lock"></i> O login é a identidade da sua conta e não pode ser alterado por aqui. Para trocar de e-mail, fale com o administrador.</p>
       <div class="form-grid">
         <div class="form-row"><label>Senha Atual</label><input type="password" id="senhaAtual" autocomplete="current-password" placeholder="••••"></div>
         <div class="form-row"><label>Nova Senha</label><input type="password" id="senhaNova" autocomplete="new-password" placeholder="mínimo 6 caracteres"></div>
@@ -496,6 +559,33 @@
 </aside>
 <!-- ======================= FIM: MENU LATERAL (DRAWER) ======================= -->
 
+<!-- ======================= INÍCIO: MODAL DETALHES DO PEDIDO ======================= -->
+<div class="modal-overlay" id="modalPedido">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalPedidoTitulo">Pedido</h3><button class="modal-x" onclick="fecharModalPedido()" aria-label="Fechar"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body" id="modalPedidoBody"></div>
+    <div class="modal-foot" id="modalPedidoFoot"></div>
+  </div>
+</div>
+<!-- ======================= FIM: MODAL DETALHES DO PEDIDO ======================= -->
+
+<!-- ======================= INÍCIO: MODAL PDF ======================= -->
+<div class="modal-overlay" id="modalPdf">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalPdfTitulo">PDF do pedido</h3><button class="modal-x" onclick="fecharModalPdf()" aria-label="Fechar"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <iframe class="pdf-frame" id="pdfFrame" title="Pré-visualização do PDF"></iframe>
+      <p class="pdf-aviso"><i class="fas fa-info-circle"></i> Confira o resumo acima. O campo <strong>Fabricante</strong> e os custos <strong>não</strong> aparecem no PDF do cliente. Se a pré-visualização não abrir no seu celular, <a id="pdfAbrir" href="#" target="_blank" rel="noopener">abra o PDF em nova aba</a>.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" id="btnPdfBaixar"><i class="fas fa-download"></i> Baixar PDF</button>
+      <button class="btn btn-whatsapp" id="btnPdfWhats"><i class="fab fa-whatsapp"></i> Enviar no WhatsApp</button>
+      <button class="btn btn-secondary" onclick="fecharModalPdf()"><i class="fas fa-times"></i> Fechar</button>
+    </div>
+  </div>
+</div>
+<!-- ======================= FIM: MODAL PDF ======================= -->
+
 </div><!-- /.app -->
 
 <div class="versao-canto" id="versaoCanto"></div>
@@ -504,10 +594,16 @@
 <!-- ======================= INÍCIO: BLOCO JAVASCRIPT ======================= -->
 <script>
 // ----- INÍCIO: JS 1 — CONSTANTES E ESTADO -----
-const APP_VERSION = "3.0";
+const APP_VERSION = "4.0";
 const API = 'https://zapshoesb2b.maxcalcadosmax.workers.dev';
+// Os produtos do pedido (fabricante, transportadora etc.) ficam empacotados em JSON dentro do campo
+// product_model, com este prefixo. Assim o Worker atual continua funcionando sem alterações.
+const PACK = '@@ZAP2@@';
 let token = '', currentUser = null, clients = [], orders = [], sessionExpiry = 0, sessionTimer = null, statusTimer = null;
+let draftItems = [], editingItem = -1, pdfCtx = null;
 const $ = id => document.getElementById(id);
+const num = v => Number(v) || 0;
+const r2 = v => Math.round(num(v) * 100) / 100;
 const money = v => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 $('versaoCanto').textContent = 'v' + APP_VERSION;
@@ -515,7 +611,7 @@ $('sobreVersao').textContent = 'v' + APP_VERSION;
 $('sobreApi').textContent = API;
 // ----- FIM: JS 1 -----
 
-// ----- INÍCIO: JS 2 — TOAST, COLAPSÁVEIS, TEMA, IDENTIDADE -----
+// ----- INÍCIO: JS 2 — TOAST, COLAPSÁVEIS, TEMA -----
 let toastTimer;
 function toast(msg, tipo = 'ok') {
   const el = $('toast');
@@ -543,7 +639,7 @@ function abrirCard(id) {
   return card;
 }
 function restaurarColapsaveis() {
-  const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '["identidade"]');
+  const abertos = JSON.parse(localStorage.getItem('zap_abertos') || '["senha"]');
   document.querySelectorAll('.card-collapsible').forEach(c => c.classList.toggle('open', abertos.includes(c.dataset.collapseId)));
 }
 // Tema claro/escuro/automático
@@ -562,28 +658,7 @@ document.querySelectorAll('.tema-btn').forEach(b => b.addEventListener('click', 
   toast('Tema: ' + ({ auto: 'Automático', claro: 'Claro', escuro: 'Escuro' })[b.dataset.tema]);
 }));
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (getTema() === 'auto') aplicarTema(); });
-// Identidade
-function aplicarIdentidade() {
-  const nome = localStorage.getItem('zap_nome_sistema') || 'ZAP SHOES';
-  const sub = localStorage.getItem('zap_subtitulo') || 'CRM para Calçados';
-  const partes = nome.trim().split(' ');
-  $('heroLogo').innerHTML = esc(partes[0] || '') + (partes.slice(1).join(' ') ? ' <span>' + esc(partes.slice(1).join(' ')) + '</span>' : '');
-  $('heroSub').textContent = sub;
-  $('cfgNomeSistema').value = nome;
-  $('cfgSubtitulo').value = sub;
-}
-$('btnSalvarConfig').onclick = () => {
-  const nome = $('cfgNomeSistema').value.trim();
-  if (!nome) return toast('Nome obrigatório', 'error');
-  localStorage.setItem('zap_nome_sistema', nome);
-  localStorage.setItem('zap_subtitulo', $('cfgSubtitulo').value.trim());
-  aplicarIdentidade();
-  toast('Identidade salva');
-};
-$('btnResetConfig').onclick = () => {
-  localStorage.removeItem('zap_nome_sistema'); localStorage.removeItem('zap_subtitulo');
-  aplicarIdentidade(); toast('Restaurado');
-};
+// WhatsApp (preferência de abertura)
 $('btnSalvarWhatsapp').onclick = () => { localStorage.setItem('zap_whatsapp_app', $('cfgWhatsappApp').value); toast('WhatsApp salvo'); };
 $('cfgWhatsappApp').value = localStorage.getItem('zap_whatsapp_app') || 'desktop';
 // ----- FIM: JS 2 -----
@@ -613,6 +688,7 @@ function showLogin() {
 function showApp() {
   $('loginScreen').classList.add('hidden'); $('app').classList.add('visible');
   $('userNome').textContent = currentUser?.name || 'Vendedor';
+  $('cfgLogin').value = currentUser?.email || currentUser?.login || '';
 }
 function erroLogin(msg) {
   const el = $('loginErro'); el.textContent = msg; el.classList.add('show');
@@ -626,6 +702,7 @@ async function login() {
     const response = await fetch(API + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || 'Falha no login');
+    if (data.user && !data.user.email) data.user.email = email;
     saveLocalSession(data); $('loginSenha').value = '';
     iniciarApp(); toast('Bem-vindo, ' + (currentUser.name || ''));
   } catch (e) { erroLogin(e.message); $('loginSenha').value = ''; }
@@ -638,7 +715,7 @@ $('loginSenha').addEventListener('keydown', e => { if (e.key === 'Enter') login(
 async function logout() {
   if (!confirm('Deseja sair do sistema?')) return;
   try { if (token) await fetch(API + '/logout', { method: 'POST', headers: { Authorization: 'Bearer ' + token } }); } catch {}
-  clearLocalSession(); clients = []; orders = []; showLogin(); $('loginEmail').focus();
+  clearLocalSession(); clients = []; orders = []; fecharModalPedido(); fecharModalPdf(); showLogin(); $('loginEmail').focus();
 }
 $('btnSair').onclick = logout;
 $('drawerSair').onclick = () => { fecharSidebar(); logout(); };
@@ -656,19 +733,19 @@ function updateSessionClock() {
   const el = $('sessionClock'); el.style.display = ''; el.textContent = `Sessão: ${h}h ${m}min`;
 }
 function iniciarApp() {
-  showApp(); aplicarTema(); aplicarIdentidade(); restaurarColapsaveis();
+  showApp(); aplicarTema(); restaurarColapsaveis();
   verificarStatus(); updateSessionClock();
   clearInterval(sessionTimer); clearInterval(statusTimer);
   sessionTimer = setInterval(updateSessionClock, 30000);
   statusTimer = setInterval(verificarStatus, 30000);
-  irParaAba('dashboard'); loadAll();
+  irParaAba('dashboard'); resetOrderForm(); loadAll();
 }
 async function restoreSession() {
   try {
     const saved = JSON.parse(localStorage.getItem('zapShoesSession') || 'null');
     if (!saved?.token || !saved?.expiresAt || Date.now() >= saved.expiresAt) { clearLocalSession(); return false; }
     token = saved.token; sessionExpiry = saved.expiresAt;
-    const me = await api('/me'); currentUser = me.user;
+    const me = await api('/me'); currentUser = { ...(saved.user || {}), ...(me.user || {}) };
     iniciarApp(); return true;
   } catch { clearLocalSession(); return false; }
 }
@@ -688,24 +765,54 @@ function fecharSidebar() { $('sidebarDrawer').classList.remove('open'); $('sideb
 $('btnMenu').onclick = e => { e.stopPropagation(); $('sidebarDrawer').classList.contains('open') ? fecharSidebar() : abrirSidebar(); };
 $('sidebarOverlay').onclick = fecharSidebar;
 document.querySelectorAll('.drawer-item[data-aba]').forEach(b => b.onclick = () => { irParaAba(b.dataset.aba); fecharSidebar(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharSidebar(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('modalPdf').classList.contains('open')) fecharModalPdf();
+  else if ($('modalPedido').classList.contains('open')) fecharModalPedido();
+  else fecharSidebar();
+});
 $('btnRefresh').onclick = async () => { toast('Atualizando...', 'info'); await verificarStatus(); await loadAll(); toast('Atualizado'); };
 // ----- FIM: JS 4 -----
 
-// ----- INÍCIO: JS 5 — CARREGAR DADOS -----
+// ----- INÍCIO: JS 5 — PEDIDO: EMPACOTAR / DESEMPACOTAR PRODUTOS -----
+// Cada produto: { manufacturer, model, color, grade, packaging, qty, price, cost }
+function unpackOrder(o) {
+  const pm = String(o.product_model || '');
+  if (pm.startsWith(PACK)) {
+    try {
+      const d = JSON.parse(pm.slice(PACK.length));
+      return { items: Array.isArray(d.items) ? d.items : [], carrier: d.carrier || '' };
+    } catch {}
+  }
+  // Pedido antigo (um produto só, formato anterior)
+  return { items: [{ manufacturer: '', model: pm, color: o.color || '', grade: o.grade || '', packaging: o.packaging || '',
+    qty: num(o.quantity), price: num(o.unit_price), cost: num(o.purchase_price) }], carrier: '' };
+}
+function enrichOrder(o) { const u = unpackOrder(o); return { ...o, _items: u.items, _carrier: u.carrier }; }
+function orderTotals(items) {
+  let pairs = 0, sub = 0, cost = 0;
+  (items || []).forEach(i => { pairs += num(i.qty); sub += num(i.qty) * num(i.price); cost += num(i.qty) * num(i.cost); });
+  return { pairs, sub, cost };
+}
+const orderNum = o => '#' + (String(o.id || '').replace(/[^a-zA-Z0-9]/g, '').slice(-6).toUpperCase() || '0');
+const findOrder = id => orders.find(x => String(x.id) === String(id));
+const findClient = id => clients.find(x => String(x.id) === String(id));
+// ----- FIM: JS 5 -----
+
+// ----- INÍCIO: JS 6 — CARREGAR DADOS -----
 async function loadAll() {
   try {
     const [c, o, d] = await Promise.all([api('/clients'), api('/orders'), api('/dashboard')]);
-    clients = c; orders = o;
+    clients = c; orders = o.map(enrichOrder);
     $('stat-clients').textContent = d.totalClients || 0;
     $('stat-orders').textContent = d.ordersThisMonth || 0;
     $('stat-revenue').textContent = money(d.revenueThisMonth);
     renderClients(); renderOrders(); renderRecentOrders(); populateClientSelect($('ordCliente').value);
   } catch (e) { toast(e.message, 'error'); }
 }
-// ----- FIM: JS 5 -----
+// ----- FIM: JS 6 -----
 
-// ----- INÍCIO: JS 6 — CLIENTES -----
+// ----- INÍCIO: JS 7 — CLIENTES -----
 function clientPayload() {
   return { name: $('cliNome').value.trim(), cpf_cnpj: $('cliCpf').value.trim(), phone: $('cliTelefone').value.trim(), cep: $('cliCep').value.trim(),
     address: $('cliEndereco').value.trim(), number: $('cliNumero').value.trim(), neighborhood: $('cliBairro').value.trim(), city: $('cliCidade').value.trim(),
@@ -727,7 +834,7 @@ function resetClientForm() {
 }
 $('btnLimparCliente').onclick = resetClientForm;
 function editClient(id) {
-  const c = clients.find(x => x.id === id); if (!c) return;
+  const c = findClient(id); if (!c) return;
   $('clienteId').value = c.id; $('cliNome').value = c.name || ''; $('cliCpf').value = c.cpf_cnpj || ''; $('cliTelefone').value = c.phone || '';
   $('cliCep').value = c.cep || ''; $('cliEndereco').value = c.address || ''; $('cliNumero').value = c.number || ''; $('cliBairro').value = c.neighborhood || '';
   $('cliCidade').value = c.city || ''; $('cliUf').value = c.state || ''; $('cliReferencia').value = c.reference_point || ''; $('cliObs').value = c.notes || '';
@@ -736,19 +843,21 @@ function editClient(id) {
   requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }
 async function deleteClient(id) {
-  const c = clients.find(x => x.id === id);
+  const c = findClient(id);
   if (!c || !confirm(`Excluir o cliente "${c.name}"? Esta ação não pode ser desfeita.`)) return;
   try { await api('/clients/' + encodeURIComponent(id), { method: 'DELETE' }); toast('Cliente excluído.'); await loadAll(); } catch (e) { toast(e.message, 'error'); }
 }
-function whatsapp(phone) {
+// Abre o WhatsApp do cliente (com texto opcional)
+function whatsapp(phone, texto) {
   const digits = String(phone || '').replace(/\D/g, '');
   if (!digits) return toast('Este cliente não possui telefone cadastrado.', 'error');
   const full = digits.startsWith('55') ? digits : '55' + digits;
-  const web = 'https://wa.me/' + full;
+  const q = texto ? (text => text)(encodeURIComponent(texto)) : '';
+  const web = 'https://wa.me/' + full + (q ? '?text=' + q : '');
   const modo = localStorage.getItem('zap_whatsapp_app') || 'desktop';
   const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   const a = document.createElement('a');
-  a.href = (modo === 'desktop' && !mobile) ? 'whatsapp://send?phone=' + full : web;
+  a.href = (modo === 'desktop' && !mobile) ? 'whatsapp://send?phone=' + full + (q ? '&text=' + q : '') : web;
   if (a.href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
   a.style.display = 'none'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 300);
 }
@@ -775,28 +884,102 @@ function renderClients() {
 }
 $('buscaClientes').addEventListener('input', renderClients);
 $('btnLimparBuscaClientes').onclick = () => { $('buscaClientes').value = ''; renderClients(); };
-// ----- FIM: JS 6 -----
+// ----- FIM: JS 7 -----
 
-// ----- INÍCIO: JS 7 — PEDIDOS -----
+// ----- INÍCIO: JS 8 — PEDIDOS: FORMULÁRIO E PRODUTOS -----
 function populateClientSelect(selected = '') {
   const s = $('ordCliente');
   s.innerHTML = '<option value="">Selecione o cliente</option>' + clients.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   if (selected) s.value = selected;
 }
 function calculateOrderTotal() {
-  const p = Number($('ordPreco').value) || 0, q = Number($('ordQtd').value) || 0, d = Number($('ordDesconto').value) || 0, f = Number($('ordFrete').value) || 0;
-  $('ordTotal').value = Math.max(0, p * q - d + f).toFixed(2);
+  const t = orderTotals(draftItems), d = num($('ordDesconto').value), f = num($('ordFrete').value);
+  $('ordTotal').value = Math.max(0, t.sub - d + f).toFixed(2);
 }
-['ordPreco', 'ordQtd', 'ordDesconto', 'ordFrete'].forEach(i => $(i).addEventListener('input', calculateOrderTotal));
+['ordDesconto', 'ordFrete'].forEach(i => $(i).addEventListener('input', calculateOrderTotal));
+
+function readItemFields() {
+  return { manufacturer: $('itFabricante').value.trim(), model: $('itModelo').value.trim(), color: $('itCor').value.trim(),
+    grade: $('itGrade').value.trim(), packaging: $('itEmbalagem').value.trim(), qty: Math.floor(num($('itQtd').value)),
+    price: r2($('itPreco').value), cost: r2($('itCusto').value) };
+}
+function clearItemFields() {
+  ['itFabricante', 'itModelo', 'itCor', 'itGrade', 'itEmbalagem'].forEach(i => $(i).value = '');
+  $('itQtd').value = 1; $('itPreco').value = 0; $('itCusto').value = 0;
+  editingItem = -1;
+  $('btnAddItem').innerHTML = '<i class="fas fa-plus"></i> Adicionar produto ao pedido';
+  $('btnCancelItem').style.display = 'none';
+  $('itemBuilderTitulo').innerHTML = '<i class="fas fa-plus-circle"></i> Adicionar produto';
+}
+function commitItem() {
+  const it = readItemFields();
+  if (!it.model) { toast('Informe o modelo do produto.', 'error'); return false; }
+  if (it.qty < 1) { toast('Informe a quantidade de pares.', 'error'); return false; }
+  const editou = editingItem >= 0;
+  if (editou) draftItems[editingItem] = it; else draftItems.push(it);
+  clearItemFields(); renderDraftItems(); calculateOrderTotal();
+  toast(editou ? 'Produto atualizado no pedido.' : 'Produto adicionado ao pedido.', 'info');
+  return true;
+}
+$('btnAddItem').onclick = commitItem;
+$('btnCancelItem').onclick = clearItemFields;
+function editDraftItem(i) {
+  const it = draftItems[i]; if (!it) return;
+  $('itFabricante').value = it.manufacturer || ''; $('itModelo').value = it.model || ''; $('itCor').value = it.color || '';
+  $('itGrade').value = it.grade || ''; $('itEmbalagem').value = it.packaging || ''; $('itQtd').value = it.qty || 1;
+  $('itPreco').value = it.price || 0; $('itCusto').value = it.cost || 0;
+  editingItem = i;
+  $('btnAddItem').innerHTML = '<i class="fas fa-save"></i> Salvar alterações do produto';
+  $('btnCancelItem').style.display = '';
+  $('itemBuilderTitulo').innerHTML = '<i class="fas fa-pen"></i> Editando produto ' + (i + 1);
+  $('itemBuilder').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function removeDraftItem(i) {
+  if (!confirm('Remover este produto do pedido?')) return;
+  draftItems.splice(i, 1);
+  if (editingItem >= 0) clearItemFields();
+  renderDraftItems(); calculateOrderTotal();
+}
+function renderDraftItems() {
+  const box = $('itensLista');
+  box.innerHTML = draftItems.length ? draftItems.map((it, i) => `
+    <div class="item-box"><div>
+      <h5>${i + 1}. ${esc(it.model)}${it.color ? ' · ' + esc(it.color) : ''}</h5>
+      <div class="meta">
+        <span><strong>${num(it.qty)}</strong> pares</span>
+        ${it.grade ? `<span>Grade: ${esc(it.grade)}</span>` : ''}
+        ${it.packaging ? `<span>Emb.: ${esc(it.packaging)}</span>` : ''}
+        <span>Venda: ${money(it.price)}</span>
+        <span>Subtotal: <strong>${money(num(it.qty) * num(it.price))}</strong></span>
+        <span>Fábrica: ${money(it.cost)}</span>
+      </div>
+      ${it.manufacturer ? `<div style="margin-top:6px"><span class="tag-int"><i class="fas fa-industry"></i> ${esc(it.manufacturer)}</span></div>` : ''}
+    </div>
+    <div class="acoes">
+      <button class="btn btn-secondary btn-sm" type="button" onclick="editDraftItem(${i})"><i class="fas fa-edit"></i></button>
+      <button class="btn btn-danger btn-sm" type="button" onclick="removeDraftItem(${i})"><i class="fas fa-trash"></i></button>
+    </div></div>`).join('') : '<div class="empty mini">Nenhum produto adicionado ainda. Preencha abaixo e clique em "Adicionar produto ao pedido".</div>';
+  const t = orderTotals(draftItems);
+  $('resumoItens').innerHTML = `<span><strong>${draftItems.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>Subtotal: <strong>${money(t.sub)}</strong></span>`;
+}
+
 function orderPayload() {
-  return { client_id: $('ordCliente').value, product_model: $('ordModelo').value.trim(), color: $('ordCor').value.trim(), unit_price: Number($('ordPreco').value) || 0,
-    packaging: $('ordEmbalagem').value.trim(), grade: $('ordGrade').value.trim(), pairs_per_grade: Number($('ordParesGrade').value) || 0, quantity: Number($('ordQtd').value) || 1,
-    discount: Number($('ordDesconto').value) || 0, freight: Number($('ordFrete').value) || 0, total: Number($('ordTotal').value) || 0,
-    purchase_price: Number($('ordCusto').value) || 0, status: $('ordStatus').value };
+  const t = orderTotals(draftItems), f = draftItems[0] || {};
+  return {
+    client_id: $('ordCliente').value,
+    product_model: PACK + JSON.stringify({ v: 2, carrier: $('ordTransportadora').value.trim(), items: draftItems }),
+    color: f.color || '', unit_price: t.pairs ? r2(t.sub / t.pairs) : 0,
+    packaging: f.packaging || '', grade: f.grade || '',
+    pairs_per_grade: t.pairs, quantity: t.pairs,
+    discount: num($('ordDesconto').value), freight: num($('ordFrete').value), total: num($('ordTotal').value),
+    purchase_price: t.pairs ? r2(t.cost / t.pairs) : 0, status: $('ordStatus').value
+  };
 }
 $('btnSalvarPedido').onclick = async () => {
   if (!clients.length) return toast('Cadastre um cliente antes de criar um pedido.', 'error');
-  if (!$('ordCliente').value || !$('ordModelo').value.trim()) return toast('Selecione o cliente e informe o modelo.', 'error');
+  if (!$('ordCliente').value) return toast('Selecione o cliente.', 'error');
+  if ($('itModelo').value.trim() && !commitItem()) return;   // produto digitado e ainda não adicionado
+  if (!draftItems.length) return toast('Adicione ao menos um produto ao pedido.', 'error');
   const id = $('pedidoId').value, btn = $('btnSalvarPedido'); btn.disabled = true;
   try {
     if (id) await api('/orders/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify(orderPayload()) });
@@ -805,42 +988,70 @@ $('btnSalvarPedido').onclick = async () => {
   } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
 };
 function resetOrderForm() {
-  ['ordModelo','ordCor','ordEmbalagem','ordGrade','pedidoId'].forEach(i => $(i).value = '');
-  $('ordQtd').value = 1; ['ordPreco','ordDesconto','ordFrete','ordTotal','ordCusto','ordParesGrade'].forEach(i => $(i).value = 0);
+  $('pedidoId').value = ''; $('ordTransportadora').value = '';
+  draftItems = []; clearItemFields(); renderDraftItems();
+  ['ordDesconto', 'ordFrete', 'ordTotal'].forEach(i => $(i).value = 0);
   $('ordStatus').value = 'pending'; populateClientSelect('');
   $('pedidoFormTitulo').innerHTML = '<i class="fas fa-plus"></i> Cadastrar Pedido';
 }
 $('btnLimparPedido').onclick = resetOrderForm;
-function editOrder(id) {
-  const o = orders.find(x => x.id === id); if (!o) return;
+
+// Editar pedido; com focarProduto=true já posiciona no campo para acrescentar um novo produto
+function editOrder(id, focarProduto = false) {
+  const o = findOrder(id); if (!o) return;
+  fecharModalPedido();
+  irParaAba('pedidos');
   $('pedidoId').value = o.id; populateClientSelect(o.client_id);
-  $('ordModelo').value = o.product_model || ''; $('ordCor').value = o.color || ''; $('ordPreco').value = o.unit_price || 0;
-  $('ordEmbalagem').value = o.packaging || ''; $('ordGrade').value = o.grade || ''; $('ordParesGrade').value = o.pairs_per_grade || 0;
-  $('ordQtd').value = o.quantity || 1; $('ordDesconto').value = o.discount || 0; $('ordFrete').value = o.freight || 0;
-  $('ordCusto').value = o.purchase_price || 0; $('ordTotal').value = o.total || 0; $('ordStatus').value = o.status || 'pending';
-  $('pedidoFormTitulo').innerHTML = '<i class="fas fa-pen-to-square"></i> Editar Pedido';
+  $('ordTransportadora').value = o._carrier || '';
+  draftItems = o._items.map(i => ({ ...i })); clearItemFields(); renderDraftItems();
+  $('ordDesconto').value = o.discount || 0; $('ordFrete').value = o.freight || 0; $('ordTotal').value = o.total || 0;
+  $('ordStatus').value = o.status || 'pending';
+  $('pedidoFormTitulo').innerHTML = '<i class="fas fa-pen-to-square"></i> Editando pedido ' + esc(orderNum(o));
   const card = abrirCard('cadastro_pedido');
-  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  requestAnimationFrame(() => {
+    if (focarProduto) {
+      $('itemBuilder').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => $('itFabricante').focus({ preventScroll: true }), 400);
+      toast('Preencha o novo produto e clique em "Adicionar produto ao pedido".', 'info');
+    } else if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
+function addProductToOrder(id) { editOrder(id, true); }
 async function deleteOrder(id) {
   if (!confirm('Excluir este pedido?')) return;
-  try { await api('/orders/' + encodeURIComponent(id), { method: 'DELETE' }); toast('Pedido excluído.'); await loadAll(); } catch (e) { toast(e.message, 'error'); }
+  try {
+    await api('/orders/' + encodeURIComponent(id), { method: 'DELETE' });
+    fecharModalPedido(); toast('Pedido excluído.'); await loadAll();
+  } catch (e) { toast(e.message, 'error'); }
 }
+// ----- FIM: JS 8 -----
+
+// ----- INÍCIO: JS 9 — PEDIDOS: LISTAGEM E DETALHES -----
 const statusLabel = s => ({ pending: 'Pendente', processing: 'Em andamento', done: 'Concluído', cancelled: 'Cancelado' })[s] || s || 'Pendente';
 const statusClass = s => 'status-' + (['pending','processing','done','cancelled'].includes(s) ? s : 'pending');
 function dateLabel(s) { if (!s) return '-'; const d = new Date(String(s).replace(' ', 'T') + 'Z'); return isNaN(d) ? s : d.toLocaleDateString('pt-BR'); }
+
 function orderCard(o, acoes) {
-  return `<div class="pedido-item"><div class="info">
-    <h4>${esc(o.client_name || '-')}</h4>
-    <div class="meta"><span>${esc(o.product_model || '-')}${o.color ? ' · ' + esc(o.color) : ''}</span><span><strong>${o.quantity || 0}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span></div>
+  const t = orderTotals(o._items);
+  const nomes = o._items.map(i => i.model).filter(Boolean);
+  const resumo = nomes.slice(0, 3).join(', ') + (nomes.length > 3 ? ` +${nomes.length - 3}` : '');
+  return `<div class="pedido-item"><div class="info clicavel" onclick="abrirPedido('${esc(o.id)}')" title="Clique para abrir o pedido">
+    <h4>${esc(o.client_name || '-')} <span style="font-size:11px;color:var(--text-dim);font-weight:600">${esc(orderNum(o))}</span></h4>
+    <div class="meta"><span><strong>${o._items.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span></div>
+    <div class="resumo-prod">${esc(resumo || '-')}</div>
     <span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div>${acoes || ''}</div>`;
 }
 function renderOrders() {
   const term = ($('buscaPedidos').value || '').toLowerCase();
-  const rows = orders.filter(o => [o.client_name, o.product_model, o.color].join(' ').toLowerCase().includes(term));
+  const rows = orders.filter(o => [o.client_name, o._carrier, ...o._items.flatMap(i => [i.model, i.color, i.manufacturer])].join(' ').toLowerCase().includes(term));
   $('orderCount').textContent = orders.length + (orders.length === 1 ? ' pedido' : ' pedidos');
   $('listaPedidos').innerHTML = rows.length ? rows.map(o => orderCard(o,
-    `<div class="acoes"><button class="btn btn-secondary btn-sm" onclick="editOrder('${esc(o.id)}')"><i class="fas fa-edit"></i> Editar</button><button class="btn btn-danger btn-sm" onclick="deleteOrder('${esc(o.id)}')"><i class="fas fa-trash"></i></button></div>`
+    `<div class="acoes">
+      <button class="btn btn-primary btn-sm" onclick="abrirPedido('${esc(o.id)}')"><i class="fas fa-folder-open"></i> Abrir</button>
+      <button class="btn btn-secondary btn-sm" onclick="gerarPdf('${esc(o.id)}')" title="Gerar PDF"><i class="fas fa-file-pdf"></i></button>
+      <button class="btn btn-secondary btn-sm" onclick="editOrder('${esc(o.id)}')" title="Editar"><i class="fas fa-edit"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="deleteOrder('${esc(o.id)}')" title="Excluir"><i class="fas fa-trash"></i></button>
+    </div>`
   )).join('') : '<div class="empty"><h2>Nenhum pedido encontrado</h2></div>';
 }
 function renderRecentOrders() {
@@ -849,9 +1060,156 @@ function renderRecentOrders() {
 }
 $('buscaPedidos').addEventListener('input', renderOrders);
 $('btnLimparBuscaPedidos').onclick = () => { $('buscaPedidos').value = ''; renderOrders(); };
-// ----- FIM: JS 7 -----
 
-// ----- INÍCIO: JS 8 — TROCA DE SENHA -----
+// Modal de detalhes
+function abrirPedido(id) {
+  const o = findOrder(id); if (!o) return;
+  const cli = findClient(o.client_id), t = orderTotals(o._items);
+  $('modalPedidoTitulo').textContent = 'Pedido ' + orderNum(o);
+  $('modalPedidoBody').innerHTML = `
+    <div class="det-grid">
+      <div class="d"><div class="k">Cliente</div><div class="v">${esc(o.client_name || '-')}</div></div>
+      <div class="d"><div class="k">Data</div><div class="v">${esc(dateLabel(o.created_at))}</div></div>
+      <div class="d"><div class="k">Status</div><div class="v"><span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div></div>
+      <div class="d"><div class="k">Transportadora</div><div class="v">${esc(o._carrier || '-')}</div></div>
+      ${cli?.phone ? `<div class="d"><div class="k">Telefone</div><div class="v">${esc(cli.phone)}</div></div>` : ''}
+    </div>
+    <div class="secao-titulo"><i class="fas fa-boxes-stacked"></i> Produtos (${o._items.length})</div>
+    ${o._items.map((it, i) => `
+      <div class="item-box" style="grid-template-columns:1fr"><div>
+        <h5>${i + 1}. ${esc(it.model)}${it.color ? ' · ' + esc(it.color) : ''}</h5>
+        <div class="meta">
+          <span><strong>${num(it.qty)}</strong> pares</span>
+          ${it.grade ? `<span>Grade: ${esc(it.grade)}</span>` : ''}
+          ${it.packaging ? `<span>Emb.: ${esc(it.packaging)}</span>` : ''}
+          <span>Venda: ${money(it.price)}</span>
+          <span>Subtotal: <strong>${money(num(it.qty) * num(it.price))}</strong></span>
+          <span>Fábrica: ${money(it.cost)}</span>
+        </div>
+        ${it.manufacturer ? `<div style="margin-top:6px"><span class="tag-int"><i class="fas fa-industry"></i> Fabricante: ${esc(it.manufacturer)}</span></div>` : ''}
+      </div></div>`).join('')}
+    <div class="totais-box">
+      <div class="lin"><span>Total de pares</span><span>${t.pairs}</span></div>
+      <div class="lin"><span>Subtotal dos produtos</span><span>${money(t.sub)}</span></div>
+      ${num(o.discount) ? `<div class="lin"><span>Desconto</span><span>− ${money(o.discount)}</span></div>` : ''}
+      ${num(o.freight) ? `<div class="lin"><span>Frete</span><span>${money(o.freight)}</span></div>` : ''}
+      <div class="lin total"><span>Total do pedido</span><span>${money(o.total)}</span></div>
+      <div class="lin interno"><span><i class="fas fa-lock"></i> Custo total (Fábrica) — uso interno</span><span>${money(t.cost)}</span></div>
+    </div>`;
+  $('modalPedidoFoot').innerHTML = `
+    <button class="btn btn-primary" onclick="gerarPdf('${esc(o.id)}')"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+    <button class="btn btn-secondary" onclick="addProductToOrder('${esc(o.id)}')"><i class="fas fa-plus"></i> Adicionar produto</button>
+    <button class="btn btn-secondary" onclick="editOrder('${esc(o.id)}')"><i class="fas fa-edit"></i> Editar</button>
+    <button class="btn btn-danger" onclick="deleteOrder('${esc(o.id)}')"><i class="fas fa-trash"></i> Excluir</button>
+    <button class="btn btn-secondary" onclick="fecharModalPedido()"><i class="fas fa-times"></i> Fechar</button>`;
+  $('modalPedido').classList.add('open');
+}
+function fecharModalPedido() { $('modalPedido').classList.remove('open'); }
+$('modalPedido').addEventListener('click', e => { if (e.target === $('modalPedido')) fecharModalPedido(); });
+// ----- FIM: JS 9 -----
+
+// ----- INÍCIO: JS 10 — PDF DO PEDIDO E ENVIO PELO WHATSAPP -----
+// O PDF é a versão do CLIENTE: não inclui Fabricante nem custos.
+const moneyPdf = v => 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const slug = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40) || 'cliente';
+
+function gerarPdf(id) {
+  const o = findOrder(id); if (!o) return;
+  if (!window.jspdf || !window.jspdf.jsPDF) return toast('O gerador de PDF não carregou. Verifique sua internet e atualize a página.', 'error');
+  fecharModalPedido();
+  const { jsPDF } = window.jspdf, doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = doc.internal.pageSize.getWidth(), M = 14, cli = findClient(o.client_id), t = orderTotals(o._items);
+
+  // Cabeçalho
+  doc.setFillColor(124, 58, 237); doc.rect(0, 0, W, 26, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text('ZAP SHOES', M, 16);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
+  doc.text('Resumo do Pedido', W - M, 12, { align: 'right' });
+  doc.text(orderNum(o) + '  |  ' + dateLabel(o.created_at), W - M, 19, { align: 'right' });
+
+  // Cliente
+  doc.setTextColor(30, 30, 40);
+  let y = 36;
+  const bloco = (titulo, linhas) => {
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(124, 58, 237); doc.text(titulo, M, y); y += 5;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(30, 30, 40);
+    linhas.filter(Boolean).forEach(l => { const w = doc.splitTextToSize(l, W - 2 * M); doc.text(w, M, y); y += 5 * w.length; });
+    y += 3;
+  };
+  const end = cli ? [[cli.address, cli.number].filter(Boolean).join(', '), cli.neighborhood, [cli.city, cli.state].filter(Boolean).join(' - '), cli.cep ? 'CEP ' + cli.cep : ''].filter(Boolean).join(' | ') : '';
+  bloco('CLIENTE', [o.client_name || '-', cli?.cpf_cnpj ? 'CPF/CNPJ: ' + cli.cpf_cnpj : '', cli?.phone ? 'Telefone: ' + cli.phone : '', end, cli?.reference_point ? 'Referencia: ' + cli.reference_point : '']);
+  if (o._carrier) bloco('TRANSPORTADORA', [o._carrier]);
+
+  // Tabela de produtos (sem fabricante e sem custo)
+  doc.autoTable({
+    startY: y + 1, margin: { left: M, right: M }, theme: 'grid',
+    head: [['#', 'Produto', 'Cor', 'Grade', 'Embalagem', 'Pares', 'Preco', 'Subtotal']],
+    body: o._items.map((it, i) => [i + 1, it.model || '-', it.color || '-', it.grade || '-', it.packaging || '-', num(it.qty), moneyPdf(it.price), moneyPdf(num(it.qty) * num(it.price))]),
+    headStyles: { fillColor: [124, 58, 237], textColor: 255, fontSize: 9 },
+    styles: { fontSize: 9, cellPadding: 2, textColor: [30, 30, 40] },
+    columnStyles: { 0: { cellWidth: 8, halign: 'center' }, 5: { halign: 'center' }, 6: { halign: 'right' }, 7: { halign: 'right' } }
+  });
+
+  // Totais
+  let fy = doc.lastAutoTable.finalY + 8;
+  if (fy > 245) { doc.addPage(); fy = 20; }
+  const lin = (rotulo, valor, bold, size) => {
+    doc.setFont('helvetica', bold ? 'bold' : 'normal'); doc.setFontSize(size || 10);
+    doc.text(rotulo, W - M - 62, fy); doc.text(valor, W - M, fy, { align: 'right' }); fy += (size || 10) > 10 ? 8 : 6;
+  };
+  doc.setTextColor(30, 30, 40);
+  lin('Total de pares:', String(t.pairs));
+  lin('Subtotal:', moneyPdf(t.sub));
+  if (num(o.discount)) lin('Desconto:', '- ' + moneyPdf(o.discount));
+  if (num(o.freight)) lin('Frete:', moneyPdf(o.freight));
+  doc.setDrawColor(124, 58, 237); doc.line(W - M - 62, fy - 3, W - M, fy - 3); fy += 2;
+  doc.setTextColor(124, 58, 237); lin('TOTAL:', moneyPdf(o.total), true, 13);
+
+  // Rodapé em todas as páginas
+  const pages = doc.getNumberOfPages();
+  for (let p = 1; p <= pages; p++) {
+    doc.setPage(p); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120, 120, 130);
+    doc.text('Documento gerado em ' + new Date().toLocaleString('pt-BR') + '  |  Pagina ' + p + ' de ' + pages, M, 290);
+  }
+
+  const blob = doc.output('blob'), url = URL.createObjectURL(blob);
+  if (pdfCtx) URL.revokeObjectURL(pdfCtx.url);
+  pdfCtx = { blob, url, order: o, cli, filename: `Pedido_${orderNum(o).replace('#', '')}_${slug(o.client_name)}.pdf` };
+  $('modalPdfTitulo').textContent = 'PDF ' + orderNum(o) + ' — conferir';
+  $('pdfFrame').src = url; $('pdfAbrir').href = url;
+  $('modalPdf').classList.add('open');
+}
+function fecharModalPdf() {
+  $('modalPdf').classList.remove('open');
+  $('pdfFrame').src = 'about:blank';
+  if (pdfCtx) { URL.revokeObjectURL(pdfCtx.url); pdfCtx = null; }
+}
+$('modalPdf').addEventListener('click', e => { if (e.target === $('modalPdf')) fecharModalPdf(); });
+function baixarPdf() {
+  if (!pdfCtx) return;
+  const a = document.createElement('a'); a.href = pdfCtx.url; a.download = pdfCtx.filename; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 300);
+}
+$('btnPdfBaixar').onclick = () => { baixarPdf(); toast('PDF baixado.'); };
+$('btnPdfWhats').onclick = async () => {
+  if (!pdfCtx) return;
+  const { blob, order: o, cli, filename } = pdfCtx;
+  const texto = `Olá${o.client_name ? ', ' + o.client_name : ''}! Segue o resumo do seu pedido ${orderNum(o)} - Total: ${moneyPdf(o.total)}. Qualquer dúvida, estou à disposição!`;
+  const file = new File([blob], filename, { type: 'application/pdf' });
+  // Celular: compartilha o PDF direto (escolha o WhatsApp e o contato)
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: filename, text: texto }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  // Computador: baixa o PDF e abre a conversa do cliente (o anexo é arrastado/selecionado na conversa)
+  baixarPdf();
+  if (!cli?.phone) return toast('PDF baixado. O cliente não tem telefone cadastrado para abrir o WhatsApp.', 'error');
+  whatsapp(cli.phone, texto);
+  toast('PDF baixado. Anexe o arquivo na conversa do WhatsApp que abriu.', 'info');
+};
+// ----- FIM: JS 10 -----
+
+// ----- INÍCIO: JS 11 — TROCA DE SENHA -----
 $('btnAlterarSenha').onclick = async () => {
   const sa = $('senhaAtual').value, sn = $('senhaNova').value, sc = $('senhaConfirma').value;
   if (!sa || !sn || !sc) return toast('Preencha todos os campos', 'error');
@@ -864,12 +1222,13 @@ $('btnAlterarSenha').onclick = async () => {
     $('senhaAtual').value = ''; $('senhaNova').value = ''; $('senhaConfirma').value = '';
   } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
 };
-// ----- FIM: JS 8 -----
+// ----- FIM: JS 11 -----
 
-// ----- INÍCIO: JS 9 — INICIALIZAÇÃO -----
+// ----- INÍCIO: JS 12 — INICIALIZAÇÃO -----
 aplicarTema();
+renderDraftItems();
 (async () => { const ok = await restoreSession(); if (!ok) { showLogin(); $('loginEmail').focus(); } })();
-// ----- FIM: JS 9 -----
+// ----- FIM: JS 12 -----
 </script>
 <!-- ======================= FIM: BLOCO JAVASCRIPT ======================= -->
 </body>
