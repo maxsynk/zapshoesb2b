@@ -6,6 +6,13 @@
 <title>ZAP SHOES — CRM</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23a855f7'/><text x='50' y='68' font-size='60' font-weight='900' text-anchor='middle' fill='white' font-family='Arial'>Z</text></svg>">
 <meta name="theme-color" content="#a855f7">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ZAP SHOES">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,7 +30,7 @@
     --neon: #a855f7; --neon-alt: #d946ef; --neon-cyan: #38bdf8;
     --neon-glow: rgba(168, 85, 247, 0.6); --neon-glow-strong: rgba(168, 85, 247, 0.9);
     --success: #22c55e; --warning: #f59e0b; --error: #ef4444; --info: #38bdf8;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif; --bg-input: rgba(0,0,0,0.5);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -119,15 +126,28 @@
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--neon); }
 
-  .hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 24px 14px; max-width: 1600px; margin: 0 auto; }
-  .hero-brand { display: flex; align-items: center; gap: 16px; min-width: 0; flex: 1; }
-  .brand-logo { max-width: 110px; max-height: 96px; object-fit: contain; flex-shrink: 0; }
-  .brand-name { font-size: clamp(18px, 3vw, 30px); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; word-break: break-word; line-height: 1.15; min-width: 0; }
-  .brand-name .b1 { color: var(--neon); text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 40px var(--neon-glow); }
+  .hero { display: flex; justify-content: center; padding: 22px 24px 16px; max-width: 1600px; margin: 0 auto; }
+  .hero-brand { display: flex; justify-content: center; max-width: 100%; min-width: 0; }
+  .brand-lockup { display: flex; align-items: center; justify-content: center; gap: 20px; max-width: 100%; padding: 16px 32px; border: 1px solid color-mix(in srgb, var(--neon) 40%, var(--border)); border-radius: 20px; background: linear-gradient(135deg, color-mix(in srgb, var(--neon) 16%, transparent), transparent 75%); box-shadow: 0 0 40px color-mix(in srgb, var(--neon) 16%, transparent); }
+  .brand-logo { max-width: 120px; max-height: 100px; object-fit: contain; flex-shrink: 0; }
+  .brand-divider { width: 2px; align-self: stretch; border-radius: 2px; background: linear-gradient(180deg, transparent, var(--neon), transparent); flex-shrink: 0; }
+  .brand-textos { display: flex; flex-direction: column; min-width: 0; text-align: left; }
+  .brand-name { font-size: clamp(22px, 4vw, 38px); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; line-height: 1.05; word-break: break-word; }
+  .brand-name .b1 { background: linear-gradient(90deg, var(--neon), var(--neon-alt)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 14px var(--neon-glow)); }
   .brand-name .b2 { color: var(--text-primary); }
-  .hero-zap { flex-shrink: 0; width: 84px; }
+  .brand-sub { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: clamp(10px, 1.5vw, 13px); font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: var(--text-secondary); }
+  .brand-sub::before { content: ''; width: 28px; height: 2px; background: linear-gradient(90deg, var(--neon), transparent); flex-shrink: 0; }
   .zap-img { width: 100%; height: auto; display: block; object-fit: contain; visibility: hidden; }
   .zap-img.pronto { visibility: visible; }
+  .dash-card.warn { border-left-color: var(--error); }
+  .dash-card.warn .val { color: var(--error); text-shadow: none; }
+  .dash-card .sub { font-size: 11px; color: var(--text-dim); margin-top: 8px; }
+  .mini-select { margin-left: auto; padding: 7px 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 12px; font-weight: 600; outline: none; }
+  .mini-select option { background: var(--bg-card); }
+  .busca-pedidos .mini-select { margin-left: 0; padding: 12px 12px; font-size: 13px; border-radius: 10px; }
+  .pix-qr { display: inline-block; background: #fff; padding: 12px; border-radius: 12px; line-height: 0; }
+  .pix-qr img, .pix-qr canvas { max-width: 100%; height: auto; }
+  .copia-cola { width: 100%; min-height: 70px; padding: 10px 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 11px; resize: vertical; word-break: break-all; }
   /* RODAPÉ */
   .rodape { max-width: 1600px; margin: 10px auto 0; padding: 22px 24px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .rodape-marca { display: flex; align-items: center; gap: 12px; }
@@ -196,7 +216,7 @@
   .card-collapsible.open .card-body { max-height: 9000px; padding: 0 24px 24px 24px; }
 
   /* DASH CARDS */
-  .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
   .dash-card { padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; border-left: 4px solid var(--neon); }
   .dash-card.ok { border-left-color: var(--success); }
   .dash-card.info { border-left-color: var(--info); }
@@ -299,7 +319,7 @@
   .tema-btn.ativo { background: linear-gradient(135deg, var(--neon), var(--neon-alt)); color: #fff; border-color: var(--neon); box-shadow: 0 0 16px var(--neon-glow); }
 
   body.tema-claro, body.tema-auto[data-tema-efetivo="claro"] {
-    --bg-main: #f5f5f7; --bg-deep: #e8e8ec; --bg-sidebar: #ffffff; --bg-card: #ffffff; --border: #d8d8e0;
+    --bg-input: #ffffff; --bg-main: #f5f5f7; --bg-deep: #e8e8ec; --bg-sidebar: #ffffff; --bg-card: #ffffff; --border: #d8d8e0;
     --text-primary: #1a1726; --text-secondary: #5a5568; --text-dim: #8a8598;
     --neon: #7c3aed; --neon-alt: #c026d3; --neon-glow: rgba(124,58,237,0.25); --neon-glow-strong: rgba(124,58,237,0.5);
     --success: #16a34a; --warning: #d97706; --error: #dc2626; --info: #0284c7;
@@ -319,7 +339,7 @@
 
   /* TEMAS EXTRAS: BRANCO COM PRETO / CINZA COM PRETO / PRETO COM BRANCO */
   body.tema-brancopreto { --bg-main:#ffffff; --bg-deep:#f2f2f2; --bg-sidebar:#ffffff; --bg-card:#ffffff; --bg-input:#f4f4f4; --border:#c8c8c8; --text-primary:#000; --text-secondary:#2a2a2a; --text-dim:#666; --neon:#000; --neon-alt:#333; --on-neon:#fff; --neon-glow:rgba(0,0,0,0.15); --neon-glow-strong:rgba(0,0,0,0.35); --success:#15803d; --warning:#b45309; --error:#b91c1c; --info:#0369a1; background:#ffffff; color:#000; }
-  body.tema-cinzapreto { --bg-main:#cfcfd3; --bg-deep:#bcbcc1; --bg-sidebar:#e2e2e5; --bg-card:#e2e2e5; --bg-input:#f1f1f3; --border:#a3a3a9; --text-primary:#000; --text-secondary:#26262a; --text-dim:#55555b; --neon:#000; --neon-alt:#333; --on-neon:#fff; --neon-glow:rgba(0,0,0,0.15); --neon-glow-strong:rgba(0,0,0,0.35); --success:#15803d; --warning:#b45309; --error:#b91c1c; --info:#0369a1; background:linear-gradient(180deg,#d8d8dc 0%,#bcbcc1 100%); color:#000; }
+  body.tema-cinzapreto { --bg-main:#a9a9ae; --bg-deep:#8f8f95; --bg-sidebar:#bdbdc2; --bg-card:#bdbdc2; --bg-input:#d2d2d7; --border:#7c7c84; --text-primary:#000; --text-secondary:#1c1c20; --text-dim:#3a3a41; --neon:#000; --neon-alt:#333; --on-neon:#fff; --neon-glow:rgba(0,0,0,0.15); --neon-glow-strong:rgba(0,0,0,0.35); --success:#15803d; --warning:#92400e; --error:#b91c1c; --info:#0369a1; background:linear-gradient(180deg,#b3b3b8 0%,#94949a 100%); color:#000; }
   body.tema-pretobranco { --bg-main:#000; --bg-deep:#0b0b0b; --bg-sidebar:#0a0a0a; --bg-card:#0f0f0f; --bg-input:#1a1a1a; --border:#2e2e2e; --text-primary:#fff; --text-secondary:#c4c4c4; --text-dim:#8a8a8a; --neon:#fff; --neon-alt:#d4d4d4; --on-neon:#000; --neon-glow:rgba(255,255,255,0.22); --neon-glow-strong:rgba(255,255,255,0.45); background:#000; color:#fff; }
   body.tema-mono .login-screen { background: var(--bg-main); }
   body.tema-mono .login-box { background: var(--bg-card); }
@@ -349,11 +369,14 @@
     .btn-text { padding: 10px; min-width: 40px; justify-content: center; font-size: 0; gap: 0; }
     .btn-text i { font-size: 15px; }
     .hamburger { width: 44px; height: 44px; flex-shrink: 0; }
-    .hero { padding: 10px 12px 8px; gap: 10px; }
-    .hero-brand { gap: 10px; }
-    .brand-logo { max-width: 92px; max-height: 80px; }
-    .brand-name { font-size: clamp(15px, 4.6vw, 20px); letter-spacing: 1px; }
-    .hero-zap { width: 58px; }
+    .hero { padding: 12px 12px 8px; }
+    .brand-lockup { gap: 12px; padding: 10px 16px; border-radius: 16px; }
+    .brand-logo { max-width: 76px; max-height: 68px; }
+    .brand-name { font-size: clamp(17px, 5.6vw, 26px); letter-spacing: 1.5px; }
+    .brand-sub { letter-spacing: 3px; margin-top: 5px; }
+    .brand-sub::before { width: 16px; }
+    .busca-pedidos { flex-wrap: wrap; }
+    .busca-pedidos input { flex: 1 1 100%; }
     .rodape { flex-direction: column; text-align: center; padding: 18px 12px 24px; }
     .rodape-direitos { text-align: center; }
     .tabs { padding: 0 8px; gap: 2px; }
@@ -415,7 +438,6 @@
 
 <div class="hero">
   <div class="hero-brand" id="heroBrand"></div>
-  <div class="hero-zap"><img class="zap-img" src="logo.png" alt="ZAP SHOES" onerror="this.style.display='none'"></div>
 </div>
 
 <div class="tabs">
@@ -436,7 +458,16 @@
       <div class="dash-card"><div class="lbl"><i class="fas fa-users"></i> Total de Clientes</div><div class="val" id="stat-clients">0</div></div>
       <div class="dash-card info"><div class="lbl"><i class="fas fa-cart-shopping"></i> Pedidos no Mês</div><div class="val" id="stat-orders">0</div></div>
       <div class="dash-card ok"><div class="lbl"><i class="fas fa-dollar-sign"></i> Faturamento no Mês</div><div class="val" id="stat-revenue" style="font-size:22px">R$ 0,00</div></div>
+      <div class="dash-card info"><div class="lbl"><i class="fas fa-hand-holding-dollar"></i> A receber</div><div class="val" id="stat-receber" style="font-size:22px">R$ 0,00</div></div>
+      <div class="dash-card warn"><div class="lbl"><i class="fas fa-triangle-exclamation"></i> Em atraso</div><div class="val" id="stat-atraso" style="font-size:22px">R$ 0,00</div><div class="sub" id="stat-atraso-n">0 pedidos</div></div>
+      <div class="dash-card ok"><div class="lbl"><i class="fas fa-sack-dollar"></i> Lucro estimado no mês</div><div class="val" id="stat-lucro" style="font-size:22px">R$ 0,00</div><div class="sub">Venda − desconto − custo da fábrica</div></div>
     </div>
+  </div>
+  <div class="card">
+    <h3><i class="fas fa-user-clock"></i> Clientes sem comprar
+      <select id="selSemCompra" class="mini-select"><option value="30">há 30+ dias</option><option value="60">há 60+ dias</option><option value="90">há 90+ dias</option></select>
+    </h3>
+    <div id="listaSemCompra"></div>
   </div>
   <div class="card">
     <h3><i class="fas fa-clock-rotate-left"></i> Pedidos recentes</h3>
@@ -537,6 +568,11 @@
         <div class="form-row"><label>Total do pedido (R$)</label><input type="number" id="ordTotal" min="0" step="0.01" value="0"></div>
       </div>
       <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px"><i class="fas fa-info-circle"></i> O total é calculado automaticamente: soma dos produtos (preço de venda × pares) − desconto + frete. Você também pode ajustar manualmente.</p>
+      <div class="secao-titulo"><i class="fas fa-hand-holding-dollar"></i> Pagamento</div>
+      <div class="form-grid">
+        <div class="form-row"><label>Valor já pago (R$)</label><input type="number" id="ordPago" min="0" step="0.01" value="0"></div>
+        <div class="form-row"><label>Vencimento do pagamento</label><input type="date" id="ordVencimento"></div>
+      </div>
       <div class="form-actions">
         <button class="btn btn-primary" id="btnSalvarPedido"><i class="fas fa-save"></i> Salvar Pedido</button>
         <button class="btn btn-secondary" id="btnLimparPedido"><i class="fas fa-eraser"></i> Limpar / Cancelar edição</button>
@@ -545,7 +581,7 @@
   </div>
   <div class="card">
     <h3><i class="fas fa-clipboard-list"></i> Meus Pedidos <span id="orderCount" style="margin-left:auto;font-size:11px;color:var(--text-dim)">0 pedidos</span></h3>
-    <div class="busca-pedidos"><input type="text" id="buscaPedidos" placeholder="Buscar por cliente, produto, fabricante ou transportadora..."><button class="btn btn-secondary btn-sm" id="btnLimparBuscaPedidos"><i class="fas fa-times"></i></button></div>
+    <div class="busca-pedidos"><input type="text" id="buscaPedidos" placeholder="Buscar por cliente, produto, fabricante ou transportadora..."><select id="filtroPag" class="mini-select"><option value="todos">Todos</option><option value="receber">A receber</option><option value="vencido">Vencidos</option><option value="pago">Pagos</option></select><button class="btn btn-secondary btn-sm" id="btnLimparBuscaPedidos"><i class="fas fa-times"></i></button></div>
     <div id="listaPedidos"><div class="loader"></div></div>
   </div>
 </div>
@@ -558,6 +594,7 @@
     <div class="card-body">
       <p style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Sua logo e seu nome de vendas aparecem no centro do topo do sistema e em destaque no cabeçalho do PDF dos pedidos. A marca ZAP SHOES fica no canto.</p>
       <div class="form-row"><label>Nome de vendas</label><input type="text" id="cfgMarcaNome" maxlength="60" placeholder="Ex.: Maria Calçados"></div>
+      <div class="form-row"><label>Subtítulo (opcional)</label><input type="text" id="cfgMarcaSub" maxlength="80" placeholder="Ex.: Calçados femininos e acessórios"></div>
       <div class="form-row"><label>Logo (PNG, JPG ou WEBP)</label>
         <div class="marca-upload">
           <div class="marca-preview" id="marcaPreview"><span>Sem logo</span></div>
@@ -587,6 +624,16 @@
     </div>
   </div>
 
+  <div class="card card-collapsible" data-collapse-id="assinatura">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-id-badge"></i> Minha Assinatura</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body"><div id="assinaturaBox"><div class="empty mini">Carregando...</div></div></div>
+  </div>
+
+  <div class="card card-collapsible" data-collapse-id="app">
+    <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fas fa-mobile-screen-button"></i> Aplicativo</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
+    <div class="card-body"><div id="instalarBox"></div></div>
+  </div>
+
   <div class="card card-collapsible" data-collapse-id="whatsapp">
     <div class="card-header" onclick="toggleCardCollapsible(this)"><h3><i class="fab fa-whatsapp"></i> WhatsApp</h3><div class="toggle-icon"><i class="fas fa-chevron-down"></i></div></div>
     <div class="card-body">
@@ -606,7 +653,7 @@
         <button class="btn btn-secondary tema-btn" data-tema="claro" type="button"><i class="fas fa-sun"></i> Claro</button>
         <button class="btn btn-secondary tema-btn" data-tema="escuro" type="button"><i class="fas fa-moon"></i> Escuro</button>
         <button class="btn btn-secondary tema-btn" data-tema="brancopreto" type="button"><span class="amostra" style="background:linear-gradient(135deg,#fff 50%,#000 50%)"></span> Branco com Preto</button>
-        <button class="btn btn-secondary tema-btn" data-tema="cinzapreto" type="button"><span class="amostra" style="background:linear-gradient(135deg,#bcbcc1 50%,#000 50%)"></span> Cinza com Preto</button>
+        <button class="btn btn-secondary tema-btn" data-tema="cinzapreto" type="button"><span class="amostra" style="background:linear-gradient(135deg,#8f8f95 50%,#000 50%)"></span> Cinza com Preto</button>
         <button class="btn btn-secondary tema-btn" data-tema="pretobranco" type="button"><span class="amostra" style="background:linear-gradient(135deg,#000 50%,#fff 50%)"></span> Preto com Branco</button>
       </div>
     </div>
@@ -688,7 +735,7 @@
 <!-- ======================= INÍCIO: BLOCO JAVASCRIPT ======================= -->
 <script>
 // ----- INÍCIO: JS 1 — CONSTANTES E ESTADO -----
-const APP_VERSION = "5.0";
+const APP_VERSION = "6.0";
 const API = 'https://zapshoesb2b.maxcalcadosmax.workers.dev';
 // Os produtos do pedido (fabricante, transportadora etc.) ficam empacotados em JSON dentro do campo
 // product_model, com este prefixo. Assim o Worker atual continua funcionando sem alterações.
@@ -748,7 +795,7 @@ function aplicarTema() {
   }
   const efetivo = pref === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro') : pref;
   document.body.dataset.temaEfetivo = efetivo;
-  const corBarra = { brancopreto: '#ffffff', cinzapreto: '#cfcfd3', pretobranco: '#000000' }[pref] || '#a855f7';
+  const corBarra = { brancopreto: '#ffffff', cinzapreto: '#a9a9ae', pretobranco: '#000000' }[pref] || '#a855f7';
   const metaCor = document.querySelector('meta[name="theme-color"]'); if (metaCor) metaCor.setAttribute('content', corBarra);
   document.querySelectorAll('.tema-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tema === pref));
 }
@@ -764,7 +811,7 @@ $('cfgWhatsappApp').value = localStorage.getItem('zap_whatsapp_app') || 'desktop
 // ----- FIM: JS 2 -----
 
 // ----- INÍCIO: JS 2B — MARCA PERSONALIZADA (logo + nome de vendas) -----
-let brand = { name: '', logo: '' }, brandDraftLogo = '';
+let brand = { name: '', sub: '', logo: '' }, brandDraftLogo = '';
 const brandKey = () => 'zap_brand_' + (currentUser?.id || 'x');
 function brandNameHtml(n) {
   const p = String(n).trim().split(/\s+/), resto = p.slice(1).join(' ');
@@ -772,8 +819,13 @@ function brandNameHtml(n) {
 }
 function renderBrand() {
   const box = $('heroBrand');
-  if (brand.name || brand.logo) {
-    box.innerHTML = (brand.logo ? `<img class="brand-logo" src="${esc(brand.logo)}" alt="Logo">` : '') + (brand.name ? `<div class="brand-name">${brandNameHtml(brand.name)}</div>` : '');
+  if (brand.name || brand.sub || brand.logo) {
+    const texto = brand.name || brand.sub;
+    box.innerHTML = '<div class="brand-lockup">'
+      + (brand.logo ? `<img class="brand-logo" src="${esc(brand.logo)}" alt="Logo">` : '')
+      + (brand.logo && texto ? '<span class="brand-divider"></span>' : '')
+      + (texto ? '<div class="brand-textos">' + (brand.name ? `<div class="brand-name">${brandNameHtml(brand.name)}</div>` : '') + (brand.sub ? `<div class="brand-sub">${esc(brand.sub)}</div>` : '') + '</div>' : '')
+      + '</div>';
   } else {
     box.innerHTML = '<button class="brand-add" type="button" onclick="abrirMarca()"><i class="fas fa-plus"></i> Adicionar sua marca</button>';
   }
@@ -787,16 +839,16 @@ function setBrandPreview(src) {
   brandDraftLogo = src || '';
   $('marcaPreview').innerHTML = src ? `<img src="${esc(src)}" alt="Prévia da logo">` : '<span>Sem logo</span>';
 }
-function fillBrandForm() { $('cfgMarcaNome').value = brand.name; setBrandPreview(brand.logo); }
+function fillBrandForm() { $('cfgMarcaNome').value = brand.name; $('cfgMarcaSub').value = brand.sub; setBrandPreview(brand.logo); }
 async function loadBrand() {
   let b = null;
   try { b = JSON.parse(localStorage.getItem(brandKey()) || 'null'); } catch {}
-  brand = { name: b?.name || '', logo: b?.logo || '' };
+  brand = { name: b?.name || '', sub: b?.sub || '', logo: b?.logo || '' };
   renderBrand(); fillBrandForm();
   try {
     const s = await api('/me/brand');
-    if (s && (s.name || s.logo)) {
-      brand = { name: s.name || '', logo: s.logo || '' };
+    if (s && (s.name || s.sub || s.logo)) {
+      brand = { name: s.name || '', sub: s.sub || '', logo: s.logo || '' };
       try { localStorage.setItem(brandKey(), JSON.stringify(brand)); } catch {}
       renderBrand(); fillBrandForm();
     }
@@ -837,7 +889,7 @@ $('marcaArquivo').addEventListener('change', async e => {
 });
 $('btnMarcaRemover').onclick = () => { setBrandPreview(''); toast('Logo removida. Clique em "Salvar marca".', 'info'); };
 $('btnMarcaSalvar').onclick = async () => {
-  brand = { name: $('cfgMarcaNome').value.trim(), logo: brandDraftLogo };
+  brand = { name: $('cfgMarcaNome').value.trim(), sub: $('cfgMarcaSub').value.trim(), logo: brandDraftLogo };
   try { localStorage.setItem(brandKey(), JSON.stringify(brand)); } catch {}
   renderBrand();
   const btn = $('btnMarcaSalvar'); btn.disabled = true;
@@ -899,7 +951,7 @@ $('loginSenha').addEventListener('keydown', e => { if (e.key === 'Enter') login(
 async function logout() {
   if (!confirm('Deseja sair do sistema?')) return;
   try { if (token) await fetch(API + '/logout', { method: 'POST', headers: { Authorization: 'Bearer ' + token } }); } catch {}
-  clearLocalSession(); clients = []; orders = []; brand = { name: '', logo: '' }; renderBrand(); fecharModalPedido(); fecharModalPdf(); showLogin(); $('loginEmail').focus();
+  clearLocalSession(); clients = []; orders = []; brand = { name: '', sub: '', logo: '' }; renderBrand(); fecharModalPedido(); fecharModalPdf(); showLogin(); $('loginEmail').focus();
 }
 $('btnSair').onclick = logout;
 $('drawerSair').onclick = () => { fecharSidebar(); logout(); };
@@ -922,7 +974,7 @@ function iniciarApp() {
   clearInterval(sessionTimer); clearInterval(statusTimer);
   sessionTimer = setInterval(updateSessionClock, 30000);
   statusTimer = setInterval(verificarStatus, 30000);
-  irParaAba('dashboard'); resetOrderForm(); loadBrand(); loadAll();
+  irParaAba('dashboard'); resetOrderForm(); loadBrand(); loadAll(); loadAssinatura(); atualizarCardInstalar();
 }
 async function restoreSession() {
   try {
@@ -965,14 +1017,14 @@ function unpackOrder(o) {
   if (pm.startsWith(PACK)) {
     try {
       const d = JSON.parse(pm.slice(PACK.length));
-      return { items: Array.isArray(d.items) ? d.items : [], carrier: d.carrier || '' };
+      return { items: Array.isArray(d.items) ? d.items : [], carrier: d.carrier || '', pay: d.pay || {} };
     } catch {}
   }
   // Pedido antigo (um produto só, formato anterior)
   return { items: [{ manufacturer: '', model: pm, color: o.color || '', grade: o.grade || '', packaging: o.packaging || '',
-    qty: num(o.quantity), price: num(o.unit_price), cost: num(o.purchase_price) }], carrier: '' };
+    qty: num(o.quantity), price: num(o.unit_price), cost: num(o.purchase_price) }], carrier: '', pay: {} };
 }
-function enrichOrder(o) { const u = unpackOrder(o); return { ...o, _items: u.items, _carrier: u.carrier }; }
+function enrichOrder(o) { const u = unpackOrder(o); return { ...o, _items: u.items, _carrier: u.carrier, _pay: u.pay || {} }; }
 function orderTotals(items) {
   let pairs = 0, sub = 0, cost = 0;
   (items || []).forEach(i => { pairs += num(i.qty); sub += num(i.qty) * num(i.price); cost += num(i.qty) * num(i.cost); });
@@ -991,7 +1043,7 @@ async function loadAll() {
     $('stat-clients').textContent = d.totalClients || 0;
     $('stat-orders').textContent = d.ordersThisMonth || 0;
     $('stat-revenue').textContent = money(d.revenueThisMonth);
-    renderClients(); renderOrders(); renderRecentOrders(); populateClientSelect($('ordCliente').value);
+    renderClients(); renderOrders(); renderRecentOrders(); populateClientSelect($('ordCliente').value); renderDashExtras(); renderSemCompra();
   } catch (e) { toast(e.message, 'error'); }
 }
 // ----- FIM: JS 6 -----
@@ -1158,7 +1210,7 @@ function buildOrderPayload(d) {
   const t = orderTotals(d.items), f = d.items[0] || {};
   return {
     client_id: d.client_id,
-    product_model: PACK + JSON.stringify({ v: 2, carrier: d.carrier || '', items: d.items }),
+    product_model: PACK + JSON.stringify({ v: 2, carrier: d.carrier || '', items: d.items, pay: d.pay || {} }),
     color: f.color || '', unit_price: t.pairs ? r2(t.sub / t.pairs) : 0,
     packaging: f.packaging || '', grade: f.grade || '',
     pairs_per_grade: t.pairs, quantity: t.pairs,
@@ -1168,7 +1220,8 @@ function buildOrderPayload(d) {
 }
 function orderPayload() {
   return buildOrderPayload({ client_id: $('ordCliente').value, carrier: $('ordTransportadora').value.trim(), items: draftItems,
-    discount: $('ordDesconto').value, freight: $('ordFrete').value, total: $('ordTotal').value, status: $('ordStatus').value });
+    discount: $('ordDesconto').value, freight: $('ordFrete').value, total: $('ordTotal').value, status: $('ordStatus').value,
+    pay: { paid: num($('ordPago').value), due: $('ordVencimento').value || '' } });
 }
 // Marcar/desmarcar "Recebido" direto no pedido aberto (salva na hora)
 async function toggleRecebido(orderId, idx, el) {
@@ -1178,7 +1231,7 @@ async function toggleRecebido(orderId, idx, el) {
   el.disabled = true;
   try {
     await api('/orders/' + encodeURIComponent(o.id), { method: 'PUT', body: JSON.stringify(buildOrderPayload({
-      client_id: o.client_id, carrier: o._carrier, items, discount: o.discount, freight: o.freight, total: o.total, status: o.status })) });
+      client_id: o.client_id, carrier: o._carrier, items, discount: o.discount, freight: o.freight, total: o.total, status: o.status, pay: o._pay })) });
     o._items = items;
     el.closest('.item-box').classList.toggle('recebido', marcado);
     renderOrders(); renderRecentOrders();
@@ -1201,7 +1254,7 @@ $('btnSalvarPedido').onclick = async () => {
 function resetOrderForm() {
   $('pedidoId').value = ''; $('ordTransportadora').value = '';
   draftItems = []; clearItemFields(); renderDraftItems();
-  ['ordDesconto', 'ordFrete', 'ordTotal'].forEach(i => $(i).value = 0);
+  ['ordDesconto', 'ordFrete', 'ordTotal', 'ordPago'].forEach(i => $(i).value = 0); $('ordVencimento').value = '';
   $('ordStatus').value = 'pending'; populateClientSelect('');
   $('pedidoFormTitulo').innerHTML = '<i class="fas fa-plus"></i> Cadastrar Pedido';
 }
@@ -1216,6 +1269,7 @@ function editOrder(id, focarProduto = false) {
   $('ordTransportadora').value = o._carrier || '';
   draftItems = o._items.map(i => ({ ...i })); clearItemFields(); renderDraftItems();
   $('ordDesconto').value = o.discount || 0; $('ordFrete').value = o.freight || 0; $('ordTotal').value = o.total || 0;
+  $('ordPago').value = num(o._pay?.paid) || 0; $('ordVencimento').value = o._pay?.due || '';
   $('ordStatus').value = o.status || 'pending';
   $('pedidoFormTitulo').innerHTML = '<i class="fas fa-pen-to-square"></i> Editando pedido ' + esc(orderNum(o));
   const card = abrirCard('cadastro_pedido');
@@ -1252,18 +1306,19 @@ function orderCard(o, acoes) {
   const resumo = nomes.slice(0, 3).join(', ') + (nomes.length > 3 ? ` +${nomes.length - 3}` : '');
   return `<div class="pedido-item"><div class="info clicavel" onclick="abrirPedido('${esc(o.id)}')" title="Clique para abrir o pedido">
     <h4>${esc(o.client_name || '-')} <span style="font-size:11px;color:var(--text-dim);font-weight:600">${esc(orderNum(o))}</span></h4>
-    <div class="meta"><span><strong>${o._items.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span>${recResumo(o)}</div>
+    <div class="meta"><span><strong>${o._items.length}</strong> produto(s)</span><span><strong>${t.pairs}</strong> pares</span><span>${esc(dateLabel(o.created_at))}</span><span>Total: <strong>${money(o.total)}</strong></span>${payMeta(o)}${recResumo(o)}</div>
     <div class="resumo-prod">${esc(resumo || '-')}</div>
-    <span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div>${acoes || ''}</div>`;
+    <span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span>${payBadge(o)}</div>${acoes || ''}</div>`;
 }
 function renderOrders() {
   const term = ($('buscaPedidos').value || '').toLowerCase();
-  const rows = orders.filter(o => [o.client_name, o._carrier, ...o._items.flatMap(i => [i.model, i.color, i.manufacturer])].join(' ').toLowerCase().includes(term));
+  const rows = orders.filter(o => [o.client_name, o._carrier, ...o._items.flatMap(i => [i.model, i.color, i.manufacturer])].join(' ').toLowerCase().includes(term) && passaFiltroPag(o));
   $('orderCount').textContent = orders.length + (orders.length === 1 ? ' pedido' : ' pedidos');
   $('listaPedidos').innerHTML = rows.length ? rows.map(o => orderCard(o,
     `<div class="acoes">
       <button class="btn btn-primary btn-sm" onclick="abrirPedido('${esc(o.id)}')"><i class="fas fa-folder-open"></i> Abrir</button>
       <button class="btn btn-secondary btn-sm" onclick="gerarPdf('${esc(o.id)}')" title="Gerar PDF"><i class="fas fa-file-pdf"></i></button>
+      <button class="btn btn-secondary btn-sm" onclick="repeatOrder('${esc(o.id)}')" title="Repetir pedido"><i class="fas fa-copy"></i></button>
       <button class="btn btn-secondary btn-sm" onclick="editOrder('${esc(o.id)}')" title="Editar"><i class="fas fa-edit"></i></button>
       <button class="btn btn-danger btn-sm" onclick="deleteOrder('${esc(o.id)}')" title="Excluir"><i class="fas fa-trash"></i></button>
     </div>`
@@ -1287,6 +1342,8 @@ function abrirPedido(id) {
       <div class="d"><div class="k">Data</div><div class="v">${esc(dateLabel(o.created_at))}</div></div>
       <div class="d"><div class="k">Status</div><div class="v"><span class="status-ped ${statusClass(o.status)}">${esc(statusLabel(o.status))}</span></div></div>
       <div class="d"><div class="k">Transportadora</div><div class="v">${esc(o._carrier || '-')}</div></div>
+      <div class="d"><div class="k">Pagamento</div><div class="v">${payBadge(o, true) || '-'}</div></div>
+      ${payInfo(o).due ? `<div class="d"><div class="k">Vencimento</div><div class="v">${esc(isoLabel(payInfo(o).due))}</div></div>` : ''}
       ${cli?.phone ? `<div class="d"><div class="k">Telefone</div><div class="v">${esc(cli.phone)}</div></div>` : ''}
     </div>
     <div class="secao-titulo"><i class="fas fa-boxes-stacked"></i> Produtos (${o._items.length})</div>
@@ -1310,11 +1367,15 @@ function abrirPedido(id) {
       ${num(o.discount) ? `<div class="lin"><span>Desconto</span><span>− ${money(o.discount)}</span></div>` : ''}
       ${num(o.freight) ? `<div class="lin"><span>Frete</span><span>${money(o.freight)}</span></div>` : ''}
       <div class="lin total"><span>Total do pedido</span><span>${money(o.total)}</span></div>
+      ${(() => { const p = payInfo(o); return p.st === 'cancelado' ? '' : `<div class="lin"><span>Valor pago</span><span>${money(p.paid)}</span></div><div class="lin"><span>A receber</span><span>${money(p.rest)}</span></div>`; })()}
       <div class="lin interno"><span><i class="fas fa-lock"></i> Custo total (Fábrica) — uso interno</span><span>${money(t.cost)}</span></div>
+      <div class="lin interno"><span><i class="fas fa-chart-line"></i> Margem estimada (venda − desconto − fábrica) — uso interno</span><span>${money(orderMargin(o))} (${marginPct(o)}%)</span></div>
     </div>`;
   $('modalPedidoFoot').innerHTML = `
     <button class="btn btn-primary" onclick="gerarPdf('${esc(o.id)}')"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
     <button class="btn btn-secondary" onclick="addProductToOrder('${esc(o.id)}')"><i class="fas fa-plus"></i> Adicionar produto</button>
+    <button class="btn btn-secondary" onclick="registrarPagamento('${esc(o.id)}')"><i class="fas fa-hand-holding-dollar"></i> Registrar pagamento</button>
+    <button class="btn btn-secondary" onclick="repeatOrder('${esc(o.id)}')"><i class="fas fa-copy"></i> Repetir pedido</button>
     <button class="btn btn-secondary" onclick="editOrder('${esc(o.id)}')"><i class="fas fa-edit"></i> Editar</button>
     <button class="btn btn-danger" onclick="deleteOrder('${esc(o.id)}')"><i class="fas fa-trash"></i> Excluir</button>
     <button class="btn btn-secondary" onclick="fecharModalPedido()"><i class="fas fa-times"></i> Fechar</button>`;
@@ -1360,7 +1421,7 @@ async function gerarPdf(id) {
   const W = doc.internal.pageSize.getWidth(), M = 14, cli = findClient(o.client_id), t = orderTotals(o._items);
 
   // Cabeçalho: marca do vendedor em destaque + marca ZAP SHOES no canto
-  const temMarca = !!(brand.name || brand.logo), zap = await getZapLogo();
+  const temMarca = !!(brand.name || brand.sub || brand.logo), zap = await getZapLogo();
   const fit = (iw, ih, maxW, maxH) => { const k = Math.min(maxW / iw, maxH / ih); return { w: iw * k, h: ih * k }; };
   let hx = M, ny = 16;
   if (temMarca) {
@@ -1378,6 +1439,11 @@ async function gerarPdf(id) {
       if (p2) { doc.setTextColor(30, 30, 40); doc.text(' ' + p2, hx + doc.getTextWidth(p1), 15); }
       ny = 23;
     }
+    if (brand.sub) {
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(110, 110, 120);
+      doc.text(doc.splitTextToSize(brand.sub, W - hx - M - 40)[0], hx, brand.name ? 20.5 : 15);
+      ny = brand.name ? 26.5 : 21.5;
+    }
   } else if (zap) {
     const d = fit(zap.w, zap.h, 50, 20); doc.addImage(zap.data, 'PNG', M, 6 + (20 - d.h) / 2, d.w, d.h); hx = M + d.w + 5;
   } else {
@@ -1389,7 +1455,7 @@ async function gerarPdf(id) {
     if (zap) { const d = fit(zap.w, zap.h, 30, 10); doc.addImage(zap.data, 'PNG', W - M - d.w, 7, d.w, d.h); }
     else { doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(124, 58, 237); doc.text('ZAP SHOES', W - M, 12, { align: 'right' }); }
   }
-  doc.setDrawColor(124, 58, 237); doc.setLineWidth(0.8); doc.line(M, 33, W - M, 33); doc.setLineWidth(0.2);
+  doc.setDrawColor(124, 58, 237); doc.setLineWidth(0.8); doc.line(M, 34.5, W - M, 34.5); doc.setLineWidth(0.2);
 
   // Cliente
   doc.setTextColor(30, 30, 40);
@@ -1487,6 +1553,208 @@ $('btnAlterarSenha').onclick = async () => {
   } catch (e) { toast(e.message, 'error'); } finally { btn.disabled = false; }
 };
 // ----- FIM: JS 11 -----
+
+// ----- INÍCIO: JS 10B — PAGAMENTO, LUCRO, REPETIR PEDIDO E CLIENTES SEM COMPRAR -----
+function isoLabel(iso) { const p = String(iso || '').slice(0, 10).split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : (iso || '-'); }
+function hojeISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function parseDate(s) { if (!s) return 0; const d = new Date(String(s).replace(' ', 'T') + (/[zZ]|[+-]\d\d:?\d\d$/.test(String(s)) ? '' : 'Z')); return isNaN(d) ? 0 : d.getTime(); }
+function payInfo(o) {
+  const total = num(o.total), pay = o._pay || {}, paid = Math.min(total, Math.max(0, num(pay.paid)));
+  const rest = Math.max(0, total - paid), due = String(pay.due || '').slice(0, 10);
+  let st = 'aberto';
+  if (o.status === 'cancelled') st = 'cancelado';
+  else if (total > 0 && rest <= 0.009) st = 'pago';
+  else if (rest > 0.009 && due && due < hojeISO()) st = 'vencido';
+  else if (paid > 0) st = 'parcial';
+  return { total, paid, rest, due, st };
+}
+function payBadge(o, semMargem) {
+  const p = payInfo(o); if (p.st === 'cancelado') return '';
+  const m = { aberto: ['status-pending', 'Em aberto'], parcial: ['status-processing', 'Pago parcial'], pago: ['status-done', 'Pago'], vencido: ['status-cancelled', 'Vencido'] }[p.st];
+  return `<span class="status-ped ${m[0]}"${semMargem ? '' : ' style="margin-left:6px"'}>${m[1]}</span>`;
+}
+function payMeta(o) {
+  const p = payInfo(o);
+  if (p.st === 'cancelado' || p.total <= 0 || p.rest <= 0.009) return '';
+  return `<span>A receber: <strong>${money(p.rest)}</strong></span>` + (p.due ? `<span>Venc.: ${esc(isoLabel(p.due))}</span>` : '');
+}
+function passaFiltroPag(o) {
+  const f = $('filtroPag').value, p = payInfo(o);
+  if (f === 'receber') return p.st !== 'cancelado' && p.rest > 0.009;
+  if (f === 'vencido') return p.st === 'vencido';
+  if (f === 'pago') return p.st === 'pago';
+  return true;
+}
+$('filtroPag').addEventListener('change', renderOrders);
+function orderMargin(o) { const t = orderTotals(o._items); return (t.sub - num(o.discount)) - t.cost; }
+function marginPct(o) { const t = orderTotals(o._items), base = t.sub - num(o.discount); return base > 0 ? (orderMargin(o) / base * 100).toFixed(1).replace('.', ',') : '0'; }
+
+async function registrarPagamento(id) {
+  const o = findOrder(id); if (!o) return;
+  const p = payInfo(o);
+  const txt = prompt(`Valor recebido agora (R$)\nAinda a receber: ${money(p.rest)}`, p.rest.toFixed(2).replace('.', ','));
+  if (txt === null) return;
+  const t = String(txt).trim(), v = t.includes(',') ? Number(t.replace(/\./g, '').replace(',', '.')) : Number(t);
+  if (!isFinite(v) || v <= 0) return toast('Valor inválido.', 'error');
+  const pay = { ...(o._pay || {}), paid: r2(num(o._pay?.paid) + v) };
+  try {
+    await api('/orders/' + encodeURIComponent(o.id), { method: 'PUT', body: JSON.stringify(buildOrderPayload({
+      client_id: o.client_id, carrier: o._carrier, items: o._items, discount: o.discount, freight: o.freight, total: o.total, status: o.status, pay })) });
+    o._pay = pay; renderOrders(); renderRecentOrders(); renderDashExtras(); abrirPedido(id);
+    toast('Pagamento registrado.');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+function novoPedidoPara(clientId) {
+  irParaAba('pedidos'); resetOrderForm(); populateClientSelect(clientId);
+  const card = abrirCard('cadastro_pedido');
+  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+}
+function repeatOrder(id) {
+  const o = findOrder(id); if (!o) return;
+  fecharModalPedido(); irParaAba('pedidos'); resetOrderForm(); populateClientSelect(o.client_id);
+  $('ordTransportadora').value = o._carrier || '';
+  draftItems = o._items.map(i => ({ ...i, received: false })); renderDraftItems();
+  $('ordDesconto').value = o.discount || 0; $('ordFrete').value = o.freight || 0; calculateOrderTotal();
+  $('pedidoFormTitulo').innerHTML = '<i class="fas fa-copy"></i> Novo pedido (repetido de ' + esc(orderNum(o)) + ')';
+  const card = abrirCard('cadastro_pedido');
+  requestAnimationFrame(() => card && card.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  toast('Pedido copiado. Confira os produtos e clique em "Salvar Pedido".', 'info');
+}
+
+function renderDashExtras() {
+  let receber = 0, atraso = 0, nAtraso = 0, lucro = 0; const agora = new Date();
+  orders.forEach(o => {
+    const p = payInfo(o); if (p.st === 'cancelado') return;
+    receber += p.rest;
+    if (p.st === 'vencido') { atraso += p.rest; nAtraso++; }
+    const t = parseDate(o.created_at);
+    if (t) { const d = new Date(t); if (d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear()) lucro += orderMargin(o); }
+  });
+  $('stat-receber').textContent = money(receber);
+  $('stat-atraso').textContent = money(atraso);
+  $('stat-atraso-n').textContent = nAtraso + (nAtraso === 1 ? ' pedido vencido' : ' pedidos vencidos');
+  $('stat-lucro').textContent = money(lucro);
+}
+
+$('selSemCompra').value = localStorage.getItem('zap_dias_sem_compra') || '30';
+$('selSemCompra').addEventListener('change', () => { localStorage.setItem('zap_dias_sem_compra', $('selSemCompra').value); renderSemCompra(); });
+function renderSemCompra() {
+  const dias = Number($('selSemCompra').value) || 30, agora = Date.now(), ultimo = {};
+  orders.forEach(o => {
+    if (o.status === 'cancelled') return;
+    const t = parseDate(o.created_at); if (!t) return;
+    if (!ultimo[o.client_id] || t > ultimo[o.client_id]) ultimo[o.client_id] = t;
+  });
+  const rows = clients.map(c => { const t = ultimo[c.id]; return { c, t, d: t ? Math.floor((agora - t) / 86400000) : null }; })
+    .filter(r => r.t === undefined || r.d >= dias)
+    .sort((a, b) => (b.d ?? -1) - (a.d ?? -1));
+  const box = $('listaSemCompra');
+  if (!clients.length) { box.innerHTML = '<div class="empty mini">Cadastre clientes para acompanhar as recompras.</div>'; return; }
+  if (!rows.length) { box.innerHTML = `<div class="empty mini">Nenhum cliente parado há ${dias}+ dias. 👏</div>`; return; }
+  const lim = 20;
+  box.innerHTML = rows.slice(0, lim).map(r => `
+    <div class="pedido-item"><div class="info">
+      <h4>${esc(r.c.name)}</h4>
+      <div class="meta">${r.t ? `<span>Última compra: <strong>${esc(new Date(r.t).toLocaleDateString('pt-BR'))}</strong></span><span><strong>${r.d}</strong> dias sem comprar</span>` : '<span><strong>Nunca comprou</strong></span>'}${r.c.phone ? `<span><i class="fas fa-phone"></i> ${esc(r.c.phone)}</span>` : ''}</div>
+    </div>
+    <div class="acoes">
+      ${r.c.phone ? `<button class="btn btn-whatsapp btn-sm" onclick="msgSemCompra('${esc(r.c.id)}')"><i class="fab fa-whatsapp"></i> Chamar</button>` : ''}
+      <button class="btn btn-secondary btn-sm" onclick="novoPedidoPara('${esc(r.c.id)}')"><i class="fas fa-plus"></i> Novo pedido</button>
+    </div></div>`).join('') + (rows.length > lim ? `<div class="empty mini">+ ${rows.length - lim} cliente(s) não mostrados</div>` : '');
+}
+function msgSemCompra(id) {
+  const c = findClient(id); if (!c) return;
+  const nome = String(c.name || '').trim().split(/\s+/)[0];
+  whatsapp(c.phone, `Olá, ${nome}! Tudo bem? Faz um tempinho que não fazemos um pedido. Posso te enviar as novidades?`);
+}
+// ----- FIM: JS 10B -----
+
+// ----- INÍCIO: JS 10C — ASSINATURA (vencimento, PIX e QR code) -----
+let assinatura = null;
+function diasAte(iso) {
+  const p = String(iso || '').slice(0, 10).split('-').map(Number);
+  if (p.length !== 3 || p.some(isNaN)) return null;
+  const alvo = new Date(p[0], p[1] - 1, p[2]), hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  return Math.round((alvo - hoje) / 86400000);
+}
+function copiarTexto(txt, msg) {
+  const ok = () => toast(msg || 'Copiado!');
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok).catch(() => copiarFallback(txt, ok));
+  else copiarFallback(txt, ok);
+}
+function copiarFallback(txt, ok) {
+  const t = document.createElement('textarea'); t.value = txt; t.style.position = 'fixed'; t.style.opacity = '0';
+  document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok(); } catch { toast('Não foi possível copiar.', 'error'); } t.remove();
+}
+async function loadAssinatura() {
+  const box = $('assinaturaBox');
+  try { assinatura = await api('/me/subscription'); }
+  catch (e) { assinatura = null; box.innerHTML = '<div class="empty mini">Não foi possível carregar sua assinatura agora. Toque em "Atualizar" para tentar de novo.</div>'; return; }
+  renderAssinatura();
+}
+function renderAssinatura() {
+  const a = assinatura || {}, box = $('assinaturaBox');
+  if (!a.plan && !a.due_date && !a.amount && !a.pix_key) {
+    box.innerHTML = '<div class="empty mini">Sua assinatura ainda não foi cadastrada. Entre em contato com o suporte da MaxSync.</div>'; return;
+  }
+  const dias = diasAte(a.due_date);
+  let badge = '';
+  if (dias !== null) {
+    if (dias < 0) badge = `<span class="status-ped status-cancelled">Vencida há ${-dias} dia(s)</span>`;
+    else if (dias === 0) badge = '<span class="status-ped status-processing">Vence hoje</span>';
+    else if (dias <= 5) badge = `<span class="status-ped status-processing">Vence em ${dias} dia(s)</span>`;
+    else badge = '<span class="status-ped status-done">Em dia</span>';
+  }
+  const v = x => esc(x || '—');
+  box.innerHTML = `
+    <div class="det-grid">
+      <div class="d"><div class="k">Plano</div><div class="v">${v(a.plan)}</div></div>
+      <div class="d"><div class="k">Valor da mensalidade</div><div class="v">${a.amount ? esc(money(a.amount)) : '—'}</div></div>
+      <div class="d"><div class="k">Vencimento</div><div class="v">${a.due_date ? esc(isoLabel(a.due_date)) : '—'}</div></div>
+      <div class="d"><div class="k">Situação</div><div class="v">${badge || '—'}</div></div>
+    </div>
+    <div class="secao-titulo"><i class="fas fa-qrcode"></i> Pagamento via PIX</div>
+    <div class="det-grid">
+      <div class="d"><div class="k">Tipo de chave</div><div class="v">${v(a.pix_key_type)}</div></div>
+      <div class="d"><div class="k">Chave PIX</div><div class="v">${v(a.pix_key)}</div>${a.pix_key ? `<button class="btn btn-secondary btn-sm" style="margin-top:8px" type="button" id="btnCopiarChave"><i class="fas fa-copy"></i> Copiar chave</button>` : ''}</div>
+      <div class="d"><div class="k">Nome completo (recebedor)</div><div class="v">${v(a.pix_name)}</div></div>
+      <div class="d"><div class="k">Banco</div><div class="v">${v(a.bank)}</div></div>
+    </div>
+    ${a.pix_payload ? `<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+      <div><div class="pix-qr" id="qrPix"></div></div>
+      <div style="flex:1;min-width:220px"><div class="k" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">PIX copia e cola</div>
+        <textarea class="copia-cola" id="pixPayload" readonly>${esc(a.pix_payload)}</textarea>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" type="button" id="btnCopiarPix"><i class="fas fa-copy"></i> Copiar código PIX</button></div>
+    </div>` : '<p style="font-size:12px;color:var(--text-dim)">QR code ainda não cadastrado para sua conta.</p>'}`;
+  if ($('btnCopiarChave')) $('btnCopiarChave').onclick = () => copiarTexto(a.pix_key, 'Chave PIX copiada!');
+  if ($('btnCopiarPix')) $('btnCopiarPix').onclick = () => copiarTexto(a.pix_payload, 'Código PIX copiado!');
+  if (a.pix_payload) {
+    const el = $('qrPix');
+    if (window.QRCode) { el.innerHTML = ''; new QRCode(el, { text: a.pix_payload, width: 176, height: 176, correctLevel: QRCode.CorrectLevel.M }); }
+    else el.innerHTML = '<span style="font-size:11px;color:#333;line-height:1.4;display:block;max-width:176px">QR indisponível agora. Use o código copia e cola.</span>';
+  }
+}
+// ----- FIM: JS 10C -----
+
+// ----- INÍCIO: JS 10D — INSTALAR COMO APLICATIVO (PWA) -----
+let promptInstalar = null;
+const jaInstalado = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); promptInstalar = e; atualizarCardInstalar(); });
+window.addEventListener('appinstalled', () => { promptInstalar = null; atualizarCardInstalar(); toast('Aplicativo instalado!'); });
+function atualizarCardInstalar() {
+  const box = $('instalarBox'); if (!box) return;
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (jaInstalado()) box.innerHTML = '<p style="font-size:13px;color:var(--success);font-weight:600"><i class="fas fa-circle-check"></i> Você já está usando o aplicativo instalado.</p>';
+  else if (promptInstalar) box.innerHTML = '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6">Instale o ZAP SHOES no seu aparelho para abrir como um aplicativo, direto da tela inicial.</p><button class="btn btn-primary" id="btnInstalarApp" type="button"><i class="fas fa-download"></i> Instalar aplicativo</button>';
+  else if (ios) box.innerHTML = '<p style="font-size:12px;color:var(--text-secondary);line-height:1.7">No iPhone/iPad: toque em <strong>Compartilhar</strong> <i class="fas fa-arrow-up-from-bracket"></i> e depois em <strong>Adicionar à Tela de Início</strong>.</p>';
+  else box.innerHTML = '<p style="font-size:12px;color:var(--text-secondary);line-height:1.7">Para instalar, abra o menu do navegador (⋮) e escolha <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>. Se a opção não aparecer, abra o sistema no Chrome ou no Edge.</p>';
+  const b = $('btnInstalarApp');
+  if (b) b.onclick = async () => { if (!promptInstalar) return; promptInstalar.prompt(); try { await promptInstalar.userChoice; } catch {} promptInstalar = null; atualizarCardInstalar(); };
+}
+atualizarCardInstalar();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+// ----- FIM: JS 10D -----
 
 // ----- INÍCIO: JS 11B — LOGO ZAP SHOES (topo e rodapé) -----
 getZapLogo().then(z => {
